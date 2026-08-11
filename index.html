@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pokémon Draft League</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div>
+            <h1>Pokémon Draft League</h1>
+            <p>11 Weeks • 12 Teams • Top 8 Make Playoffs</p>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <!-- =========================
+             STANDINGS
+             ========================= -->
+
+        <section class="standings-section">
+
+            <div class="section-header">
+                <div>
+                    <h2>League Standings</h2>
+                    <p>Ranked by wins, then point differential</p>
+                </div>
+
+                <button id="refreshStandings" class="refresh-button">
+                    Update Standings
+                </button>
+            </div>
+
+
+            <div class="standings-wrapper">
+
+                <table class="standings-table">
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Team</th>
+                            <th>W</th>
+                            <th>L</th>
+                            <th>Point Differential</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="standingsBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             WEEK SELECTOR
+             ========================= -->
+
+        <section class="schedule-section">
+
+            <div class="week-selector">
+
+                <h2>Schedule</h2>
+
+                <div id="weekButtons" class="week-buttons"></div>
+
+            </div>
+
+
+            <!-- =========================
+                 SELECTED WEEK
+                 ========================= -->
+
+            <div class="selected-week">
+
+                <div class="week-heading">
+
+                    <div>
+                        <h2 id="weekTitle">Week 1</h2>
+                        <p id="weekDates"></p>
+                    </div>
+
+                    <div id="weekStatus" class="week-status"></div>
+
+                </div>
+
+
+                <div id="matches" class="matches"></div>
+
+
+                <div id="weekControls" class="week-controls"></div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>Pokémon Draft League</p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
