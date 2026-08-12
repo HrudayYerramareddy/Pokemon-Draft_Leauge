@@ -1,13 +1,13 @@
 /* =========================================================
    POKÉMON DRAFT LEAGUE
-   ========================================================= */
+========================================================= */
 
 
 /* =========================================================
    TEAMS
-   ========================================================= */
+========================================================= */
 
-   const teams = [
+const teams = [
     "Durham Drills",
     "Florida Floettes",
     "New Braunfels Ninetails",
@@ -25,13 +25,9 @@
 
 /* =========================================================
    WEEKS
-   ========================================================= */
+========================================================= */
 
 const weeks = [
-
-    /* =====================================================
-       WEEK 1
-       ===================================================== */
 
     {
         number: 1,
@@ -49,10 +45,6 @@ const weeks = [
     },
 
 
-    /* =====================================================
-       WEEK 2
-       ===================================================== */
-
     {
         number: 2,
         dates: "July 10-12",
@@ -68,10 +60,6 @@ const weeks = [
         ]
     },
 
-
-    /* =====================================================
-       WEEK 3
-       ===================================================== */
 
     {
         number: 3,
@@ -89,10 +77,6 @@ const weeks = [
     },
 
 
-    /* =====================================================
-       WEEK 4
-       ===================================================== */
-
     {
         number: 4,
         dates: "July 24-26",
@@ -108,10 +92,6 @@ const weeks = [
         ]
     },
 
-
-    /* =====================================================
-       WEEK 5
-       ===================================================== */
 
     {
         number: 5,
@@ -129,10 +109,6 @@ const weeks = [
     },
 
 
-    /* =====================================================
-       WEEK 6
-       ===================================================== */
-
     {
         number: 6,
         dates: "August 7-9",
@@ -148,10 +124,6 @@ const weeks = [
         ]
     },
 
-
-    /* =====================================================
-       WEEK 7
-       ===================================================== */
 
     {
         number: 7,
@@ -169,10 +141,6 @@ const weeks = [
     },
 
 
-    /* =====================================================
-       WEEK 8
-       ===================================================== */
-
     {
         number: 8,
         dates: "August 21-23",
@@ -188,10 +156,6 @@ const weeks = [
         ]
     },
 
-
-    /* =====================================================
-       WEEK 9
-       ===================================================== */
 
     {
         number: 9,
@@ -209,10 +173,6 @@ const weeks = [
     },
 
 
-    /* =====================================================
-       WEEK 10
-       ===================================================== */
-
     {
         number: 10,
         dates: "September 4-6",
@@ -228,10 +188,6 @@ const weeks = [
         ]
     },
 
-
-    /* =====================================================
-       WEEK 11
-       ===================================================== */
 
     {
         number: 11,
@@ -252,23 +208,61 @@ const weeks = [
 
 
 /* =========================================================
-   CURRENT WEEK
-   ========================================================= */
+   SETTINGS
+========================================================= */
+
+const PLAYOFF_SPOTS = 8;
+const TOTAL_WEEKS = weeks.length;
+
+const STORAGE_KEY = "pokemonDraftLeagueScores";
+
 
 let currentWeek = 1;
 
 
 /* =========================================================
-   LOCAL STORAGE
-   ========================================================= */
+   SCORE VALIDATION
+========================================================= */
 
-const STORAGE_KEY =
-    "pokemonDraftLeagueScores";
+function validScore(scoreA, scoreB) {
+
+    if (
+        scoreA === "" ||
+        scoreB === "" ||
+        scoreA === null ||
+        scoreB === null ||
+        scoreA === undefined ||
+        scoreB === undefined
+    ) {
+        return false;
+    }
+
+    const a = Number(scoreA);
+    const b = Number(scoreB);
+
+    if (
+        !Number.isInteger(a) ||
+        !Number.isInteger(b)
+    ) {
+        return false;
+    }
+
+    if (
+        a < 0 ||
+        b < 0 ||
+        a > 3 ||
+        b > 3
+    ) {
+        return false;
+    }
+
+    return a + b === 3;
+}
 
 
 /* =========================================================
-   LOAD SAVED SCORES
-   ========================================================= */
+   LOAD SCORES
+========================================================= */
 
 function loadSavedScores() {
 
@@ -284,11 +278,7 @@ function loadSavedScores() {
         const savedWeeks =
             JSON.parse(saved);
 
-        for (
-            let w = 0;
-            w < weeks.length;
-            w++
-        ) {
+        for (let w = 0; w < weeks.length; w++) {
 
             if (weeks[w].locked) {
                 continue;
@@ -332,23 +322,18 @@ function loadSavedScores() {
         );
 
     }
-
 }
 
 
 /* =========================================================
    SAVE SCORES
-   ========================================================= */
+========================================================= */
 
 function saveScoresToStorage() {
 
     const data = [];
 
-    for (
-        let w = 0;
-        w < weeks.length;
-        w++
-    ) {
+    for (let w = 0; w < weeks.length; w++) {
 
         data[w] = [];
 
@@ -380,54 +365,12 @@ function saveScoresToStorage() {
         STORAGE_KEY,
         JSON.stringify(data)
     );
-
-}
-
-
-/* =========================================================
-   SCORE VALIDATION
-   ========================================================= */
-
-function validScore(scoreA, scoreB) {
-
-    if (
-        scoreA === "" ||
-        scoreB === "" ||
-        scoreA === null ||
-        scoreB === null ||
-        scoreA === undefined ||
-        scoreB === undefined
-    ) {
-        return false;
-    }
-
-    const a = Number(scoreA);
-    const b = Number(scoreB);
-
-    if (
-        !Number.isInteger(a) ||
-        !Number.isInteger(b)
-    ) {
-        return false;
-    }
-
-    if (
-        a < 0 ||
-        b < 0 ||
-        a > 3 ||
-        b > 3
-    ) {
-        return false;
-    }
-
-    return a + b === 3;
-
 }
 
 
 /* =========================================================
    CALCULATE STANDINGS
-   ========================================================= */
+========================================================= */
 
 function calculateStandings() {
 
@@ -476,14 +419,12 @@ function calculateStandings() {
 
             const teamA =
                 standings.find(
-                    team =>
-                        team.team === match[0]
+                    t => t.team === match[0]
                 );
 
             const teamB =
                 standings.find(
-                    team =>
-                        team.team === match[1]
+                    t => t.team === match[1]
                 );
 
 
@@ -519,24 +460,20 @@ function calculateStandings() {
 
 
     standings.sort(
-        function(a, b) {
+        (a, b) => {
 
             if (a.wins !== b.wins) {
-
                 return b.wins - a.wins;
-
             }
 
             if (
                 a.differential !==
                 b.differential
             ) {
-
                 return (
                     b.differential -
                     a.differential
                 );
-
             }
 
             return a.team.localeCompare(
@@ -548,13 +485,211 @@ function calculateStandings() {
 
 
     return standings;
+}
 
+
+/* =========================================================
+   CALCULATE STATUS
+=========================================================
+
+   This uses a mathematical maximum/minimum approach.
+
+   We DO NOT enumerate every possible future result.
+
+   For each team:
+
+   maximum possible wins =
+       current wins + remaining games
+
+   minimum possible wins =
+       current wins
+
+   If they cannot reach the current
+   playoff cutoff -> ELIMINATED.
+
+   If their minimum wins are already
+   guaranteed to finish above the
+   possible cutoff -> CLINCHED.
+
+   Otherwise -> IN CONTENTION.
+========================================================= */
+
+function calculateStatuses(standings) {
+
+    const gamesPlayed = {};
+
+    for (const team of teams) {
+        gamesPlayed[team] = 0;
+    }
+
+
+    for (const week of weeks) {
+
+        for (const match of week.matches) {
+
+            if (
+                match.length >= 4 &&
+                validScore(
+                    match[2],
+                    match[3]
+                )
+            ) {
+
+                gamesPlayed[match[0]]++;
+                gamesPlayed[match[1]]++;
+
+            }
+
+        }
+
+    }
+
+
+    const totalGamesPerTeam =
+        TOTAL_WEEKS;
+
+
+    /*
+     * Current playoff cutoff.
+     *
+     * We calculate the record of
+     * the team currently sitting
+     * in 8th place.
+     */
+
+    const cutoffIndex =
+        PLAYOFF_SPOTS - 1;
+
+    const currentCutoff =
+        standings[cutoffIndex].wins;
+
+
+    /*
+     * Maximum possible wins for
+     * every team.
+     */
+
+    const maxWins = {};
+
+    const minWins = {};
+
+    for (const team of standings) {
+
+        const remaining =
+            totalGamesPerTeam -
+            gamesPlayed[team.team];
+
+        minWins[team.team] =
+            team.wins;
+
+        maxWins[team.team] =
+            team.wins +
+            remaining;
+
+    }
+
+
+    /*
+     * Determine elimination.
+     *
+     * A team is eliminated if at least
+     * 8 teams already have MORE wins
+     * than that team's absolute maximum.
+     */
+
+    for (const team of standings) {
+
+        const max =
+            maxWins[team.team];
+
+        let teamsAhead =
+            0;
+
+        for (const other of standings) {
+
+            if (
+                other.team === team.team
+            ) {
+                continue;
+            }
+
+            if (
+                other.wins > max
+            ) {
+                teamsAhead++;
+            }
+
+        }
+
+        if (teamsAhead >= PLAYOFF_SPOTS) {
+
+            team.status =
+                "ELIMINATED";
+
+            continue;
+        }
+
+
+        /*
+         * Determine clinching.
+         *
+         * If fewer than 8 other teams
+         * can possibly finish with more
+         * wins than this team's current
+         * wins, then the team is safe.
+         */
+
+        const currentWins =
+            team.wins;
+
+        let possibleAbove =
+            0;
+
+        for (const other of standings) {
+
+            if (
+                other.team === team.team
+            ) {
+                continue;
+            }
+
+            if (
+                maxWins[other.team] >
+                currentWins
+            ) {
+
+                possibleAbove++;
+
+            }
+
+        }
+
+
+        if (
+            possibleAbove <
+            PLAYOFF_SPOTS
+        ) {
+
+            team.status =
+                "CLINCHED";
+
+        } else {
+
+            team.status =
+                "IN CONTENTION";
+
+        }
+
+    }
+
+
+    return standings;
 }
 
 
 /* =========================================================
    UPDATE STANDINGS
-   ========================================================= */
+========================================================= */
 
 function updateStandings() {
 
@@ -567,19 +702,28 @@ function updateStandings() {
         return;
     }
 
-    const standings =
+
+    let standings =
         calculateStandings();
+
+
+    standings =
+        calculateStatuses(
+            standings
+        );
 
 
     body.innerHTML = "";
 
 
     standings.forEach(
-        function(team, index) {
+        (team, index) => {
 
-            /* PLAYOFF CUTOFF */
+            /*
+             * PLAYOFF CUTOFF
+             */
 
-            if (index === 8) {
+            if (index === PLAYOFF_SPOTS) {
 
                 const cutoff =
                     document.createElement(
@@ -589,13 +733,12 @@ function updateStandings() {
                 cutoff.className =
                     "playoff-cutoff";
 
-                cutoff.innerHTML =
-                    `
-                    <td colspan="5">
+                cutoff.innerHTML = `
+                    <td colspan="6">
                         PLAYOFF CUTOFF
                         • TOP 8 QUALIFY
                     </td>
-                    `;
+                `;
 
                 body.appendChild(
                     cutoff
@@ -610,7 +753,7 @@ function updateStandings() {
                 );
 
 
-            if (index < 8) {
+            if (index < PLAYOFF_SPOTS) {
 
                 row.classList.add(
                     "playoff-team"
@@ -629,33 +772,72 @@ function updateStandings() {
                     : String(differential);
 
 
-            row.innerHTML =
-                `
-                <td>${index + 1}</td>
+            let statusClass =
+                "status-contention";
+
+
+            if (
+                team.status ===
+                "CLINCHED"
+            ) {
+
+                statusClass =
+                    "status-clinched";
+
+            } else if (
+                team.status ===
+                "ELIMINATED"
+            ) {
+
+                statusClass =
+                    "status-eliminated";
+
+            }
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
 
                 <td class="team-name">
                     ${team.team}
                 </td>
 
-                <td>${team.wins}</td>
+                <td>
+                    ${team.wins}
+                </td>
 
-                <td>${team.losses}</td>
+                <td>
+                    ${team.losses}
+                </td>
 
-                <td>${differentialText}</td>
-                `;
+                <td>
+                    ${differentialText}
+                </td>
+
+                <td>
+                    <span
+                        class="status-badge ${statusClass}"
+                    >
+                        ${team.status}
+                    </span>
+                </td>
+
+            `;
 
 
             body.appendChild(row);
 
         }
     );
-
 }
 
 
 /* =========================================================
    WEEK BUTTONS
-   ========================================================= */
+========================================================= */
 
 function renderWeekButtons() {
 
@@ -673,13 +855,15 @@ function renderWeekButtons() {
 
 
     weeks.forEach(
-        function(week) {
+        week => {
 
             const button =
                 document.createElement(
                     "button"
                 );
 
+
+            button.type = "button";
 
             button.className =
                 "week-button";
@@ -718,7 +902,7 @@ function renderWeekButtons() {
 
             button.addEventListener(
                 "click",
-                function() {
+                () => {
 
                     currentWeek =
                         week.number;
@@ -737,13 +921,12 @@ function renderWeekButtons() {
 
         }
     );
-
 }
 
 
 /* =========================================================
    RENDER WEEK
-   ========================================================= */
+========================================================= */
 
 function renderWeek() {
 
@@ -808,7 +991,7 @@ function renderWeek() {
 
 
     week.matches.forEach(
-        function(match, index) {
+        (match, index) => {
 
             renderMatch(
                 match,
@@ -822,13 +1005,12 @@ function renderWeek() {
 
 
     renderControls();
-
 }
 
 
 /* =========================================================
    RENDER MATCH
-   ========================================================= */
+========================================================= */
 
 function renderMatch(
     match,
@@ -882,7 +1064,7 @@ function renderMatch(
 
     /* =====================================================
        LOCKED MATCH
-       ===================================================== */
+    ===================================================== */
 
     if (locked) {
 
@@ -959,7 +1141,8 @@ function renderMatch(
                 "span"
             );
 
-        dash.textContent = "-";
+        dash.textContent =
+            "-";
 
 
         scoreArea.appendChild(
@@ -976,7 +1159,7 @@ function renderMatch(
 
     /* =====================================================
        OPEN MATCH
-       ===================================================== */
+    ===================================================== */
 
     else {
 
@@ -1009,6 +1192,10 @@ function renderMatch(
             "score-input";
 
 
+        /*
+         * Load existing values.
+         */
+
         if (match.length >= 4) {
 
             inputA.value =
@@ -1019,6 +1206,61 @@ function renderMatch(
 
         }
 
+
+        /*
+         * Update the actual match
+         * immediately as the user types.
+         */
+
+        function updateMatchData() {
+
+            if (
+                inputA.value === "" ||
+                inputB.value === ""
+            ) {
+
+                /*
+                 * Remove incomplete result.
+                 */
+
+                match.length = 2;
+
+                saveScoresToStorage();
+
+                updateStandings();
+
+                updateWinnerDisplay();
+
+                return;
+            }
+
+
+            const a =
+                Number(inputA.value);
+
+            const b =
+                Number(inputB.value);
+
+
+            if (validScore(a, b)) {
+
+                match[2] = a;
+                match[3] = b;
+
+                saveScoresToStorage();
+
+            }
+
+
+            updateStandings();
+
+            updateWinnerDisplay();
+        }
+
+
+        /*
+         * Visual winner/loser display.
+         */
 
         function updateWinnerDisplay() {
 
@@ -1100,105 +1342,36 @@ function renderMatch(
 
 
         /*
-         * SAVE THIS ONE MATCH
-         * when Enter is pressed.
+         * Input event.
+         *
+         * This is what makes the leaderboard
+         * update automatically.
          */
-
-        function saveMatch() {
-
-            const scoreA =
-                inputA.value;
-
-            const scoreB =
-                inputB.value;
-
-
-            if (
-                !validScore(
-                    scoreA,
-                    scoreB
-                )
-            ) {
-
-                inputA.classList.add(
-                    "invalid-score"
-                );
-
-                inputB.classList.add(
-                    "invalid-score"
-                );
-
-                alert(
-                    "Invalid score.\n\n" +
-                    "The two scores must total exactly 3.\n\n" +
-                    "Examples:\n" +
-                    "3 - 0\n" +
-                    "2 - 1\n" +
-                    "1 - 2\n" +
-                    "0 - 3"
-                );
-
-                return;
-
-            }
-
-
-            week.matches[matchIndex][2] =
-                Number(scoreA);
-
-            week.matches[matchIndex][3] =
-                Number(scoreB);
-
-
-            saveScoresToStorage();
-
-
-            /*
-             * Immediately update standings.
-             */
-
-            updateStandings();
-
-
-            /*
-             * Re-render this week.
-             */
-
-            renderWeek();
-
-
-            /*
-             * Brief confirmation.
-             */
-
-            showSaveMessage();
-
-        }
-
 
         inputA.addEventListener(
             "input",
-            updateWinnerDisplay
+            updateMatchData
         );
 
         inputB.addEventListener(
             "input",
-            updateWinnerDisplay
+            updateMatchData
         );
 
 
         /*
-         * Pressing Enter in either
-         * input saves only this match.
+         * Enter also works.
          */
 
         inputA.addEventListener(
             "keydown",
-            function(event) {
+            event => {
 
                 if (event.key === "Enter") {
 
-                    saveMatch();
+                    updateMatchData();
+
+                    inputA.blur();
 
                 }
 
@@ -1208,11 +1381,13 @@ function renderMatch(
 
         inputB.addEventListener(
             "keydown",
-            function(event) {
+            event => {
 
                 if (event.key === "Enter") {
 
-                    saveMatch();
+                    updateMatchData();
+
+                    inputB.blur();
 
                 }
 
@@ -1230,7 +1405,8 @@ function renderMatch(
                 "span"
             );
 
-        dash.textContent = "-";
+        dash.textContent =
+            "-";
 
 
         scoreArea.appendChild(
@@ -1264,63 +1440,12 @@ function renderMatch(
     container.appendChild(
         matchDiv
     );
-
-}
-
-
-/* =========================================================
-   SAVE MESSAGE
-   ========================================================= */
-
-function showSaveMessage() {
-
-    const controls =
-        document.getElementById(
-            "weekControls"
-        );
-
-    if (!controls) {
-        return;
-    }
-
-
-    const message =
-        document.createElement(
-            "span"
-        );
-
-    message.className =
-        "locked-message";
-
-    message.style.color =
-        "#86efac";
-
-    message.textContent =
-        "✓ Result saved";
-
-
-    controls.innerHTML = "";
-
-    controls.appendChild(
-        message
-    );
-
-
-    setTimeout(
-        function() {
-
-            renderControls();
-
-        },
-        1200
-    );
-
 }
 
 
 /* =========================================================
    RENDER CONTROLS
-   ========================================================= */
+========================================================= */
 
 function renderControls() {
 
@@ -1360,9 +1485,7 @@ function renderControls() {
             message
         );
 
-
         return;
-
     }
 
 
@@ -1375,19 +1498,18 @@ function renderControls() {
         "locked-message";
 
     message.textContent =
-        "Press Enter after entering a score to save that match";
+        "Enter a valid score (3-0, 2-1, 1-2, or 0-3)";
 
 
     controls.appendChild(
         message
     );
-
 }
 
 
 /* =========================================================
-   RESET ALL SCORES
-   ========================================================= */
+   RESET
+========================================================= */
 
 function resetAllScores() {
 
@@ -1404,19 +1526,10 @@ function resetAllScores() {
     }
 
 
-    /*
-     * Remove saved local data.
-     */
-
     localStorage.removeItem(
         STORAGE_KEY
     );
 
-
-    /*
-     * Remove scores from
-     * all unlocked weeks.
-     */
 
     for (const week of weeks) {
 
@@ -1425,13 +1538,7 @@ function resetAllScores() {
         }
 
 
-        for (
-            const match of week.matches
-        ) {
-
-            /*
-             * Keep only the two teams.
-             */
+        for (const match of week.matches) {
 
             match.length = 2;
 
@@ -1439,10 +1546,6 @@ function resetAllScores() {
 
     }
 
-
-    /*
-     * Recalculate everything.
-     */
 
     updateStandings();
 
@@ -1454,17 +1557,16 @@ function resetAllScores() {
     alert(
         "All editable scores have been reset."
     );
-
 }
 
 
 /* =========================================================
    INITIALIZATION
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    () => {
 
         loadSavedScores();
 

@@ -1,12 +1,13 @@
 /* =========================================================
-   GLOBAL
-   ========================================================= */
+GLOBAL
+========================================================= */
 
-   * {
+* {
     box-sizing: border-box;
 }
 
 :root {
+
     --bg: #050816;
 
     --glass: rgba(255, 255, 255, 0.075);
@@ -21,6 +22,7 @@
 
     --green: #4ade80;
     --red: #f87171;
+    --yellow: #facc15;
 
     --shadow:
         0 25px 70px rgba(0, 0, 0, 0.45);
@@ -28,11 +30,17 @@
     --blur: blur(24px);
 }
 
+
+/* =========================================================
+BODY
+========================================================= */
+
 html {
     scroll-behavior: smooth;
 }
 
 body {
+
     margin: 0;
 
     font-family:
@@ -45,6 +53,7 @@ body {
         sans-serif;
 
     background:
+
         radial-gradient(
             circle at 10% 0%,
             rgba(59, 130, 246, 0.18),
@@ -70,6 +79,7 @@ body {
     min-height: 100vh;
 }
 
+
 button,
 input {
     font-family: inherit;
@@ -77,10 +87,11 @@ input {
 
 
 /* =========================================================
-   BACKGROUND EFFECT
-   ========================================================= */
+BACKGROUND EFFECT
+========================================================= */
 
 body::before {
+
     content: "";
 
     position: fixed;
@@ -102,10 +113,11 @@ body::before {
 
 
 /* =========================================================
-   HEADER
-   ========================================================= */
+HEADER
+========================================================= */
 
 .site-header {
+
     position: relative;
 
     padding: 42px 20px;
@@ -122,7 +134,9 @@ body::before {
     overflow: hidden;
 }
 
+
 .header-glow {
+
     position: absolute;
 
     width: 500px;
@@ -143,7 +157,9 @@ body::before {
     pointer-events: none;
 }
 
+
 .header-content {
+
     position: relative;
 
     width: min(1200px, 94%);
@@ -159,8 +175,10 @@ body::before {
     gap: 30px;
 }
 
+
 .eyebrow,
 .section-label {
+
     color: var(--blue);
 
     font-size: 11px;
@@ -172,7 +190,9 @@ body::before {
     text-transform: uppercase;
 }
 
+
 .site-header h1 {
+
     margin: 8px 0 5px;
 
     font-size: clamp(30px, 5vw, 46px);
@@ -180,7 +200,9 @@ body::before {
     letter-spacing: -1.5px;
 }
 
+
 .site-header p {
+
     margin: 0;
 
     color: var(--muted);
@@ -190,10 +212,11 @@ body::before {
 
 
 /* =========================================================
-   RESET BUTTON
-   ========================================================= */
+RESET BUTTON
+========================================================= */
 
 .reset-button {
+
     flex-shrink: 0;
 
     padding: 12px 18px;
@@ -220,7 +243,9 @@ body::before {
         border 0.2s ease;
 }
 
+
 .reset-button:hover {
+
     transform: translateY(-2px);
 
     background:
@@ -230,16 +255,18 @@ body::before {
         rgba(248,113,113,0.55);
 }
 
+
 .reset-button:active {
     transform: scale(0.97);
 }
 
 
 /* =========================================================
-   MAIN
-   ========================================================= */
+MAIN
+========================================================= */
 
 .container {
+
     width: min(1200px, 94%);
 
     margin: 35px auto 60px;
@@ -247,10 +274,11 @@ body::before {
 
 
 /* =========================================================
-   GLASS CARDS
-   ========================================================= */
+GLASS CARDS
+========================================================= */
 
 .glass-card {
+
     position: relative;
 
     background:
@@ -275,7 +303,9 @@ body::before {
     overflow: hidden;
 }
 
+
 .glass-card::before {
+
     content: "";
 
     position: absolute;
@@ -297,8 +327,10 @@ body::before {
     pointer-events: none;
 }
 
+
 .standings-section,
 .schedule-section {
+
     padding: 28px;
 
     margin-bottom: 28px;
@@ -306,10 +338,11 @@ body::before {
 
 
 /* =========================================================
-   SECTION HEADER
-   ========================================================= */
+SECTION HEADER
+========================================================= */
 
 .section-header {
+
     display: flex;
 
     justify-content: space-between;
@@ -321,8 +354,10 @@ body::before {
     margin-bottom: 24px;
 }
 
+
 .section-header h2,
 .schedule-section h2 {
+
     margin: 5px 0;
 
     font-size: 25px;
@@ -330,8 +365,10 @@ body::before {
     letter-spacing: -0.5px;
 }
 
+
 .section-header p,
 .section-description {
+
     color: var(--muted);
 
     margin: 0;
@@ -341,10 +378,11 @@ body::before {
 
 
 /* =========================================================
-   PLAYOFF BADGE
-   ========================================================= */
+PLAYOFF BADGE
+========================================================= */
 
 .playoff-badge {
+
     display: flex;
 
     align-items: center;
@@ -370,7 +408,9 @@ body::before {
     white-space: nowrap;
 }
 
+
 .badge-dot {
+
     width: 7px;
     height: 7px;
 
@@ -384,10 +424,11 @@ body::before {
 
 
 /* =========================================================
-   STANDINGS
-   ========================================================= */
+STANDINGS
+========================================================= */
 
 .standings-wrapper {
+
     overflow-x: auto;
 
     border-radius: 16px;
@@ -396,15 +437,19 @@ body::before {
         1px solid rgba(255,255,255,0.08);
 }
 
+
 .standings-table {
+
     width: 100%;
 
     border-collapse: collapse;
 
-    min-width: 550px;
+    min-width: 650px;
 }
 
+
 .standings-table th {
+
     padding: 14px 16px;
 
     background:
@@ -421,7 +466,9 @@ body::before {
     text-transform: uppercase;
 }
 
+
 .standings-table td {
+
     padding: 15px 16px;
 
     border-bottom:
@@ -430,33 +477,43 @@ body::before {
     font-size: 14px;
 }
 
+
 .standings-table tbody tr {
+
     transition:
         background 0.2s ease;
 }
 
+
 .standings-table tbody tr:hover {
+
     background:
         rgba(255,255,255,0.035);
 }
 
+
 .standings-table th:first-child,
 .standings-table td:first-child {
-    width: 60px;
+
+    width: 55px;
 
     text-align: center;
 }
+
 
 .standings-table th:nth-child(3),
 .standings-table th:nth-child(4),
 .standings-table th:nth-child(5),
+
 .standings-table td:nth-child(3),
 .standings-table td:nth-child(4),
 .standings-table td:nth-child(5) {
+
     text-align: center;
 
-    width: 75px;
+    width: 70px;
 }
+
 
 .team-name {
     font-weight: 700;
@@ -464,20 +521,22 @@ body::before {
 
 
 /* =========================================================
-   PLAYOFF TEAMS
-   ========================================================= */
+PLAYOFF TEAMS
+========================================================= */
 
 .playoff-team {
+
     background:
         rgba(59,130,246,0.055);
 }
 
 
 /* =========================================================
-   PLAYOFF CUTOFF
-   ========================================================= */
+PLAYOFF CUTOFF
+========================================================= */
 
 .playoff-cutoff td {
+
     position: relative;
 
     padding: 9px 14px !important;
@@ -512,13 +571,78 @@ body::before {
 
 
 /* =========================================================
-   SCHEDULE
-   ========================================================= */
+STATUS BADGES
+========================================================= */
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+
+    white-space: nowrap;
+}
+
+
+.status-clinched {
+
+    color: #86efac;
+
+    background:
+        rgba(74,222,128,0.10);
+
+    border:
+        1px solid rgba(74,222,128,0.25);
+}
+
+
+.status-contention {
+
+    color: #93c5fd;
+
+    background:
+        rgba(59,130,246,0.10);
+
+    border:
+        1px solid rgba(59,130,246,0.25);
+}
+
+
+.status-eliminated {
+
+    color: #fca5a5;
+
+    background:
+        rgba(248,113,113,0.09);
+
+    border:
+        1px solid rgba(248,113,113,0.22);
+}
+
+
+/* =========================================================
+SCHEDULE
+========================================================= */
 
 .schedule-section > h2 {
+
     margin-top: 5px;
+
     margin-bottom: 4px;
 }
+
 
 .section-description {
     margin-bottom: 24px;
@@ -526,14 +650,16 @@ body::before {
 
 
 /* =========================================================
-   WEEK BUTTONS
-   ========================================================= */
+WEEK BUTTONS
+========================================================= */
 
 .week-selector {
     margin-bottom: 26px;
 }
 
+
 .week-buttons {
+
     display: flex;
 
     flex-wrap: wrap;
@@ -541,7 +667,9 @@ body::before {
     gap: 8px;
 }
 
+
 .week-button {
+
     position: relative;
 
     border:
@@ -570,7 +698,9 @@ body::before {
         border 0.2s ease;
 }
 
+
 .week-button:hover {
+
     transform: translateY(-2px);
 
     background:
@@ -580,7 +710,9 @@ body::before {
         rgba(255,255,255,0.20);
 }
 
+
 .week-button.active {
+
     background:
         linear-gradient(
             135deg,
@@ -597,23 +729,27 @@ body::before {
         0 8px 25px rgba(37,99,235,0.25);
 }
 
+
 .week-button.locked {
     opacity: 0.75;
 }
 
 
 /* =========================================================
-   SELECTED WEEK
-   ========================================================= */
+SELECTED WEEK
+========================================================= */
 
 .selected-week {
+
     padding-top: 25px;
 
     border-top:
         1px solid rgba(255,255,255,0.09);
 }
 
+
 .week-heading {
+
     display: flex;
 
     justify-content: space-between;
@@ -623,7 +759,9 @@ body::before {
     margin-bottom: 18px;
 }
 
+
 .week-title {
+
     font-size: 25px;
 
     font-weight: 800;
@@ -631,7 +769,9 @@ body::before {
     letter-spacing: -0.5px;
 }
 
+
 .week-heading p {
+
     color: var(--muted);
 
     margin: 4px 0 0;
@@ -641,10 +781,11 @@ body::before {
 
 
 /* =========================================================
-   WEEK STATUS
-   ========================================================= */
+WEEK STATUS
+========================================================= */
 
 .week-status {
+
     padding: 8px 13px;
 
     border-radius: 999px;
@@ -656,7 +797,9 @@ body::before {
     letter-spacing: 1px;
 }
 
+
 .week-status.locked {
+
     background:
         rgba(148,163,184,0.10);
 
@@ -666,7 +809,9 @@ body::before {
     color: #cbd5e1;
 }
 
+
 .week-status.open {
+
     background:
         rgba(74,222,128,0.09);
 
@@ -678,10 +823,11 @@ body::before {
 
 
 /* =========================================================
-   MATCHES
-   ========================================================= */
+MATCHES
+========================================================= */
 
 .matches {
+
     display: flex;
 
     flex-direction: column;
@@ -689,7 +835,9 @@ body::before {
     gap: 9px;
 }
 
+
 .match {
+
     display: grid;
 
     grid-template-columns:
@@ -717,7 +865,9 @@ body::before {
         transform 0.2s ease;
 }
 
+
 .match:hover {
+
     background:
         rgba(255,255,255,0.045);
 
@@ -727,7 +877,9 @@ body::before {
     transform: translateY(-1px);
 }
 
+
 .match-team {
+
     font-weight: 700;
 
     padding: 10px;
@@ -739,16 +891,18 @@ body::before {
         color 0.2s ease;
 }
 
+
 .match-team:last-child {
     text-align: right;
 }
 
 
 /* =========================================================
-   WINNER / LOSER
-   ========================================================= */
+WINNER / LOSER
+========================================================= */
 
 .match-team.winner {
+
     background:
         linear-gradient(
             135deg,
@@ -762,16 +916,18 @@ body::before {
         inset 0 0 0 1px rgba(96,165,250,0.14);
 }
 
+
 .match-team.loser {
     color: #64748b;
 }
 
 
 /* =========================================================
-   SCORES
-   ========================================================= */
+SCORES
+========================================================= */
 
 .score-area {
+
     display: flex;
 
     justify-content: center;
@@ -785,13 +941,17 @@ body::before {
     font-weight: 900;
 }
 
+
 .score {
+
     min-width: 30px;
 
     text-align: center;
 }
 
+
 .winner-score {
+
     color: #93c5fd;
 
     text-shadow:
@@ -800,10 +960,11 @@ body::before {
 
 
 /* =========================================================
-   SCORE INPUT
-   ========================================================= */
+SCORE INPUT
+========================================================= */
 
 .score-input {
+
     width: 44px;
     height: 42px;
 
@@ -833,12 +994,16 @@ body::before {
         box-shadow 0.2s ease;
 }
 
+
 .score-input:hover {
+
     background:
         rgba(255,255,255,0.11);
 }
 
+
 .score-input:focus {
+
     border-color:
         rgba(96,165,250,0.75);
 
@@ -849,7 +1014,9 @@ body::before {
         0 0 0 3px rgba(59,130,246,0.13);
 }
 
+
 .score-input.invalid-score {
+
     border-color:
         rgba(248,113,113,0.9);
 
@@ -860,8 +1027,10 @@ body::before {
         0 0 0 3px rgba(248,113,113,0.08);
 }
 
+
 .score-input::-webkit-inner-spin-button,
 .score-input::-webkit-outer-spin-button {
+
     -webkit-appearance: none;
 
     margin: 0;
@@ -869,10 +1038,11 @@ body::before {
 
 
 /* =========================================================
-   CONTROLS
-   ========================================================= */
+CONTROLS
+========================================================= */
 
 .week-controls {
+
     display: flex;
 
     justify-content: flex-end;
@@ -884,47 +1054,9 @@ body::before {
     min-height: 42px;
 }
 
-.save-button {
-    border:
-        1px solid rgba(147,197,253,0.35);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(59,130,246,0.85),
-            rgba(37,99,235,0.65)
-        );
-
-    color: white;
-
-    padding: 11px 19px;
-
-    border-radius: 12px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 8px 25px rgba(37,99,235,0.22);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.save-button:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 12px 30px rgba(37,99,235,0.32);
-}
-
-.save-button:active {
-    transform: scale(0.97);
-}
 
 .locked-message {
+
     color: #64748b;
 
     font-size: 13px;
@@ -934,10 +1066,11 @@ body::before {
 
 
 /* =========================================================
-   FOOTER
-   ========================================================= */
+FOOTER
+========================================================= */
 
 footer {
+
     text-align: center;
 
     color: #475569;
@@ -949,8 +1082,8 @@ footer {
 
 
 /* =========================================================
-   MOBILE
-   ========================================================= */
+MOBILE
+========================================================= */
 
 @media (max-width: 700px) {
 
@@ -959,6 +1092,7 @@ footer {
     }
 
     .header-content {
+
         width: 100%;
 
         align-items: flex-start;
@@ -971,6 +1105,7 @@ footer {
     }
 
     .container {
+
         width: 94%;
 
         margin-top: 22px;
@@ -978,12 +1113,14 @@ footer {
 
     .standings-section,
     .schedule-section {
+
         padding: 19px;
 
         border-radius: 20px;
     }
 
     .section-header {
+
         align-items: flex-start;
 
         flex-direction: column;
@@ -994,12 +1131,14 @@ footer {
     }
 
     .week-heading {
+
         align-items: flex-start;
 
         gap: 12px;
     }
 
     .match {
+
         grid-template-columns:
             minmax(0, 1fr)
             100px
@@ -1009,6 +1148,7 @@ footer {
     }
 
     .match-team {
+
         font-size: 12px;
 
         padding: 8px 5px;
@@ -1019,6 +1159,7 @@ footer {
     }
 
     .score-input {
+
         width: 36px;
 
         height: 38px;
@@ -1027,20 +1168,17 @@ footer {
     .week-controls {
         justify-content: stretch;
     }
-
-    .save-button {
-        width: 100%;
-    }
 }
 
 
 /* =========================================================
-   VERY SMALL SCREENS
-   ========================================================= */
+VERY SMALL SCREENS
+========================================================= */
 
 @media (max-width: 430px) {
 
     .match {
+
         grid-template-columns:
             minmax(0, 1fr)
             82px
