@@ -1,5 +1,5 @@
 /* =========================================================
-   POKEMON DRAFT LEAGUE
+   POKÉMON DRAFT LEAGUE
    ========================================================= */
 
 
@@ -21,19 +21,6 @@
     "Amarillo Archaludon",
     "Southern Tier Supporters"
 ];
-
-
-/*
- * Score format:
- *
- * [team 1, team 2, score 1, score 2]
- *
- * Weeks 1-6:
- * LOCKED
- *
- * Weeks 7-11:
- * OPEN
- */
 
 
 /* =========================================================
@@ -279,12 +266,9 @@ const STORAGE_KEY =
     "pokemonDraftLeagueScores";
 
 
-/*
- * Load saved scores.
- *
- * Only OPEN weeks can be changed.
- * Locked weeks always use the hard-coded results.
- */
+/* =========================================================
+   LOAD SAVED SCORES
+   ========================================================= */
 
 function loadSavedScores() {
 
@@ -300,26 +284,19 @@ function loadSavedScores() {
         const savedWeeks =
             JSON.parse(saved);
 
-
         for (
             let w = 0;
             w < weeks.length;
             w++
         ) {
 
-            /*
-             * Never overwrite locked weeks.
-             */
-
             if (weeks[w].locked) {
                 continue;
             }
 
-
             if (!savedWeeks[w]) {
                 continue;
             }
-
 
             for (
                 let m = 0;
@@ -330,58 +307,16 @@ function loadSavedScores() {
                 const savedMatch =
                     savedWeeks[w][m];
 
-
                 if (
                     savedMatch &&
                     savedMatch.length === 4
                 ) {
 
-                    const scoreA =
+                    weeks[w].matches[m][2] =
                         savedMatch[2];
 
-                    const scoreB =
+                    weeks[w].matches[m][3] =
                         savedMatch[3];
-
-
-                    /*
-                     * Blank match
-                     */
-
-                    if (
-                        scoreA === null ||
-                        scoreA === undefined ||
-                        scoreB === null ||
-                        scoreB === undefined
-                    ) {
-
-                        weeks[w].matches[m] =
-                            [
-                                weeks[w].matches[m][0],
-                                weeks[w].matches[m][1]
-                            ];
-
-                        continue;
-                    }
-
-
-                    /*
-                     * Valid saved match
-                     */
-
-                    if (
-                        validScore(
-                            scoreA,
-                            scoreB
-                        )
-                    ) {
-
-                        weeks[w].matches[m][2] =
-                            Number(scoreA);
-
-                        weeks[w].matches[m][3] =
-                            Number(scoreB);
-
-                    }
 
                 }
 
@@ -401,14 +336,13 @@ function loadSavedScores() {
 }
 
 
-/*
- * Save all OPEN week scores.
- */
+/* =========================================================
+   SAVE SCORES
+   ========================================================= */
 
 function saveScoresToStorage() {
 
     const data = [];
-
 
     for (
         let w = 0;
@@ -417,7 +351,6 @@ function saveScoresToStorage() {
     ) {
 
         data[w] = [];
-
 
         for (
             let m = 0;
@@ -428,32 +361,26 @@ function saveScoresToStorage() {
             const match =
                 weeks[w].matches[m];
 
-
             data[w][m] = [
-
                 match[0],
-
                 match[1],
-
                 match.length >= 4
                     ? match[2]
                     : null,
-
                 match.length >= 4
                     ? match[3]
                     : null
-
             ];
 
         }
 
     }
 
-
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(data)
     );
+
 }
 
 
@@ -471,36 +398,18 @@ function validScore(scoreA, scoreB) {
         scoreA === undefined ||
         scoreB === undefined
     ) {
-
         return false;
-
     }
 
-
-    const a =
-        Number(scoreA);
-
-    const b =
-        Number(scoreB);
-
-
-    /*
-     * Must be integers.
-     */
+    const a = Number(scoreA);
+    const b = Number(scoreB);
 
     if (
         !Number.isInteger(a) ||
         !Number.isInteger(b)
     ) {
-
         return false;
-
     }
-
-
-    /*
-     * Scores must be 0-3.
-     */
 
     if (
         a < 0 ||
@@ -508,18 +417,11 @@ function validScore(scoreA, scoreB) {
         a > 3 ||
         b > 3
     ) {
-
         return false;
-
     }
 
-
-    /*
-     * Every match consists of
-     * exactly 3 games.
-     */
-
     return a + b === 3;
+
 }
 
 
@@ -530,12 +432,6 @@ function validScore(scoreA, scoreB) {
 function calculateStandings() {
 
     const standings = [];
-
-
-    /*
-     * Create initial standings
-     * for every team.
-     */
 
     for (const team of teams) {
 
@@ -554,26 +450,22 @@ function calculateStandings() {
     }
 
 
-    /*
-     * Go through every week.
-     */
-
     for (const week of weeks) {
 
-        /*
-         * Go through every match.
-         */
-
         for (const match of week.matches) {
-
-            /*
-             * Ignore matches with no score.
-             */
 
             if (match.length < 4) {
                 continue;
             }
 
+            if (
+                !validScore(
+                    match[2],
+                    match[3]
+                )
+            ) {
+                continue;
+            }
 
             const scoreA =
                 Number(match[2]);
@@ -582,29 +474,11 @@ function calculateStandings() {
                 Number(match[3]);
 
 
-            /*
-             * Ignore invalid/incomplete
-             * matches.
-             */
-
-            if (
-                !validScore(
-                    scoreA,
-                    scoreB
-                )
-            ) {
-
-                continue;
-
-            }
-
-
             const teamA =
                 standings.find(
                     team =>
                         team.team === match[0]
                 );
-
 
             const teamB =
                 standings.find(
@@ -613,19 +487,10 @@ function calculateStandings() {
                 );
 
 
-            if (
-                !teamA ||
-                !teamB
-            ) {
-
+            if (!teamA || !teamB) {
                 continue;
-
             }
 
-
-            /*
-             * Point differential.
-             */
 
             teamA.differential +=
                 scoreA - scoreB;
@@ -633,10 +498,6 @@ function calculateStandings() {
             teamB.differential +=
                 scoreB - scoreA;
 
-
-            /*
-             * Wins / losses.
-             */
 
             if (scoreA > scoreB) {
 
@@ -657,29 +518,14 @@ function calculateStandings() {
     }
 
 
-    /*
-     * Sort standings:
-     *
-     * 1. Most wins
-     * 2. Highest differential
-     * 3. Alphabetical name
-     */
-
     standings.sort(
         function(a, b) {
 
-            if (
-                a.wins !==
-                b.wins
-            ) {
+            if (a.wins !== b.wins) {
 
-                return (
-                    b.wins -
-                    a.wins
-                );
+                return b.wins - a.wins;
 
             }
-
 
             if (
                 a.differential !==
@@ -693,7 +539,6 @@ function calculateStandings() {
 
             }
 
-
             return a.team.localeCompare(
                 b.team
             );
@@ -703,11 +548,12 @@ function calculateStandings() {
 
 
     return standings;
+
 }
 
 
 /* =========================================================
-   UPDATE STANDINGS TABLE
+   UPDATE STANDINGS
    ========================================================= */
 
 function updateStandings() {
@@ -717,11 +563,9 @@ function updateStandings() {
             "standingsBody"
         );
 
-
     if (!body) {
         return;
     }
-
 
     const standings =
         calculateStandings();
@@ -733,11 +577,7 @@ function updateStandings() {
     standings.forEach(
         function(team, index) {
 
-
-            /*
-             * Playoff cutoff before
-             * position 9.
-             */
+            /* PLAYOFF CUTOFF */
 
             if (index === 8) {
 
@@ -746,16 +586,16 @@ function updateStandings() {
                         "tr"
                     );
 
-
                 cutoff.className =
                     "playoff-cutoff";
 
-
                 cutoff.innerHTML =
-                    "<td colspan='5'>" +
-                    "PLAYOFF CUTOFF — TOP 8" +
-                    "</td>";
-
+                    `
+                    <td colspan="5">
+                        PLAYOFF CUTOFF
+                        • TOP 8 QUALIFY
+                    </td>
+                    `;
 
                 body.appendChild(
                     cutoff
@@ -770,10 +610,6 @@ function updateStandings() {
                 );
 
 
-            /*
-             * Highlight playoff teams.
-             */
-
             if (index < 8) {
 
                 row.classList.add(
@@ -783,56 +619,33 @@ function updateStandings() {
             }
 
 
-            /*
-             * Differential text.
-             */
-
             let differential =
                 team.differential;
 
 
-            let differentialText;
-
-
-            if (differential > 0) {
-
-                differentialText =
-                    "+" + differential;
-
-            } else {
-
-                differentialText =
-                    String(differential);
-
-            }
+            const differentialText =
+                differential > 0
+                    ? "+" + differential
+                    : String(differential);
 
 
             row.innerHTML =
+                `
+                <td>${index + 1}</td>
 
-                "<td>" +
-                    (index + 1) +
-                "</td>" +
+                <td class="team-name">
+                    ${team.team}
+                </td>
 
-                "<td class='team-name'>" +
-                    team.team +
-                "</td>" +
+                <td>${team.wins}</td>
 
-                "<td>" +
-                    team.wins +
-                "</td>" +
+                <td>${team.losses}</td>
 
-                "<td>" +
-                    team.losses +
-                "</td>" +
-
-                "<td>" +
-                    differentialText +
-                "</td>";
+                <td>${differentialText}</td>
+                `;
 
 
-            body.appendChild(
-                row
-            );
+            body.appendChild(row);
 
         }
     );
@@ -841,7 +654,7 @@ function updateStandings() {
 
 
 /* =========================================================
-   RENDER WEEK BUTTONS
+   WEEK BUTTONS
    ========================================================= */
 
 function renderWeekButtons() {
@@ -850,7 +663,6 @@ function renderWeekButtons() {
         document.getElementById(
             "weekButtons"
         );
-
 
     if (!container) {
         return;
@@ -873,10 +685,6 @@ function renderWeekButtons() {
                 "week-button";
 
 
-            /*
-             * Active week.
-             */
-
             if (
                 week.number ===
                 currentWeek
@@ -888,10 +696,6 @@ function renderWeekButtons() {
 
             }
 
-
-            /*
-             * Locked week.
-             */
 
             if (week.locked) {
 
@@ -919,7 +723,6 @@ function renderWeekButtons() {
                     currentWeek =
                         week.number;
 
-
                     renderWeekButtons();
 
                     renderWeek();
@@ -939,7 +742,7 @@ function renderWeekButtons() {
 
 
 /* =========================================================
-   RENDER CURRENT WEEK
+   RENDER WEEK
    ========================================================= */
 
 function renderWeek() {
@@ -958,18 +761,15 @@ function renderWeek() {
             "weekTitle"
         );
 
-
     const dates =
         document.getElementById(
             "weekDates"
         );
 
-
     const status =
         document.getElementById(
             "weekStatus"
         );
-
 
     const matches =
         document.getElementById(
@@ -977,96 +777,52 @@ function renderWeek() {
         );
 
 
-    /*
-     * Update title.
-     */
-
-    if (title) {
-
-        title.textContent =
-            "Week " +
-            week.number;
-
-    }
+    title.textContent =
+        "Week " + week.number;
 
 
-    /*
-     * Update dates.
-     */
-
-    if (dates) {
-
-        dates.textContent =
-            week.dates;
-
-    }
+    dates.textContent =
+        week.dates;
 
 
-    /*
-     * Clear matches.
-     */
+    matches.innerHTML = "";
 
-    if (matches) {
 
-        matches.innerHTML = "";
+    if (week.locked) {
+
+        status.textContent =
+            "🔒 LOCKED";
+
+        status.className =
+            "week-status locked";
+
+    } else {
+
+        status.textContent =
+            "● OPEN";
+
+        status.className =
+            "week-status open";
 
     }
 
 
-    /*
-     * Week status.
-     */
+    week.matches.forEach(
+        function(match, index) {
 
-    if (status) {
-
-        if (week.locked) {
-
-            status.textContent =
-                "🔒 LOCKED";
-
-            status.className =
-                "week-status locked";
-
-        } else {
-
-            status.textContent =
-                "OPEN";
-
-            status.className =
-                "week-status open";
+            renderMatch(
+                match,
+                index,
+                week.locked,
+                matches
+            );
 
         }
+    );
 
-    }
-
-
-    /*
-     * Render all six matches.
-     */
-
-    if (matches) {
-
-        week.matches.forEach(
-            function(match, index) {
-
-                renderMatch(
-                    match,
-                    index,
-                    week.locked,
-                    matches
-                );
-
-            }
-        );
-
-    }
-
-
-    /*
-     * Render bottom controls.
-     */
 
     renderControls();
+
 }
 
 
@@ -1086,24 +842,14 @@ function renderMatch(
             "div"
         );
 
-
     matchDiv.className =
         "match";
 
-
-    /*
-     * Team A
-     */
 
     const teamA =
         document.createElement(
             "div"
         );
-
-
-    /*
-     * Team B
-     */
 
     const teamB =
         document.createElement(
@@ -1114,7 +860,6 @@ function renderMatch(
     teamA.className =
         "match-team";
 
-
     teamB.className =
         "match-team";
 
@@ -1122,20 +867,14 @@ function renderMatch(
     teamA.textContent =
         match[0];
 
-
     teamB.textContent =
         match[1];
 
-
-    /*
-     * Score area.
-     */
 
     const scoreArea =
         document.createElement(
             "div"
         );
-
 
     scoreArea.className =
         "score-area";
@@ -1150,7 +889,6 @@ function renderMatch(
         const scoreA =
             Number(match[2]);
 
-
         const scoreB =
             Number(match[3]);
 
@@ -1159,7 +897,6 @@ function renderMatch(
             document.createElement(
                 "span"
             );
-
 
         const scoreElementB =
             document.createElement(
@@ -1170,7 +907,6 @@ function renderMatch(
         scoreElementA.className =
             "score";
 
-
         scoreElementB.className =
             "score";
 
@@ -1178,14 +914,9 @@ function renderMatch(
         scoreElementA.textContent =
             scoreA;
 
-
         scoreElementB.textContent =
             scoreB;
 
-
-        /*
-         * Winner / loser.
-         */
 
         if (scoreA > scoreB) {
 
@@ -1193,11 +924,9 @@ function renderMatch(
                 "winner"
             );
 
-
             teamB.classList.add(
                 "loser"
             );
-
 
             scoreElementA.classList.add(
                 "winner-score"
@@ -1209,11 +938,9 @@ function renderMatch(
                 "winner"
             );
 
-
             teamA.classList.add(
                 "loser"
             );
-
 
             scoreElementB.classList.add(
                 "winner-score"
@@ -1232,9 +959,7 @@ function renderMatch(
                 "span"
             );
 
-
-        dash.textContent =
-            "-";
+        dash.textContent = "-";
 
 
         scoreArea.appendChild(
@@ -1260,92 +985,47 @@ function renderMatch(
                 "input"
             );
 
-
         const inputB =
             document.createElement(
                 "input"
             );
 
 
-        inputA.type =
-            "number";
+        inputA.type = "number";
+        inputB.type = "number";
 
 
-        inputB.type =
-            "number";
+        inputA.min = "0";
+        inputA.max = "3";
 
-
-        inputA.min =
-            "0";
-
-
-        inputA.max =
-            "3";
-
-
-        inputB.min =
-            "0";
-
-
-        inputB.max =
-            "3";
+        inputB.min = "0";
+        inputB.max = "3";
 
 
         inputA.className =
             "score-input";
 
-
         inputB.className =
             "score-input";
 
 
-        /*
-         * Load existing saved score.
-         */
+        if (match.length >= 4) {
 
-        if (
-            match.length >= 4
-        ) {
+            inputA.value =
+                match[2];
 
-            if (
-                match[2] !== null &&
-                match[2] !== undefined
-            ) {
-
-                inputA.value =
-                    match[2];
-
-            }
-
-
-            if (
-                match[3] !== null &&
-                match[3] !== undefined
-            ) {
-
-                inputB.value =
-                    match[3];
-
-            }
+            inputB.value =
+                match[3];
 
         }
 
 
-        /* =================================================
-           UPDATE THIS MATCH
-           ================================================= */
-
-        function updateMatch() {
-
-            /*
-             * Remove old winner styling.
-             */
+        function updateWinnerDisplay() {
 
             teamA.classList.remove(
                 "winner",
                 "loser"
             );
-
 
             teamB.classList.remove(
                 "winner",
@@ -1357,58 +1037,81 @@ function renderMatch(
                 "invalid-score"
             );
 
-
             inputB.classList.remove(
                 "invalid-score"
             );
 
 
-            const valueA =
-                inputA.value;
-
-
-            const valueB =
-                inputB.value;
-
-
-            /*
-             * If either score is blank,
-             * this match is not counted.
-             */
-
             if (
-                valueA === "" ||
-                valueB === ""
+                inputA.value === "" ||
+                inputB.value === ""
             ) {
-
-                /*
-                 * Keep only the two team
-                 * names in the match array.
-                 */
-
-                match.length = 2;
-
-
-                saveScoresToStorage();
-
-                updateStandings();
 
                 return;
 
             }
 
 
-            const scoreA =
-                Number(valueA);
+            const a =
+                Number(inputA.value);
 
+            const b =
+                Number(inputB.value);
+
+
+            if (!validScore(a, b)) {
+
+                inputA.classList.add(
+                    "invalid-score"
+                );
+
+                inputB.classList.add(
+                    "invalid-score"
+                );
+
+                return;
+
+            }
+
+
+            if (a > b) {
+
+                teamA.classList.add(
+                    "winner"
+                );
+
+                teamB.classList.add(
+                    "loser"
+                );
+
+            } else {
+
+                teamB.classList.add(
+                    "winner"
+                );
+
+                teamA.classList.add(
+                    "loser"
+                );
+
+            }
+
+        }
+
+
+        /*
+         * SAVE THIS ONE MATCH
+         * when Enter is pressed.
+         */
+
+        function saveMatch() {
+
+            const scoreA =
+                inputA.value;
 
             const scoreB =
-                Number(valueB);
+                inputB.value;
 
-
-            /*
-             * Invalid score.
-             */
 
             if (
                 !validScore(
@@ -1421,130 +1124,113 @@ function renderMatch(
                     "invalid-score"
                 );
 
-
                 inputB.classList.add(
                     "invalid-score"
                 );
 
-
-                /*
-                 * Do not count invalid
-                 * scores in standings.
-                 */
-
-                match.length = 2;
-
-
-                saveScoresToStorage();
-
-                updateStandings();
+                alert(
+                    "Invalid score.\n\n" +
+                    "The two scores must total exactly 3.\n\n" +
+                    "Examples:\n" +
+                    "3 - 0\n" +
+                    "2 - 1\n" +
+                    "1 - 2\n" +
+                    "0 - 3"
+                );
 
                 return;
 
             }
 
 
-            /*
-             * Valid score.
-             *
-             * Save it directly into
-             * this match.
-             */
+            week.matches[matchIndex][2] =
+                Number(scoreA);
 
-            match[2] =
-                scoreA;
+            week.matches[matchIndex][3] =
+                Number(scoreB);
 
-
-            match[3] =
-                scoreB;
-
-
-            /*
-             * Highlight winner.
-             */
-
-            if (
-                scoreA >
-                scoreB
-            ) {
-
-                teamA.classList.add(
-                    "winner"
-                );
-
-
-                teamB.classList.add(
-                    "loser"
-                );
-
-            } else {
-
-                teamB.classList.add(
-                    "winner"
-                );
-
-
-                teamA.classList.add(
-                    "loser"
-                );
-
-            }
-
-
-            /*
-             * SAVE IMMEDIATELY.
-             */
 
             saveScoresToStorage();
 
 
             /*
-             * UPDATE STANDINGS IMMEDIATELY.
+             * Immediately update standings.
              */
 
             updateStandings();
 
+
+            /*
+             * Re-render this week.
+             */
+
+            renderWeek();
+
+
+            /*
+             * Brief confirmation.
+             */
+
+            showSaveMessage();
+
         }
 
 
+        inputA.addEventListener(
+            "input",
+            updateWinnerDisplay
+        );
+
+        inputB.addEventListener(
+            "input",
+            updateWinnerDisplay
+        );
+
+
         /*
-         * Input event fires immediately
-         * when the user changes a score.
+         * Pressing Enter in either
+         * input saves only this match.
          */
 
         inputA.addEventListener(
-            "input",
-            updateMatch
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    saveMatch();
+
+                }
+
+            }
         );
 
 
         inputB.addEventListener(
-            "input",
-            updateMatch
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    saveMatch();
+
+                }
+
+            }
         );
 
-
-        /*
-         * Score A.
-         */
 
         scoreArea.appendChild(
             inputA
         );
 
 
-        /*
-         * Dash.
-         */
-
         const dash =
             document.createElement(
                 "span"
             );
 
-
-        dash.textContent =
-            "-";
+        dash.textContent = "-";
 
 
         scoreArea.appendChild(
@@ -1552,72 +1238,23 @@ function renderMatch(
         );
 
 
-        /*
-         * Score B.
-         */
-
         scoreArea.appendChild(
             inputB
         );
 
 
-        /*
-         * Display saved winner.
-         */
-
-        if (
-            match.length >= 4 &&
-            validScore(
-                match[2],
-                match[3]
-            )
-        ) {
-
-            if (
-                Number(match[2]) >
-                Number(match[3])
-            ) {
-
-                teamA.classList.add(
-                    "winner"
-                );
-
-
-                teamB.classList.add(
-                    "loser"
-                );
-
-            } else {
-
-                teamB.classList.add(
-                    "winner"
-                );
-
-
-                teamA.classList.add(
-                    "loser"
-                );
-
-            }
-
-        }
+        updateWinnerDisplay();
 
     }
 
-
-    /*
-     * Build match.
-     */
 
     matchDiv.appendChild(
         teamA
     );
 
-
     matchDiv.appendChild(
         scoreArea
     );
-
 
     matchDiv.appendChild(
         teamB
@@ -1627,6 +1264,57 @@ function renderMatch(
     container.appendChild(
         matchDiv
     );
+
+}
+
+
+/* =========================================================
+   SAVE MESSAGE
+   ========================================================= */
+
+function showSaveMessage() {
+
+    const controls =
+        document.getElementById(
+            "weekControls"
+        );
+
+    if (!controls) {
+        return;
+    }
+
+
+    const message =
+        document.createElement(
+            "span"
+        );
+
+    message.className =
+        "locked-message";
+
+    message.style.color =
+        "#86efac";
+
+    message.textContent =
+        "✓ Result saved";
+
+
+    controls.innerHTML = "";
+
+    controls.appendChild(
+        message
+    );
+
+
+    setTimeout(
+        function() {
+
+            renderControls();
+
+        },
+        1200
+    );
+
 }
 
 
@@ -1654,15 +1342,6 @@ function renderControls() {
         weeks[currentWeek - 1];
 
 
-    if (!week) {
-        return;
-    }
-
-
-    /*
-     * Locked week.
-     */
-
     if (week.locked) {
 
         const message =
@@ -1670,10 +1349,8 @@ function renderControls() {
                 "span"
             );
 
-
         message.className =
             "locked-message";
-
 
         message.textContent =
             "🔒 Results for this week are locked";
@@ -1685,30 +1362,99 @@ function renderControls() {
 
 
         return;
+
     }
 
-
-    /*
-     * Open week.
-     */
 
     const message =
         document.createElement(
             "span"
         );
 
-
     message.className =
-        "open-message";
-
+        "locked-message";
 
     message.textContent =
-        "✓ Scores save automatically";
+        "Press Enter after entering a score to save that match";
 
 
     controls.appendChild(
         message
     );
+
+}
+
+
+/* =========================================================
+   RESET ALL SCORES
+   ========================================================= */
+
+function resetAllScores() {
+
+    const confirmed =
+        confirm(
+            "Reset ALL editable match results?\n\n" +
+            "Weeks 1-6 are locked and will not be changed.\n\n" +
+            "All scores entered for Weeks 7-11 will be deleted."
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    /*
+     * Remove saved local data.
+     */
+
+    localStorage.removeItem(
+        STORAGE_KEY
+    );
+
+
+    /*
+     * Remove scores from
+     * all unlocked weeks.
+     */
+
+    for (const week of weeks) {
+
+        if (week.locked) {
+            continue;
+        }
+
+
+        for (
+            const match of week.matches
+        ) {
+
+            /*
+             * Keep only the two teams.
+             */
+
+            match.length = 2;
+
+        }
+
+    }
+
+
+    /*
+     * Recalculate everything.
+     */
+
+    updateStandings();
+
+    renderWeekButtons();
+
+    renderWeek();
+
+
+    alert(
+        "All editable scores have been reset."
+    );
+
 }
 
 
@@ -1720,54 +1466,26 @@ document.addEventListener(
     "DOMContentLoaded",
     function() {
 
-        /*
-         * Load previously saved
-         * scores first.
-         */
-
         loadSavedScores();
-
-
-        /*
-         * Calculate standings.
-         */
 
         updateStandings();
 
-
-        /*
-         * Create Week 1-11 buttons.
-         */
-
         renderWeekButtons();
-
-
-        /*
-         * Display current week.
-         */
 
         renderWeek();
 
 
-        /*
-         * Optional refresh button.
-         */
-
-        const refreshButton =
+        const resetButton =
             document.getElementById(
-                "refreshStandings"
+                "resetAll"
             );
 
 
-        if (refreshButton) {
+        if (resetButton) {
 
-            refreshButton.addEventListener(
+            resetButton.addEventListener(
                 "click",
-                function() {
-
-                    updateStandings();
-
-                }
+                resetAllScores
             );
 
         }

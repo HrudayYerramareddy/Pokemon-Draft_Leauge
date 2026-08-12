@@ -11,108 +11,158 @@
 
 <body>
 
-    <header class="site-header">
+<header class="site-header">
+    <div class="header-glow"></div>
+
+    <div class="header-content">
         <div>
-            <h1>Pokémon Draft League</h1>
-            <p>11 Weeks • 12 Teams • Top 8 Make Playoffs</p>
+            <div class="eyebrow">POKÉMON DRAFT LEAGUE</div>
+            <h1>Season Standings</h1>
+            <p>Track results, standings, and the road to the playoffs.</p>
         </div>
-    </header>
+
+        <button
+            id="resetAll"
+            class="reset-button"
+            type="button"
+        >
+            Reset All Scores
+        </button>
+    </div>
+</header>
 
 
-    <main class="container">
+<main class="container">
 
-        <!-- =========================
-             STANDINGS
-             ========================= -->
+    <!-- =====================================================
+         STANDINGS
+         ===================================================== -->
 
-        <section class="standings-section">
+    <section class="glass-card standings-section">
 
-            <div class="section-header">
-                <div>
-                    <h2>League Standings</h2>
-                    <p>Ranked by wins, then point differential</p>
+        <div class="section-header">
+
+            <div>
+                <div class="section-label">
+                    CURRENT STANDINGS
                 </div>
 
-                <button id="refreshStandings" class="refresh-button">
-                    Update Standings
-                </button>
+                <h2>League Table</h2>
+
+                <p>
+                    Updated automatically when results are saved.
+                </p>
             </div>
 
-
-            <div class="standings-wrapper">
-
-                <table class="standings-table">
-
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Team</th>
-                            <th>W</th>
-                            <th>L</th>
-                            <th>Point Differential</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="standingsBody"></tbody>
-
-                </table>
-
+            <div class="playoff-badge">
+                <span class="badge-dot"></span>
+                Top 8 Make Playoffs
             </div>
 
-        </section>
+        </div>
 
 
-        <!-- =========================
-             WEEK SELECTOR
-             ========================= -->
+        <div class="standings-wrapper">
 
-        <section class="schedule-section">
+            <table class="standings-table">
 
-            <div class="week-selector">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Team</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>Diff</th>
+                    </tr>
+                </thead>
 
-                <h2>Schedule</h2>
+                <tbody id="standingsBody"></tbody>
 
-                <div id="weekButtons" class="week-buttons"></div>
+            </table>
 
-            </div>
+        </div>
+
+    </section>
 
 
-            <!-- =========================
-                 SELECTED WEEK
-                 ========================= -->
+    <!-- =====================================================
+         SCHEDULE
+         ===================================================== -->
 
-            <div class="selected-week">
+    <section class="glass-card schedule-section">
 
-                <div class="week-heading">
+        <div class="section-label">
+            SEASON SCHEDULE
+        </div>
 
-                    <div>
-                        <h2 id="weekTitle">Week 1</h2>
-                        <p id="weekDates"></p>
+        <h2>Match Results</h2>
+
+        <p class="section-description">
+            Select a week to view or enter results.
+        </p>
+
+
+        <!-- WEEK SELECTOR -->
+
+        <div class="week-selector">
+
+            <div
+                id="weekButtons"
+                class="week-buttons"
+            ></div>
+
+        </div>
+
+
+        <!-- SELECTED WEEK -->
+
+        <div class="selected-week">
+
+            <div class="week-heading">
+
+                <div>
+                    <div
+                        id="weekTitle"
+                        class="week-title"
+                    >
+                        Week 1
                     </div>
 
-                    <div id="weekStatus" class="week-status"></div>
-
+                    <p id="weekDates"></p>
                 </div>
 
-
-                <div id="matches" class="matches"></div>
-
-
-                <div id="weekControls" class="week-controls"></div>
+                <div
+                    id="weekStatus"
+                    class="week-status"
+                ></div>
 
             </div>
 
-        </section>
 
-    </main>
-
-
-    <footer>
-        <p>Pokémon Draft League</p>
-    </footer>
+            <div
+                id="matches"
+                class="matches"
+            ></div>
 
 
-    <script src="script.js"></script>
+            <div
+                id="weekControls"
+                class="week-controls"
+            ></div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    Pokémon Draft League
+</footer>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
