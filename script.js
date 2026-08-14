@@ -363,6 +363,61 @@ function validScore(scoreA, scoreB) {
 
 
 /* =========================================================
+   CHECK IF A WEEK IS COMPLETELY SUBMITTED
+========================================================= */
+
+function isWeekComplete(weekNumber) {
+
+    const week =
+        weeks.find(
+            w => w.number === weekNumber
+        );
+
+    if (!week) {
+        return false;
+    }
+
+    return week.matches.every(
+        match =>
+            match.length >= 4 &&
+            validScore(
+                match[2],
+                match[3]
+            )
+    );
+}
+
+
+/*
+ * A week's scenario analysis is only allowed when
+ * the immediately previous week has been completely
+ * submitted.
+ *
+ * Week 7:
+ *   Requires Week 6 complete.
+ *
+ * Week 8:
+ *   Requires Week 7 complete.
+ *
+ * Week 9:
+ *   Requires Week 8 complete.
+ *
+ * etc.
+ */
+
+function canAnalyzeWeek(weekNumber) {
+
+    if (weekNumber <= 1) {
+        return true;
+    }
+
+    return isWeekComplete(
+        weekNumber - 1
+    );
+}
+
+
+/* =========================================================
    CALCULATE STANDINGS
 ========================================================= */
 
@@ -590,23 +645,6 @@ function updateStandings() {
    FUTURE POSSIBILITY MATH
 ========================================================= */
 
-/*
- * This is the important part.
- *
- * We do NOT enumerate every future combination.
- *
- * For each team we calculate:
- *
- *   minimum possible future wins
- *   maximum possible future wins
- *
- * based on the remaining schedule.
- *
- * Since every remaining match has one winner and one loser,
- * this gives us the mathematical bounds needed to determine
- * whether a playoff spot is guaranteed or impossible.
- */
-
 function getRemainingGames(teamName, afterWeek) {
 
     const games = [];
@@ -637,11 +675,6 @@ function getRemainingGames(teamName, afterWeek) {
     return games;
 }
 
-
-/*
- * Get standings after a particular week using a supplied
- * set of matches for that week.
- */
 
 function calculateStandingsThroughWeek(
     weekNumber,
@@ -699,19 +732,6 @@ function calculateStandingsThroughWeek(
 }
 
 
-/*
- * Determine if a team is guaranteed top 8.
- *
- * A team is clinched if:
- *
- *   its minimum possible final wins
- *   are greater than the maximum possible
- *   final wins of at least 9 other teams.
- *
- * We also use differential bounds when teams can
- * finish on equal wins.
- */
-
 function analyzeTeamAfterScenario(
     teamName,
     standingsAfterWeek,
@@ -735,12 +755,6 @@ function analyzeTeamAfterScenario(
         );
 
 
-    /*
-     * =====================================================
-     * TEAM'S MAXIMUM / MINIMUM FUTURE
-     * =====================================================
-     */
-
     const minWins =
         current.wins;
 
@@ -749,18 +763,9 @@ function analyzeTeamAfterScenario(
         remaining.length;
 
 
-    /*
-     * =====================================================
-     * CHECK ELIMINATION
-     * =====================================================
-     *
-     * If 8 other teams are guaranteed to finish
-     * above the team's maximum possible record,
-     * the team is eliminated.
-     */
-
     let teamsDefinitelyAbove =
         0;
+
 
     for (
         const opponent of standingsAfterWeek
@@ -808,18 +813,9 @@ function analyzeTeamAfterScenario(
     }
 
 
-    /*
-     * =====================================================
-     * CHECK CLINCH
-     * =====================================================
-     *
-     * For a true clinch, we need the team to remain
-     * safely ahead of enough opponents even if it loses
-     * all remaining games.
-     */
-
     let teamsDefinitelyBelow =
         0;
+
 
     for (
         const opponent of standingsAfterWeek
@@ -842,10 +838,6 @@ function analyzeTeamAfterScenario(
             opponentRemaining.length;
 
 
-        /*
-         * Opponent can NEVER reach our minimum record.
-         */
-
         if (
             opponentMaxWins <
             minWins
@@ -867,12 +859,6 @@ function analyzeTeamAfterScenario(
 
 
     if (teamsDefinitelyBelow >= 4) {
-
-        /*
-         * If four teams are definitely below us,
-         * we are guaranteed to finish no worse than 8th.
-         */
-
         return "CLINCHED";
     }
 
@@ -889,11 +875,6 @@ function getCurrentTeamStatus(
     teamName,
     standings
 ) {
-
-    /*
-     * Only run definitive analysis once the season
-     * has progressed enough to matter.
-     */
 
     const completedWeeks =
         weeks.filter(
@@ -914,12 +895,9 @@ function getCurrentTeamStatus(
     }
 
 
-    /*
-     * Find the latest completed week.
-     */
-
     let latestCompleted =
         0;
+
 
     for (const week of weeks) {
 
@@ -1629,23 +1607,6 @@ function renderControls() {
    GENERATE 4,096 SCENARIOS
 ========================================================= */
 
-/*
- * 6 matches
- *
- * Each match:
- *
- * 0 = 3-0
- * 1 = 2-1
- * 2 = 1-2
- * 3 = 0-3
- *
- * Therefore:
- *
- * 4 × 4 × 4 × 4 × 4 × 4
- *
- * = 4,096
- */
-
 function generateAllWeekScenarios(week) {
 
     const scenarios = [];
@@ -1867,10 +1828,9 @@ function analyzeCurrentWeekScenarios() {
         );
 
 
-    /*
-     * Locked weeks don't need hypothetical
-     * future-result analysis.
-     */
+    /* =====================================================
+       LOCKED WEEK
+       ===================================================== */
 
     if (week.locked) {
 
@@ -1895,9 +1855,36 @@ function analyzeCurrentWeekScenarios() {
     }
 
 
-    /*
-     * EXACTLY 4,096 scenarios.
-     */
+    /* =====================================================
+       NEW: REQUIRE PREVIOUS WEEK TO BE COMPLETE
+       ===================================================== */
+
+    if (!canAnalyzeWeek(week.number)) {
+
+        countElement.textContent =
+            "—";
+
+        clinchCountElement.textContent =
+            "—";
+
+        elimCountElement.textContent =
+            "—";
+
+        resultsElement.innerHTML = `
+            <div class="no-scenarios">
+                Week ${week.number} scenario analysis
+                is locked until all Week ${week.number - 1}
+                matches have been submitted.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    /* =====================================================
+       EXACTLY 4,096 SCENARIOS
+       ===================================================== */
 
     const scenarios =
         generateAllWeekScenarios(
@@ -1917,9 +1904,9 @@ function analyzeCurrentWeekScenarios() {
     let eliminationScenarioCount = 0;
 
 
-    /*
-     * Run every scenario.
-     */
+    /* =====================================================
+       RUN EVERY SCENARIO
+       ===================================================== */
 
     for (
         let i = 0;
@@ -2065,9 +2052,9 @@ function renderScenarioResults(
         }
 
 
-        /*
-         * CLINCH SCENARIOS
-         */
+        /* =================================================
+           CLINCH SCENARIOS
+           ================================================= */
 
         if (
             events.clinch.length > 0
@@ -2092,9 +2079,9 @@ function renderScenarioResults(
         }
 
 
-        /*
-         * ELIMINATION SCENARIOS
-         */
+        /* =================================================
+           ELIMINATION SCENARIOS
+           ================================================= */
 
         if (
             events.elimination.length > 0
@@ -2253,15 +2240,6 @@ function createScenarioTeamBox(
     list.className =
         "scenario-list";
 
-
-    /*
-     * Don't render thousands of giant DOM elements.
-     *
-     * The calculation still checks ALL 4,096.
-     *
-     * We display the first 100 scenarios that cause
-     * the event, followed by a count of the rest.
-     */
 
     const MAX_DISPLAY =
         100;
