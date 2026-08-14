@@ -7,7 +7,6 @@ GLOBAL
 }
 
 :root {
-
     --bg: #050816;
 
     --glass: rgba(255, 255, 255, 0.075);
@@ -30,17 +29,11 @@ GLOBAL
     --blur: blur(24px);
 }
 
-
-/* =========================================================
-BODY
-========================================================= */
-
 html {
     scroll-behavior: smooth;
 }
 
 body {
-
     margin: 0;
 
     font-family:
@@ -53,7 +46,6 @@ body {
         sans-serif;
 
     background:
-
         radial-gradient(
             circle at 10% 0%,
             rgba(59, 130, 246, 0.18),
@@ -79,7 +71,6 @@ body {
     min-height: 100vh;
 }
 
-
 button,
 input {
     font-family: inherit;
@@ -87,11 +78,10 @@ input {
 
 
 /* =========================================================
-BACKGROUND EFFECT
+BACKGROUND
 ========================================================= */
 
 body::before {
-
     content: "";
 
     position: fixed;
@@ -117,7 +107,6 @@ HEADER
 ========================================================= */
 
 .site-header {
-
     position: relative;
 
     padding: 42px 20px;
@@ -134,9 +123,7 @@ HEADER
     overflow: hidden;
 }
 
-
 .header-glow {
-
     position: absolute;
 
     width: 500px;
@@ -157,9 +144,7 @@ HEADER
     pointer-events: none;
 }
 
-
 .header-content {
-
     position: relative;
 
     width: min(1200px, 94%);
@@ -175,10 +160,8 @@ HEADER
     gap: 30px;
 }
 
-
 .eyebrow,
 .section-label {
-
     color: var(--blue);
 
     font-size: 11px;
@@ -190,9 +173,7 @@ HEADER
     text-transform: uppercase;
 }
 
-
 .site-header h1 {
-
     margin: 8px 0 5px;
 
     font-size: clamp(30px, 5vw, 46px);
@@ -200,9 +181,7 @@ HEADER
     letter-spacing: -1.5px;
 }
 
-
 .site-header p {
-
     margin: 0;
 
     color: var(--muted);
@@ -212,11 +191,10 @@ HEADER
 
 
 /* =========================================================
-RESET BUTTON
+RESET
 ========================================================= */
 
 .reset-button {
-
     flex-shrink: 0;
 
     padding: 12px 18px;
@@ -243,9 +221,7 @@ RESET BUTTON
         border 0.2s ease;
 }
 
-
 .reset-button:hover {
-
     transform: translateY(-2px);
 
     background:
@@ -254,7 +230,6 @@ RESET BUTTON
     border-color:
         rgba(248,113,113,0.55);
 }
-
 
 .reset-button:active {
     transform: scale(0.97);
@@ -266,7 +241,6 @@ MAIN
 ========================================================= */
 
 .container {
-
     width: min(1200px, 94%);
 
     margin: 35px auto 60px;
@@ -278,7 +252,6 @@ GLASS CARDS
 ========================================================= */
 
 .glass-card {
-
     position: relative;
 
     background:
@@ -303,9 +276,7 @@ GLASS CARDS
     overflow: hidden;
 }
 
-
 .glass-card::before {
-
     content: "";
 
     position: absolute;
@@ -327,10 +298,9 @@ GLASS CARDS
     pointer-events: none;
 }
 
-
 .standings-section,
-.schedule-section {
-
+.schedule-section,
+.scenario-section {
     padding: 28px;
 
     margin-bottom: 28px;
@@ -342,7 +312,6 @@ SECTION HEADER
 ========================================================= */
 
 .section-header {
-
     display: flex;
 
     justify-content: space-between;
@@ -354,10 +323,9 @@ SECTION HEADER
     margin-bottom: 24px;
 }
 
-
 .section-header h2,
-.schedule-section h2 {
-
+.schedule-section h2,
+.scenario-section h2 {
     margin: 5px 0;
 
     font-size: 25px;
@@ -365,10 +333,8 @@ SECTION HEADER
     letter-spacing: -0.5px;
 }
 
-
 .section-header p,
 .section-description {
-
     color: var(--muted);
 
     margin: 0;
@@ -382,7 +348,6 @@ PLAYOFF BADGE
 ========================================================= */
 
 .playoff-badge {
-
     display: flex;
 
     align-items: center;
@@ -408,9 +373,7 @@ PLAYOFF BADGE
     white-space: nowrap;
 }
 
-
 .badge-dot {
-
     width: 7px;
     height: 7px;
 
@@ -428,7 +391,6 @@ STANDINGS
 ========================================================= */
 
 .standings-wrapper {
-
     overflow-x: auto;
 
     border-radius: 16px;
@@ -437,19 +399,15 @@ STANDINGS
         1px solid rgba(255,255,255,0.08);
 }
 
-
 .standings-table {
-
     width: 100%;
 
     border-collapse: collapse;
 
-    min-width: 650px;
+    min-width: 700px;
 }
 
-
 .standings-table th {
-
     padding: 14px 16px;
 
     background:
@@ -466,9 +424,7 @@ STANDINGS
     text-transform: uppercase;
 }
 
-
 .standings-table td {
-
     padding: 15px 16px;
 
     border-bottom:
@@ -477,43 +433,33 @@ STANDINGS
     font-size: 14px;
 }
 
-
 .standings-table tbody tr {
-
     transition:
         background 0.2s ease;
 }
 
-
 .standings-table tbody tr:hover {
-
     background:
         rgba(255,255,255,0.035);
 }
 
-
 .standings-table th:first-child,
 .standings-table td:first-child {
-
-    width: 55px;
+    width: 60px;
 
     text-align: center;
 }
-
 
 .standings-table th:nth-child(3),
 .standings-table th:nth-child(4),
 .standings-table th:nth-child(5),
-
 .standings-table td:nth-child(3),
 .standings-table td:nth-child(4),
 .standings-table td:nth-child(5) {
-
     text-align: center;
 
-    width: 70px;
+    width: 75px;
 }
-
 
 .team-name {
     font-weight: 700;
@@ -525,7 +471,6 @@ PLAYOFF TEAMS
 ========================================================= */
 
 .playoff-team {
-
     background:
         rgba(59,130,246,0.055);
 }
@@ -536,7 +481,6 @@ PLAYOFF CUTOFF
 ========================================================= */
 
 .playoff-cutoff td {
-
     position: relative;
 
     padding: 9px 14px !important;
@@ -575,7 +519,6 @@ STATUS BADGES
 ========================================================= */
 
 .status-badge {
-
     display: inline-flex;
 
     align-items: center;
@@ -595,9 +538,17 @@ STATUS BADGES
     white-space: nowrap;
 }
 
+.status-contention {
+    color: #cbd5e1;
+
+    background:
+        rgba(148,163,184,0.10);
+
+    border:
+        1px solid rgba(148,163,184,0.18);
+}
 
 .status-clinched {
-
     color: #86efac;
 
     background:
@@ -607,28 +558,14 @@ STATUS BADGES
         1px solid rgba(74,222,128,0.25);
 }
 
-
-.status-contention {
-
-    color: #93c5fd;
-
-    background:
-        rgba(59,130,246,0.10);
-
-    border:
-        1px solid rgba(59,130,246,0.25);
-}
-
-
 .status-eliminated {
-
     color: #fca5a5;
 
     background:
-        rgba(248,113,113,0.09);
+        rgba(248,113,113,0.10);
 
     border:
-        1px solid rgba(248,113,113,0.22);
+        1px solid rgba(248,113,113,0.25);
 }
 
 
@@ -637,12 +574,9 @@ SCHEDULE
 ========================================================= */
 
 .schedule-section > h2 {
-
     margin-top: 5px;
-
     margin-bottom: 4px;
 }
-
 
 .section-description {
     margin-bottom: 24px;
@@ -657,9 +591,7 @@ WEEK BUTTONS
     margin-bottom: 26px;
 }
 
-
 .week-buttons {
-
     display: flex;
 
     flex-wrap: wrap;
@@ -667,9 +599,7 @@ WEEK BUTTONS
     gap: 8px;
 }
 
-
 .week-button {
-
     position: relative;
 
     border:
@@ -698,9 +628,7 @@ WEEK BUTTONS
         border 0.2s ease;
 }
 
-
 .week-button:hover {
-
     transform: translateY(-2px);
 
     background:
@@ -710,9 +638,7 @@ WEEK BUTTONS
         rgba(255,255,255,0.20);
 }
 
-
 .week-button.active {
-
     background:
         linear-gradient(
             135deg,
@@ -729,7 +655,6 @@ WEEK BUTTONS
         0 8px 25px rgba(37,99,235,0.25);
 }
 
-
 .week-button.locked {
     opacity: 0.75;
 }
@@ -740,16 +665,13 @@ SELECTED WEEK
 ========================================================= */
 
 .selected-week {
-
     padding-top: 25px;
 
     border-top:
         1px solid rgba(255,255,255,0.09);
 }
 
-
 .week-heading {
-
     display: flex;
 
     justify-content: space-between;
@@ -759,9 +681,7 @@ SELECTED WEEK
     margin-bottom: 18px;
 }
 
-
 .week-title {
-
     font-size: 25px;
 
     font-weight: 800;
@@ -769,9 +689,7 @@ SELECTED WEEK
     letter-spacing: -0.5px;
 }
 
-
 .week-heading p {
-
     color: var(--muted);
 
     margin: 4px 0 0;
@@ -785,7 +703,6 @@ WEEK STATUS
 ========================================================= */
 
 .week-status {
-
     padding: 8px 13px;
 
     border-radius: 999px;
@@ -797,9 +714,7 @@ WEEK STATUS
     letter-spacing: 1px;
 }
 
-
 .week-status.locked {
-
     background:
         rgba(148,163,184,0.10);
 
@@ -809,9 +724,7 @@ WEEK STATUS
     color: #cbd5e1;
 }
 
-
 .week-status.open {
-
     background:
         rgba(74,222,128,0.09);
 
@@ -827,7 +740,6 @@ MATCHES
 ========================================================= */
 
 .matches {
-
     display: flex;
 
     flex-direction: column;
@@ -835,9 +747,7 @@ MATCHES
     gap: 9px;
 }
 
-
 .match {
-
     display: grid;
 
     grid-template-columns:
@@ -865,9 +775,7 @@ MATCHES
         transform 0.2s ease;
 }
 
-
 .match:hover {
-
     background:
         rgba(255,255,255,0.045);
 
@@ -877,9 +785,7 @@ MATCHES
     transform: translateY(-1px);
 }
 
-
 .match-team {
-
     font-weight: 700;
 
     padding: 10px;
@@ -891,7 +797,6 @@ MATCHES
         color 0.2s ease;
 }
 
-
 .match-team:last-child {
     text-align: right;
 }
@@ -902,7 +807,6 @@ WINNER / LOSER
 ========================================================= */
 
 .match-team.winner {
-
     background:
         linear-gradient(
             135deg,
@@ -916,7 +820,6 @@ WINNER / LOSER
         inset 0 0 0 1px rgba(96,165,250,0.14);
 }
 
-
 .match-team.loser {
     color: #64748b;
 }
@@ -927,7 +830,6 @@ SCORES
 ========================================================= */
 
 .score-area {
-
     display: flex;
 
     justify-content: center;
@@ -941,17 +843,13 @@ SCORES
     font-weight: 900;
 }
 
-
 .score {
-
     min-width: 30px;
 
     text-align: center;
 }
 
-
 .winner-score {
-
     color: #93c5fd;
 
     text-shadow:
@@ -964,7 +862,6 @@ SCORE INPUT
 ========================================================= */
 
 .score-input {
-
     width: 44px;
     height: 42px;
 
@@ -994,16 +891,12 @@ SCORE INPUT
         box-shadow 0.2s ease;
 }
 
-
 .score-input:hover {
-
     background:
         rgba(255,255,255,0.11);
 }
 
-
 .score-input:focus {
-
     border-color:
         rgba(96,165,250,0.75);
 
@@ -1014,9 +907,7 @@ SCORE INPUT
         0 0 0 3px rgba(59,130,246,0.13);
 }
 
-
 .score-input.invalid-score {
-
     border-color:
         rgba(248,113,113,0.9);
 
@@ -1027,10 +918,8 @@ SCORE INPUT
         0 0 0 3px rgba(248,113,113,0.08);
 }
 
-
 .score-input::-webkit-inner-spin-button,
 .score-input::-webkit-outer-spin-button {
-
     -webkit-appearance: none;
 
     margin: 0;
@@ -1042,7 +931,6 @@ CONTROLS
 ========================================================= */
 
 .week-controls {
-
     display: flex;
 
     justify-content: flex-end;
@@ -1054,9 +942,7 @@ CONTROLS
     min-height: 42px;
 }
 
-
 .locked-message {
-
     color: #64748b;
 
     font-size: 13px;
@@ -1066,11 +952,231 @@ CONTROLS
 
 
 /* =========================================================
+SCENARIO ANALYSIS
+========================================================= */
+
+.scenario-section {
+    margin-top: 10px;
+}
+
+.scenario-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 24px;
+
+    margin-bottom: 24px;
+}
+
+.scenario-stat {
+    padding: 18px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(3,7,18,0.40);
+
+    border:
+        1px solid rgba(255,255,255,0.075);
+
+    text-align: center;
+}
+
+.scenario-stat-number {
+    display: block;
+
+    font-size: 25px;
+
+    font-weight: 900;
+
+    color: #dbeafe;
+}
+
+.scenario-stat-label {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+SCENARIO RESULTS
+========================================================= */
+
+.scenario-results {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+.no-scenarios {
+    padding: 22px;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid rgba(255,255,255,0.07);
+
+    color: var(--muted);
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+.team-scenario {
+    padding: 18px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(3,7,18,0.42);
+
+    border:
+        1px solid rgba(255,255,255,0.075);
+}
+
+.team-scenario.clinch {
+    border-color:
+        rgba(74,222,128,0.22);
+}
+
+.team-scenario.elimination {
+    border-color:
+        rgba(248,113,113,0.22);
+}
+
+.team-scenario-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 12px;
+}
+
+.team-scenario-name {
+    font-weight: 900;
+
+    font-size: 16px;
+}
+
+.scenario-type {
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+}
+
+.scenario-type.clinch {
+    color: #86efac;
+
+    background:
+        rgba(74,222,128,0.10);
+}
+
+.scenario-type.elimination {
+    color: #fca5a5;
+
+    background:
+        rgba(248,113,113,0.10);
+}
+
+.scenario-description {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    margin-bottom: 14px;
+}
+
+.scenario-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    max-height: 450px;
+
+    overflow-y: auto;
+
+    padding-right: 4px;
+}
+
+.scenario-item {
+    padding: 10px 12px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(255,255,255,0.035);
+
+    border:
+        1px solid rgba(255,255,255,0.05);
+
+    font-size: 12px;
+}
+
+.scenario-match-line {
+    color: #cbd5e1;
+
+    font-weight: 700;
+
+    line-height: 1.5;
+}
+
+.scenario-final-line {
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.scenario-more {
+    color: #64748b;
+
+    text-align: center;
+
+    padding: 8px;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
 FOOTER
 ========================================================= */
 
 footer {
-
     text-align: center;
 
     color: #475569;
@@ -1092,7 +1198,6 @@ MOBILE
     }
 
     .header-content {
-
         width: 100%;
 
         align-items: flex-start;
@@ -1105,22 +1210,20 @@ MOBILE
     }
 
     .container {
-
         width: 94%;
 
         margin-top: 22px;
     }
 
     .standings-section,
-    .schedule-section {
-
+    .schedule-section,
+    .scenario-section {
         padding: 19px;
 
         border-radius: 20px;
     }
 
     .section-header {
-
         align-items: flex-start;
 
         flex-direction: column;
@@ -1131,14 +1234,12 @@ MOBILE
     }
 
     .week-heading {
-
         align-items: flex-start;
 
         gap: 12px;
     }
 
     .match {
-
         grid-template-columns:
             minmax(0, 1fr)
             100px
@@ -1148,7 +1249,6 @@ MOBILE
     }
 
     .match-team {
-
         font-size: 12px;
 
         padding: 8px 5px;
@@ -1159,10 +1259,13 @@ MOBILE
     }
 
     .score-input {
-
         width: 36px;
 
         height: 38px;
+    }
+
+    .scenario-summary {
+        grid-template-columns: 1fr;
     }
 
     .week-controls {
@@ -1178,7 +1281,6 @@ VERY SMALL SCREENS
 @media (max-width: 430px) {
 
     .match {
-
         grid-template-columns:
             minmax(0, 1fr)
             82px

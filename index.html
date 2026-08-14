@@ -60,7 +60,7 @@
                 <h2>League Table</h2>
 
                 <p>
-                    Updated automatically when results are entered.
+                    Updated automatically when results are saved.
                 </p>
 
             </div>
@@ -78,6 +78,7 @@
             <table class="standings-table">
 
                 <thead>
+
                     <tr>
                         <th>#</th>
                         <th>Team</th>
@@ -86,6 +87,7 @@
                         <th>Diff</th>
                         <th>Status</th>
                     </tr>
+
                 </thead>
 
                 <tbody id="standingsBody"></tbody>
@@ -165,6 +167,73 @@
             ></div>
 
         </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CLINCH / ELIMINATION ANALYSIS
+         ===================================================== -->
+
+    <section
+        id="scenarioSection"
+        class="glass-card scenario-section"
+    >
+
+        <div class="section-label">
+            PLAYOFF SCENARIO ANALYSIS
+        </div>
+
+        <h2>
+            Week <span id="scenarioWeekNumber">7</span>
+            Clinch / Elimination Scenarios
+        </h2>
+
+        <p class="section-description">
+            Every possible result combination for this week's
+            6 matches is analyzed.
+        </p>
+
+
+        <div class="scenario-summary">
+
+            <div class="scenario-stat">
+                <span class="scenario-stat-number" id="scenarioCount">
+                    4096
+                </span>
+
+                <span class="scenario-stat-label">
+                    Possible Week Results
+                </span>
+            </div>
+
+            <div class="scenario-stat">
+                <span class="scenario-stat-number" id="clinchCount">
+                    0
+                </span>
+
+                <span class="scenario-stat-label">
+                    Clinch Scenarios
+                </span>
+            </div>
+
+            <div class="scenario-stat">
+                <span class="scenario-stat-number" id="elimCount">
+                    0
+                </span>
+
+                <span class="scenario-stat-label">
+                    Elimination Scenarios
+                </span>
+            </div>
+
+        </div>
+
+
+        <div
+            id="scenarioResults"
+            class="scenario-results"
+        ></div>
 
     </section>
 
