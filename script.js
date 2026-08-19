@@ -1,13 +1,14 @@
 /* =========================================================
    POKÉMON DRAFT LEAGUE
-   ========================================================= */
+   FAST NFL-STYLE CLINCH / ELIMINATION ANALYSIS
+========================================================= */
 
 
 /* =========================================================
    TEAMS
-   ========================================================= */
+========================================================= */
 
-   const teams = [
+const teams = [
     "Durham Drills",
     "Florida Floettes",
     "New Braunfels Ninetails",
@@ -25,7 +26,7 @@
 
 /* =========================================================
    WEEKS
-   ========================================================= */
+========================================================= */
 
 const weeks = [
 
@@ -193,13 +194,12 @@ const weeks = [
             ["Texas State Disasters", "Southern Tier Supporters"]
         ]
     }
-
 ];
 
 
 /* =========================================================
    SETTINGS
-   ========================================================= */
+========================================================= */
 
 let currentWeek = 1;
 
@@ -215,8 +215,85 @@ const POSSIBLE_SCORES = [
 
 
 /* =========================================================
+   CACHED FUTURE SCHEDULE
+========================================================= */
+
+/*
+    This is built ONCE.
+
+    The old code repeatedly searched through every week
+    for every scenario and every team.
+
+    This cache eliminates that work.
+*/
+
+const futureScheduleCache = new Map();
+
+
+function buildFutureScheduleCache() {
+
+    futureScheduleCache.clear();
+
+    for (const team of teams) {
+
+        const gamesByWeek = {};
+
+        for (const week of weeks) {
+
+            let count = 0;
+
+            for (const match of week.matches) {
+
+                if (
+                    match[0] === team ||
+                    match[1] === team
+                ) {
+                    count++;
+                }
+            }
+
+            gamesByWeek[week.number] = count;
+        }
+
+        futureScheduleCache.set(
+            team,
+            gamesByWeek
+        );
+    }
+}
+
+
+function getRemainingGameCount(
+    teamName,
+    afterWeek
+) {
+
+    const schedule =
+        futureScheduleCache.get(teamName);
+
+    if (!schedule) {
+        return 0;
+    }
+
+    let count = 0;
+
+    for (
+        let weekNumber = afterWeek + 1;
+        weekNumber <= weeks.length;
+        weekNumber++
+    ) {
+
+        count +=
+            schedule[weekNumber] || 0;
+    }
+
+    return count;
+}
+
+
+/* =========================================================
    STORAGE
-   ========================================================= */
+========================================================= */
 
 function loadSavedScores() {
 
@@ -232,7 +309,11 @@ function loadSavedScores() {
         const savedWeeks =
             JSON.parse(saved);
 
-        for (let w = 0; w < weeks.length; w++) {
+        for (
+            let w = 0;
+            w < weeks.length;
+            w++
+        ) {
 
             if (weeks[w].locked) {
                 continue;
@@ -265,11 +346,8 @@ function loadSavedScores() {
 
                     weeks[w].matches[m][3] =
                         savedMatch[3];
-
                 }
-
             }
-
         }
 
     } catch (error) {
@@ -278,7 +356,6 @@ function loadSavedScores() {
             "Could not load saved scores:",
             error
         );
-
     }
 }
 
@@ -287,7 +364,11 @@ function saveScoresToStorage() {
 
     const data = [];
 
-    for (let w = 0; w < weeks.length; w++) {
+    for (
+        let w = 0;
+        w < weeks.length;
+        w++
+    ) {
 
         data[w] = [];
 
@@ -310,9 +391,7 @@ function saveScoresToStorage() {
                     ? match[3]
                     : null
             ];
-
         }
-
     }
 
     localStorage.setItem(
@@ -324,7 +403,7 @@ function saveScoresToStorage() {
 
 /* =========================================================
    SCORE VALIDATION
-   ========================================================= */
+========================================================= */
 
 function validScore(scoreA, scoreB) {
 
@@ -363,8 +442,8 @@ function validScore(scoreA, scoreB) {
 
 
 /* =========================================================
-   CHECK IF A WEEK IS COMPLETELY SUBMITTED
-   ========================================================= */
+   WEEK COMPLETION
+========================================================= */
 
 function isWeekComplete(weekNumber) {
 
@@ -401,8 +480,8 @@ function canAnalyzeWeek(weekNumber) {
 
 
 /* =========================================================
-   CALCULATE STANDINGS
-   ========================================================= */
+   STANDINGS
+========================================================= */
 
 function createEmptyStandings() {
 
@@ -412,22 +491,29 @@ function createEmptyStandings() {
         losses: 0,
         differential: 0
     }));
-
-
 }
 
 
-function applyMatch(standings, match) {
+function applyMatch(
+    standings,
+    match
+) {
 
     if (
         match.length < 4 ||
-        !validScore(match[2], match[3])
+        !validScore(
+            match[2],
+            match[3]
+        )
     ) {
         return;
     }
 
-    const scoreA = Number(match[2]);
-    const scoreB = Number(match[3]);
+    const scoreA =
+        Number(match[2]);
+
+    const scoreB =
+        Number(match[3]);
 
     const teamA =
         standings.find(
@@ -458,31 +544,37 @@ function applyMatch(standings, match) {
 
         teamB.wins++;
         teamA.losses++;
-
     }
 }
 
 
-function sortStandings(standings) {
+function sortStandings(
+    standings
+) {
 
-    return standings.sort((a, b) => {
+    return standings.sort(
+        (a, b) => {
 
-        if (a.wins !== b.wins) {
-            return b.wins - a.wins;
-        }
+            if (a.wins !== b.wins) {
+                return b.wins - a.wins;
+            }
 
-        if (
-            a.differential !==
-            b.differential
-        ) {
-            return (
-                b.differential -
-                a.differential
+            if (
+                a.differential !==
+                b.differential
+            ) {
+
+                return (
+                    b.differential -
+                    a.differential
+                );
+            }
+
+            return a.team.localeCompare(
+                b.team
             );
         }
-
-        return a.team.localeCompare(b.team);
-    });
+    );
 }
 
 
@@ -499,9 +591,7 @@ function calculateStandings() {
                 standings,
                 match
             );
-
         }
-
     }
 
     return sortStandings(
@@ -511,8 +601,375 @@ function calculateStandings() {
 
 
 /* =========================================================
-   CURRENT STANDINGS DISPLAY
-   ========================================================= */
+   TOP 8
+========================================================= */
+
+function isTeamCurrentlyTopEight(
+    teamName,
+    standings
+) {
+
+    const position =
+        standings.findIndex(
+            t => t.team === teamName
+        );
+
+    return (
+        position >= 0 &&
+        position < 8
+    );
+}
+
+
+/* =========================================================
+   REMAINING GAMES
+========================================================= */
+
+function getRemainingGames(
+    teamName,
+    afterWeek
+) {
+
+    const games = [];
+
+    for (
+        let w = afterWeek;
+        w < weeks.length;
+        w++
+    ) {
+
+        const week =
+            weeks[w];
+
+        for (
+            const match of week.matches
+        ) {
+
+            if (
+                match[0] === teamName ||
+                match[1] === teamName
+            ) {
+
+                games.push(match);
+            }
+        }
+    }
+
+    return games;
+}
+
+
+/* =========================================================
+   FAST MAXIMUM WINS
+========================================================= */
+
+function getMaximumPossibleWinsFast(
+    teamName,
+    standings,
+    afterWeek
+) {
+
+    const team =
+        standings.find(
+            t => t.team === teamName
+        );
+
+    if (!team) {
+        return -Infinity;
+    }
+
+    return (
+        team.wins +
+        getRemainingGameCount(
+            teamName,
+            afterWeek
+        )
+    );
+}
+
+
+/* =========================================================
+   FAST MATHEMATICAL STATUS
+========================================================= */
+
+/*
+    This is the NFL-style mathematical calculation.
+
+    We don't simulate every possible future season.
+
+    Instead we calculate:
+
+        MAX WINS
+        = current wins + every remaining game won
+
+        MIN WINS
+        = current wins
+
+    A team is eliminated when eight opponents are
+    mathematically guaranteed to finish above its maximum.
+
+    A team is clinched when fewer than eight opponents
+    can mathematically finish above its minimum.
+
+    Differential is used when the win totals are tied.
+
+    This is dramatically faster than recursively simulating
+    every future matchup.
+*/
+
+function calculateFastTeamStatus(
+    teamName,
+    standings,
+    afterWeek
+) {
+
+    const team =
+        standings.find(
+            t => t.team === teamName
+        );
+
+    if (!team) {
+        return "CONTENTION";
+    }
+
+    const remaining =
+        getRemainingGameCount(
+            teamName,
+            afterWeek
+        );
+
+
+    /* =====================================================
+       NO GAMES LEFT
+    ===================================================== */
+
+    if (remaining === 0) {
+
+        return isTeamCurrentlyTopEight(
+            teamName,
+            standings
+        )
+            ? "CLINCHED"
+            : "ELIMINATED";
+    }
+
+
+    /* =====================================================
+       MAXIMUM POSSIBLE WINS
+    ===================================================== */
+
+    const maximumWins =
+        team.wins +
+        remaining;
+
+
+    /* =====================================================
+       MINIMUM POSSIBLE WINS
+    ===================================================== */
+
+    const minimumWins =
+        team.wins;
+
+
+    /* =====================================================
+       ELIMINATION TEST
+    ===================================================== */
+
+    let guaranteedAboveMaximum = 0;
+
+    for (
+        const opponent of standings
+    ) {
+
+        if (
+            opponent.team === teamName
+        ) {
+            continue;
+        }
+
+        const opponentMaximum =
+            getMaximumPossibleWinsFast(
+                opponent.team,
+                standings,
+                afterWeek
+            );
+
+        /*
+            If opponent's minimum already exceeds
+            our maximum, opponent is definitely above us.
+        */
+
+        const opponentMinimum =
+            opponent.wins;
+
+        if (
+            opponentMinimum >
+            maximumWins
+        ) {
+
+            guaranteedAboveMaximum++;
+
+            continue;
+        }
+
+        /*
+            If tied in wins, differential gives us
+            a possible tie-break advantage/disadvantage.
+
+            We use the current differential as the
+            mathematical baseline.
+        */
+
+        if (
+            opponentMinimum === maximumWins &&
+            opponent.differential >
+            team.differential
+        ) {
+
+            guaranteedAboveMaximum++;
+        }
+    }
+
+    if (
+        guaranteedAboveMaximum >= 8
+    ) {
+
+        return "ELIMINATED";
+    }
+
+
+    /* =====================================================
+       CLINCH TEST
+    ===================================================== */
+
+    let possibleAboveMinimum = 0;
+
+    for (
+        const opponent of standings
+    ) {
+
+        if (
+            opponent.team === teamName
+        ) {
+            continue;
+        }
+
+        const opponentMaximum =
+            getMaximumPossibleWinsFast(
+                opponent.team,
+                standings,
+                afterWeek
+            );
+
+        /*
+            Opponent can finish with more wins.
+        */
+
+        if (
+            opponentMaximum >
+            minimumWins
+        ) {
+
+            possibleAboveMinimum++;
+
+            continue;
+        }
+
+        /*
+            Same wins but opponent has better
+            current differential.
+        */
+
+        if (
+            opponentMaximum === minimumWins &&
+            opponent.differential >
+            team.differential
+        ) {
+
+            possibleAboveMinimum++;
+        }
+    }
+
+    /*
+        If fewer than eight teams can finish above
+        us, playoff qualification is mathematically
+        guaranteed.
+    */
+
+    if (
+        possibleAboveMinimum < 8
+    ) {
+
+        return "CLINCHED";
+    }
+
+
+    return "CONTENTION";
+}
+
+
+/* =========================================================
+   CURRENT TEAM STATUS
+========================================================= */
+
+function getCurrentTeamStatus(
+    teamName,
+    standings
+) {
+
+    /*
+        Find the last completed week.
+    */
+
+    let completedThrough = 0;
+
+    for (const week of weeks) {
+
+        if (
+            isWeekComplete(
+                week.number
+            )
+        ) {
+
+            completedThrough =
+                week.number;
+
+        } else {
+
+            break;
+        }
+    }
+
+
+    /*
+        If all 11 weeks are complete,
+        simply use the final standings.
+    */
+
+    if (
+        completedThrough >= weeks.length
+    ) {
+
+        return isTeamCurrentlyTopEight(
+            teamName,
+            standings
+        )
+            ? "CLINCHED"
+            : "ELIMINATED";
+    }
+
+
+    return calculateFastTeamStatus(
+        teamName,
+        standings,
+        completedThrough
+    );
+}
+
+
+/* =========================================================
+   STANDINGS DISPLAY
+========================================================= */
 
 function updateStandings() {
 
@@ -550,7 +1007,9 @@ function updateStandings() {
                     </td>
                 `;
 
-                body.appendChild(cutoff);
+                body.appendChild(
+                    cutoff
+                );
             }
 
             const row =
@@ -563,10 +1022,9 @@ function updateStandings() {
                 row.classList.add(
                     "playoff-team"
                 );
-
             }
 
-            let differential =
+            const differential =
                 team.differential;
 
             const differentialText =
@@ -583,18 +1041,20 @@ function updateStandings() {
             let statusClass =
                 "status-contention";
 
-            if (status === "CLINCHED") {
+            if (
+                status === "CLINCHED"
+            ) {
 
                 statusClass =
                     "status-clinched";
-
             }
 
-            if (status === "ELIMINATED") {
+            if (
+                status === "ELIMINATED"
+            ) {
 
                 statusClass =
                     "status-eliminated";
-
             }
 
             row.innerHTML = `
@@ -619,446 +1079,17 @@ function updateStandings() {
                 </td>
             `;
 
-            body.appendChild(row);
-
+            body.appendChild(
+                row
+            );
         }
     );
 }
 
 
 /* =========================================================
-   REMAINING MATCHES
-   ========================================================= */
-
-/*
-    IMPORTANT:
-
-    This does NOT care whether the current week is complete.
-
-    It simply finds every match that does not yet have
-    a valid score.
-
-    Therefore:
-
-    Week 8:
-        1 match entered
-        5 matches empty
-
-    means those 5 matches are future possibilities.
-
-    Weeks 9-11 are also future possibilities.
-*/
-
-function getRemainingGames(
-    teamName,
-    afterWeek
-) {
-
-    const games = [];
-
-    for (
-        let w = afterWeek;
-        w < weeks.length;
-        w++
-    ) {
-
-        const week = weeks[w];
-
-        for (const match of week.matches) {
-
-            if (
-                match[0] === teamName ||
-                match[1] === teamName
-            ) {
-
-                games.push(match);
-
-            }
-
-        }
-
-    }
-
-    return games;
-}
-
-
-/* =========================================================
-   GET ALL CURRENTLY UNPLAYED MATCHES
-   ========================================================= */
-
-function getAllUnplayedMatches() {
-
-    const matches = [];
-
-    for (const week of weeks) {
-
-        for (const match of week.matches) {
-
-            if (
-                match.length < 4 ||
-                !validScore(
-                    match[2],
-                    match[3]
-                )
-            ) {
-
-                matches.push({
-                    teamA: match[0],
-                    teamB: match[1]
-                });
-
-            }
-
-        }
-
-    }
-
-    return matches;
-}
-
-
-/* =========================================================
-   CURRENT TEAM WIN CEILING
-   ========================================================= */
-
-function getMaximumPossibleWins(
-    teamName,
-    standings,
-    unplayedMatches
-) {
-
-    const team =
-        standings.find(
-            t => t.team === teamName
-        );
-
-    if (!team) {
-        return -Infinity;
-    }
-
-    let remainingGames = 0;
-
-    for (const match of unplayedMatches) {
-
-        if (
-            match.teamA === teamName ||
-            match.teamB === teamName
-        ) {
-
-            remainingGames++;
-
-        }
-
-    }
-
-    return (
-        team.wins +
-        remainingGames
-    );
-}
-
-
-/* =========================================================
-   SCHEDULE-AWARE ELIMINATION CHECK
-   ========================================================= */
-
-/*
-    This calculation deliberately uses the ENTIRE remaining
-    schedule rather than assuming that the current week must
-    be complete.
-
-    The first test is the team's absolute maximum number
-    of wins.
-
-    We then calculate whether at least 8 other teams are
-    mathematically guaranteed to finish ahead of it.
-
-    "Guaranteed ahead" means that even in the best possible
-    case for our team, the opponent cannot fall below us.
-
-    Ties are handled using differential.
-*/
-
-function canTeamPossiblyMakeTopEight(
-    teamName,
-    standings
-) {
-
-    const unplayed =
-        getAllUnplayedMatches();
-
-    const current =
-        standings.find(
-            t => t.team === teamName
-        );
-
-    if (!current) {
-        return false;
-    }
-
-
-    /* -----------------------------------------------------
-       NO GAMES LEFT
-       ----------------------------------------------------- */
-
-    if (unplayed.length === 0) {
-
-        return isTeamCurrentlyTopEight(
-            teamName,
-            standings
-        );
-
-    }
-
-
-    /* -----------------------------------------------------
-       TEAM'S ABSOLUTE MAXIMUM
-       ----------------------------------------------------- */
-
-    const maximumWins =
-        getMaximumPossibleWins(
-            teamName,
-            standings,
-            unplayed
-        );
-
-
-    /*
-        Maximum possible differential.
-
-        Every remaining game for this team could be 3-0.
-    */
-
-    let maximumDifferential =
-        current.differential;
-
-
-    for (const match of unplayed) {
-
-        if (
-            match.teamA === teamName ||
-            match.teamB === teamName
-        ) {
-
-            maximumDifferential += 3;
-
-        }
-
-    }
-
-
-    /* -----------------------------------------------------
-       FIND TEAMS THAT CANNOT POSSIBLY FALL BELOW US
-       ----------------------------------------------------- */
-
-    let guaranteedAbove = 0;
-
-
-    for (const opponent of standings) {
-
-        if (
-            opponent.team === teamName
-        ) {
-            continue;
-        }
-
-
-        /*
-            Determine how many games the opponent
-            still has left.
-        */
-
-        let opponentRemaining = 0;
-
-        for (const match of unplayed) {
-
-            if (
-                match.teamA === opponent.team ||
-                match.teamB === opponent.team
-            ) {
-
-                opponentRemaining++;
-
-            }
-
-        }
-
-
-        /*
-            Absolute minimum wins for opponent.
-        */
-
-        const opponentMinimumWins =
-            opponent.wins;
-
-
-        /*
-            If opponent already has more wins than
-            our absolute maximum, they are definitely
-            ahead.
-        */
-
-        if (
-            opponentMinimumWins >
-            maximumWins
-        ) {
-
-            guaranteedAbove++;
-
-            continue;
-
-        }
-
-
-        /*
-            If opponent has exactly our maximum,
-            they could tie us.
-
-            We then use differential.
-
-            Our maximum differential assumes every
-            remaining game for us is 3-0.
-
-            Opponent's current differential is the
-            minimum guaranteed differential because
-            future games could lower it.
-        */
-
-        if (
-            opponentMinimumWins ===
-            maximumWins &&
-            opponent.differential >
-            maximumDifferential
-        ) {
-
-            guaranteedAbove++;
-
-        }
-
-    }
-
-
-    /*
-        If at least 8 teams are guaranteed above us,
-        there is no possible top-8 finish.
-    */
-
-    if (guaranteedAbove >= 8) {
-
-        return false;
-
-    }
-
-
-    /*
-        Otherwise there remains a mathematically possible
-        route to the top 8.
-
-        This is intentionally conservative:
-        if we cannot prove elimination, the team remains
-        in contention.
-    */
-
-    return true;
-}
-
-
-/* =========================================================
-   CURRENT TOP 8 CHECK
-   ========================================================= */
-
-function isTeamCurrentlyTopEight(
-    teamName,
-    standings
-) {
-
-    const position =
-        standings.findIndex(
-            t => t.team === teamName
-        );
-
-    return (
-        position >= 0 &&
-        position < 8
-    );
-}
-
-
-/* =========================================================
-   CURRENT TEAM STATUS
-   ========================================================= */
-
-function getCurrentTeamStatus(
-    teamName,
-    standings
-) {
-
-    const unplayed =
-        getAllUnplayedMatches();
-
-
-    /*
-        Entire season is finished.
-    */
-
-    if (unplayed.length === 0) {
-
-        return isTeamCurrentlyTopEight(
-            teamName,
-            standings
-        )
-            ? "CLINCHED"
-            : "ELIMINATED";
-
-    }
-
-
-    /*
-        First determine whether the team can
-        mathematically reach the top 8.
-
-        This uses all entered results immediately,
-        including partially entered current weeks.
-    */
-
-    const canMake =
-        canTeamPossiblyMakeTopEight(
-            teamName,
-            standings
-        );
-
-
-    if (!canMake) {
-
-        return "ELIMINATED";
-
-    }
-
-
-    /*
-        We deliberately do NOT call a "clinched"
-        calculation here based on the current week.
-
-        A team should only be marked CLINCHED when
-        every possible remaining result leaves them
-        in the top 8.
-
-        For the schedule shown here, the conservative
-        approach is to keep teams in CONTENTION unless
-        the season is complete.
-
-        This prevents false clinches caused by assuming
-        incomplete current-week results are finished.
-    */
-
-    return "IN CONTENTION";
-}
-
-
-/* =========================================================
-   CALCULATE STANDINGS THROUGH WEEK
-   ========================================================= */
+   STANDINGS THROUGH WEEK
+========================================================= */
 
 function calculateStandingsThroughWeek(
     weekNumber,
@@ -1090,7 +1121,6 @@ function calculateStandingsThroughWeek(
                     standings,
                     match
                 );
-
             }
 
         } else {
@@ -1103,11 +1133,8 @@ function calculateStandingsThroughWeek(
                     standings,
                     match
                 );
-
             }
-
         }
-
     }
 
     return sortStandings(
@@ -1118,7 +1145,7 @@ function calculateStandingsThroughWeek(
 
 /* =========================================================
    WEEK BUTTONS
-   ========================================================= */
+========================================================= */
 
 function renderWeekButtons() {
 
@@ -1152,7 +1179,6 @@ function renderWeekButtons() {
                 button.classList.add(
                     "active"
                 );
-
             }
 
             if (week.locked) {
@@ -1160,7 +1186,6 @@ function renderWeekButtons() {
                 button.classList.add(
                     "locked"
                 );
-
             }
 
             button.textContent =
@@ -1184,14 +1209,12 @@ function renderWeekButtons() {
                     renderWeek();
 
                     analyzeCurrentWeekScenarios();
-
                 }
             );
 
             container.appendChild(
                 button
             );
-
         }
     );
 }
@@ -1199,7 +1222,7 @@ function renderWeekButtons() {
 
 /* =========================================================
    RENDER WEEK
-   ========================================================= */
+========================================================= */
 
 function renderWeek() {
 
@@ -1230,31 +1253,42 @@ function renderWeek() {
             "matches"
         );
 
-    title.textContent =
-        "Week " +
-        week.number;
+    if (title) {
+        title.textContent =
+            "Week " + week.number;
+    }
 
-    dates.textContent =
-        week.dates;
+    if (dates) {
+        dates.textContent =
+            week.dates;
+    }
 
-    matches.innerHTML = "";
+    if (matches) {
+        matches.innerHTML = "";
+    }
 
-    if (week.locked) {
+    if (status) {
 
-        status.textContent =
-            "🔒 LOCKED";
+        if (week.locked) {
 
-        status.className =
-            "week-status locked";
+            status.textContent =
+                "🔒 LOCKED";
 
-    } else {
+            status.className =
+                "week-status locked";
 
-        status.textContent =
-            "● OPEN";
+        } else {
 
-        status.className =
-            "week-status open";
+            status.textContent =
+                "● OPEN";
 
+            status.className =
+                "week-status open";
+        }
+    }
+
+    if (!matches) {
+        return;
     }
 
     week.matches.forEach(
@@ -1266,7 +1300,6 @@ function renderWeek() {
                 week.locked,
                 matches
             );
-
         }
     );
 
@@ -1276,7 +1309,7 @@ function renderWeek() {
 
 /* =========================================================
    RENDER MATCH
-   ========================================================= */
+========================================================= */
 
 function renderMatch(
     match,
@@ -1325,8 +1358,8 @@ function renderMatch(
 
 
     /* =====================================================
-       LOCKED MATCH
-       ===================================================== */
+       LOCKED
+    ===================================================== */
 
     if (locked) {
 
@@ -1385,7 +1418,6 @@ function renderMatch(
             scoreElementB.classList.add(
                 "winner-score"
             );
-
         }
 
         scoreArea.appendChild(
@@ -1407,13 +1439,12 @@ function renderMatch(
         scoreArea.appendChild(
             scoreElementB
         );
-
     }
 
 
     /* =====================================================
-       OPEN MATCH
-       ===================================================== */
+       OPEN
+    ===================================================== */
 
     else {
 
@@ -1427,23 +1458,14 @@ function renderMatch(
                 "input"
             );
 
-        inputA.type =
-            "number";
+        inputA.type = "number";
+        inputB.type = "number";
 
-        inputB.type =
-            "number";
+        inputA.min = "0";
+        inputA.max = "3";
 
-        inputA.min =
-            "0";
-
-        inputA.max =
-            "3";
-
-        inputB.min =
-            "0";
-
-        inputB.max =
-            "3";
+        inputB.min = "0";
+        inputB.max = "3";
 
         inputA.className =
             "score-input";
@@ -1458,7 +1480,6 @@ function renderMatch(
 
             inputB.value =
                 match[3];
-
         }
 
 
@@ -1488,7 +1509,6 @@ function renderMatch(
             ) {
 
                 return;
-
             }
 
             const a =
@@ -1508,7 +1528,6 @@ function renderMatch(
                 );
 
                 return;
-
             }
 
             if (a > b) {
@@ -1530,9 +1549,7 @@ function renderMatch(
                 teamA.classList.add(
                     "loser"
                 );
-
             }
-
         }
 
 
@@ -1570,7 +1587,6 @@ function renderMatch(
                 );
 
                 return;
-
             }
 
             weeks[currentWeek - 1]
@@ -1583,40 +1599,22 @@ function renderMatch(
 
             saveScoresToStorage();
 
-            /*
-                IMPORTANT:
-
-                Standings update immediately after ONE
-                match is entered.
-
-                We do NOT wait for the entire week.
-            */
-
             updateStandings();
 
             renderWeek();
 
             analyzeCurrentWeekScenarios();
-
         }
 
 
         inputA.addEventListener(
             "input",
-            function() {
-
-                updateWinnerDisplay();
-
-            }
+            updateWinnerDisplay
         );
 
         inputB.addEventListener(
             "input",
-            function() {
-
-                updateWinnerDisplay();
-
-            }
+            updateWinnerDisplay
         );
 
         inputA.addEventListener(
@@ -1624,14 +1622,11 @@ function renderMatch(
             function(event) {
 
                 if (
-                    event.key ===
-                    "Enter"
+                    event.key === "Enter"
                 ) {
 
                     saveMatch();
-
                 }
-
             }
         );
 
@@ -1640,14 +1635,11 @@ function renderMatch(
             function(event) {
 
                 if (
-                    event.key ===
-                    "Enter"
+                    event.key === "Enter"
                 ) {
 
                     saveMatch();
-
                 }
-
             }
         );
 
@@ -1672,7 +1664,6 @@ function renderMatch(
         );
 
         updateWinnerDisplay();
-
     }
 
     matchDiv.appendChild(
@@ -1695,7 +1686,7 @@ function renderMatch(
 
 /* =========================================================
    CONTROLS
-   ========================================================= */
+========================================================= */
 
 function renderControls() {
 
@@ -1730,7 +1721,6 @@ function renderControls() {
 
         message.textContent =
             "Press Enter after entering a score to save that match";
-
     }
 
     controls.appendChild(
@@ -1740,65 +1730,54 @@ function renderControls() {
 
 
 /* =========================================================
-   GENERATE 4,096 SCENARIOS
-   ========================================================= */
+   BUILD ONE SCENARIO
+========================================================= */
 
-function generateAllWeekScenarios(week) {
+/*
+    Instead of creating an array containing ALL 4096
+    scenarios, create one when needed.
 
-    const scenarios = [];
+    This saves memory and is substantially faster.
+*/
 
-    const total =
-        Math.pow(
-            POSSIBLE_SCORES.length,
-            week.matches.length
-        );
+function buildScenarioFromNumber(
+    scenarioNumber,
+    matchCount
+) {
+
+    let number =
+        scenarioNumber;
+
+    const scenario = [];
 
     for (
-        let scenarioNumber = 0;
-        scenarioNumber < total;
-        scenarioNumber++
+        let matchIndex = 0;
+        matchIndex < matchCount;
+        matchIndex++
     ) {
 
-        let number =
-            scenarioNumber;
+        const option =
+            number %
+            POSSIBLE_SCORES.length;
 
-        const results = [];
-
-        for (
-            let matchIndex = 0;
-            matchIndex < week.matches.length;
-            matchIndex++
-        ) {
-
-            const option =
-                number %
-                POSSIBLE_SCORES.length;
-
-            number =
-                Math.floor(
-                    number /
-                    POSSIBLE_SCORES.length
-                );
-
-            results.push(
-                POSSIBLE_SCORES[option]
+        number =
+            Math.floor(
+                number /
+                POSSIBLE_SCORES.length
             );
 
-        }
-
-        scenarios.push(
-            results
+        scenario.push(
+            POSSIBLE_SCORES[option]
         );
-
     }
 
-    return scenarios;
+    return scenario;
 }
 
 
 /* =========================================================
-   APPLY SCENARIO
-   ========================================================= */
+   BUILD SCENARIO MATCHES
+========================================================= */
 
 function buildScenarioMatches(
     week,
@@ -1814,15 +1793,38 @@ function buildScenarioMatches(
                 scenario[index][0],
                 scenario[index][1]
             ];
-
         }
     );
 }
 
 
 /* =========================================================
-   FIND CLINCH / ELIMINATION
-   ========================================================= */
+   SCENARIO STATUS
+========================================================= */
+
+function analyzeTeamAfterScenario(
+    teamName,
+    standingsAfterWeek,
+    weekNumber
+) {
+
+    /*
+        Use the FAST mathematical calculation.
+
+        Future weeks are NOT brute-forced.
+    */
+
+    return calculateFastTeamStatus(
+        teamName,
+        standingsAfterWeek,
+        weekNumber
+    );
+}
+
+
+/* =========================================================
+   ANALYZE ONE SCENARIO
+========================================================= */
 
 function analyzeScenario(
     week,
@@ -1843,7 +1845,9 @@ function analyzeScenario(
 
     const results = [];
 
-    for (const team of teams) {
+    for (
+        const team of teams
+    ) {
 
         const status =
             analyzeTeamAfterScenario(
@@ -1859,216 +1863,85 @@ function analyzeScenario(
 
             const teamStanding =
                 standings.find(
-                    t =>
-                        t.team === team
+                    t => t.team === team
                 );
 
             results.push({
-
                 team,
-
                 status,
-
                 wins:
                     teamStanding.wins,
-
                 losses:
                     teamStanding.losses,
-
                 differential:
                     teamStanding.differential
-
             });
-
         }
-
     }
 
     return {
         results,
-        standings,
-        scenarioMatches
+        standings
     };
 }
 
 
 /* =========================================================
-   SCENARIO ANALYSIS LOGIC
-   ========================================================= */
+   GROUP RESULT FOR A TEAM
+========================================================= */
 
-/*
-    This is kept separate from the live standings status.
-
-    It is used ONLY by the 4,096 possible-results engine.
-
-    It assumes the selected scenario week has been completed.
-*/
-
-function analyzeTeamAfterScenario(
+function getTeamWeekResult(
     teamName,
-    standingsAfterWeek,
-    weekNumber
+    week,
+    scenario
 ) {
 
-    const current =
-        standingsAfterWeek.find(
-            t => t.team === teamName
-        );
-
-    if (!current) {
-        return "CONTENTION";
-    }
-
-    const remaining =
-        getRemainingGames(
-            teamName,
-            weekNumber
-        );
-
-    const minWins =
-        current.wins;
-
-    const maxWins =
-        current.wins +
-        remaining.length;
-
-    let teamsDefinitelyAbove =
-        0;
-
     for (
-        const opponent of standingsAfterWeek
+        let m = 0;
+        m < week.matches.length;
+        m++
     ) {
 
+        const match =
+            week.matches[m];
+
         if (
-            opponent.team === teamName
+            match[0] !== teamName &&
+            match[1] !== teamName
         ) {
             continue;
         }
 
-        const opponentRemaining =
-            getRemainingGames(
-                opponent.team,
-                weekNumber
+        if (
+            match[0] === teamName
+        ) {
+
+            return (
+                scenario[m][0] +
+                "-" +
+                scenario[m][1]
             );
-
-        const opponentMaxWins =
-            opponent.wins +
-            opponentRemaining.length;
-
-        if (
-            opponent.wins >
-            maxWins
-        ) {
-
-            teamsDefinitelyAbove++;
-
-        } else if (
-            opponent.wins === maxWins &&
-            opponent.differential >
-            current.differential
-        ) {
-
-            teamsDefinitelyAbove++;
-
         }
 
+        return (
+            scenario[m][1] +
+            "-" +
+            scenario[m][0]
+        );
     }
 
-    if (teamsDefinitelyAbove >= 8) {
-
-        return "ELIMINATED";
-
-    }
-
-    let teamsDefinitelyBelow =
-        0;
-
-    for (
-        const opponent of standingsAfterWeek
-    ) {
-
-        if (
-            opponent.team === teamName
-        ) {
-            continue;
-        }
-
-        const opponentRemaining =
-            getRemainingGames(
-                opponent.team,
-                weekNumber
-            );
-
-        const opponentMaxWins =
-            opponent.wins +
-            opponentRemaining.length;
-
-        if (
-            opponentMaxWins <
-            minWins
-        ) {
-
-            teamsDefinitelyBelow++;
-
-        } else if (
-            opponentMaxWins === minWins &&
-            opponent.differential <
-            current.differential
-        ) {
-
-            teamsDefinitelyBelow++;
-
-        }
-
-    }
-
-    if (teamsDefinitelyBelow >= 4) {
-
-        return "CLINCHED";
-
-    }
-
-    return "CONTENTION";
-}
-
-
-/* =========================================================
-   SCENARIO DISPLAY
-   ========================================================= */
-
-function formatScenario(
-    scenarioMatches
-) {
-
-    return scenarioMatches.map(
-        match =>
-            `${match[0]} ${match[2]}-${match[3]} ${match[1]}`
-    );
+    return null;
 }
 
 
 /* =========================================================
    ANALYZE CURRENT WEEK
-   ========================================================= */
+========================================================= */
 
 function analyzeCurrentWeekScenarios() {
 
     const week =
         weeks[currentWeek - 1];
-
-    const section =
-        document.getElementById(
-            "scenarioSection"
-        );
-
-    if (!section) {
-        return;
-    }
-
-    document.getElementById(
-        "scenarioWeekNumber"
-    ).textContent =
-        week.number;
 
     const countElement =
         document.getElementById(
@@ -2090,10 +1963,32 @@ function analyzeCurrentWeekScenarios() {
             "scenarioResults"
         );
 
+    const weekNumberElement =
+        document.getElementById(
+            "scenarioWeekNumber"
+        );
+
+    if (
+        !week ||
+        !countElement ||
+        !clinchCountElement ||
+        !elimCountElement ||
+        !resultsElement
+    ) {
+
+        return;
+    }
+
+    if (weekNumberElement) {
+
+        weekNumberElement.textContent =
+            week.number;
+    }
+
 
     /* =====================================================
-       LOCKED WEEK
-       ===================================================== */
+       LOCKED
+    ===================================================== */
 
     if (week.locked) {
 
@@ -2119,10 +2014,14 @@ function analyzeCurrentWeekScenarios() {
 
 
     /* =====================================================
-       REQUIRE PREVIOUS WEEK TO BE COMPLETE
-       ===================================================== */
+       PREVIOUS WEEK REQUIRED
+    ===================================================== */
 
-    if (!canAnalyzeWeek(week.number)) {
+    if (
+        !canAnalyzeWeek(
+            week.number
+        )
+    ) {
 
         countElement.textContent =
             "—";
@@ -2136,7 +2035,8 @@ function analyzeCurrentWeekScenarios() {
         resultsElement.innerHTML = `
             <div class="no-scenarios">
                 Week ${week.number} scenario analysis
-                is locked until all Week ${week.number - 1}
+                is locked until all Week
+                ${week.number - 1}
                 matches have been submitted.
             </div>
         `;
@@ -2146,64 +2046,92 @@ function analyzeCurrentWeekScenarios() {
 
 
     /* =====================================================
-       EXACTLY 4,096 SCENARIOS
-       ===================================================== */
+       4096 CURRENT-WEEK SCENARIOS
+    ===================================================== */
 
-    const scenarios =
-        generateAllWeekScenarios(
-            week
+    const total =
+        Math.pow(
+            POSSIBLE_SCORES.length,
+            week.matches.length
         );
 
     countElement.textContent =
-        scenarios.length;
+        total.toLocaleString();
+
+
+    /*
+        Instead of storing:
+
+            4096 scenarios
+
+        we only store the COUNTS.
+    */
 
     const teamEvents =
         new Map();
 
-    let clinchScenarioCount = 0;
-    let eliminationScenarioCount = 0;
+    for (const team of teams) {
+
+        teamEvents.set(
+            team,
+            {
+                clinch: {
+                    "3-0": 0,
+                    "2-1": 0,
+                    "1-2": 0,
+                    "0-3": 0
+                },
+
+                elimination: {
+                    "3-0": 0,
+                    "2-1": 0,
+                    "1-2": 0,
+                    "0-3": 0
+                }
+            }
+        );
+    }
+
+
+    let totalClinchEvents = 0;
+    let totalEliminationEvents = 0;
 
 
     /* =====================================================
-       RUN EVERY SCENARIO
-       ===================================================== */
+       PROCESS ONE SCENARIO AT A TIME
+    ===================================================== */
 
     for (
-        let i = 0;
-        i < scenarios.length;
-        i++
+        let scenarioNumber = 0;
+        scenarioNumber < total;
+        scenarioNumber++
     ) {
+
+        const scenario =
+            buildScenarioFromNumber(
+                scenarioNumber,
+                week.matches.length
+            );
 
         const analysis =
             analyzeScenario(
                 week,
-                scenarios[i]
+                scenario
             );
-
-        if (
-            analysis.results.length === 0
-        ) {
-            continue;
-        }
 
         for (
             const event of analysis.results
         ) {
 
-            if (
-                !teamEvents.has(
-                    event.team
-                )
-            ) {
-
-                teamEvents.set(
+            const result =
+                getTeamWeekResult(
                     event.team,
-                    {
-                        clinch: [],
-                        elimination: []
-                    }
+                    week,
+                    scenario
                 );
 
+            if (!result) {
+                continue;
             }
 
             const storage =
@@ -2211,60 +2139,42 @@ function analyzeCurrentWeekScenarios() {
                     event.team
                 );
 
-            const scenarioRecord = {
-
-                scenarioNumber:
-                    i + 1,
-
-                matches:
-                    analysis.scenarioMatches,
-
-                wins:
-                    event.wins,
-
-                losses:
-                    event.losses,
-
-                differential:
-                    event.differential
-
-            };
-
             if (
                 event.status ===
                 "CLINCHED"
             ) {
 
-                storage.clinch.push(
-                    scenarioRecord
-                );
+                storage.clinch[result]++;
 
-                clinchScenarioCount++;
+                totalClinchEvents++;
 
-            }
-
-            if (
+            } else if (
                 event.status ===
                 "ELIMINATED"
             ) {
 
-                storage.elimination.push(
-                    scenarioRecord
-                );
+                storage.elimination[result]++;
 
-                eliminationScenarioCount++;
-
+                totalEliminationEvents++;
             }
-
         }
-
     }
 
+
+    /* =====================================================
+       SUMMARY
+    ===================================================== */
+
     clinchCountElement.textContent =
-        clinchScenarioCount;
+        totalClinchEvents.toLocaleString();
 
     elimCountElement.textContent =
-        eliminationScenarioCount;
+        totalEliminationEvents.toLocaleString();
+
+
+    /* =====================================================
+       RENDER
+    ===================================================== */
 
     renderScenarioResults(
         teamEvents
@@ -2274,7 +2184,7 @@ function analyzeCurrentWeekScenarios() {
 
 /* =========================================================
    RENDER SCENARIO RESULTS
-   ========================================================= */
+========================================================= */
 
 function renderScenarioResults(
     teamEvents
@@ -2285,12 +2195,18 @@ function renderScenarioResults(
             "scenarioResults"
         );
 
+    if (!container) {
+        return;
+    }
+
     container.innerHTML = "";
 
     let renderedSomething =
         false;
 
-    for (const team of teams) {
+    for (
+        const team of teams
+    ) {
 
         const events =
             teamEvents.get(team);
@@ -2301,54 +2217,63 @@ function renderScenarioResults(
 
 
         /* =================================================
-           CLINCH SCENARIOS
-           ================================================= */
+           CLINCH
+        ================================================= */
+
+        const clinchTotal =
+            Object.values(
+                events.clinch
+            ).reduce(
+                (sum, value) =>
+                    sum + value,
+                0
+            );
 
         if (
-            events.clinch.length > 0
+            clinchTotal > 0
         ) {
 
-            renderedSomething =
-                true;
+            renderedSomething = true;
 
-            const box =
+            container.appendChild(
                 createScenarioTeamBox(
                     team,
                     "CLINCHED",
-                    events.clinch
-                );
-
-            container.appendChild(
-                box
+                    events.clinch,
+                    clinchTotal
+                )
             );
-
         }
 
 
         /* =================================================
-           ELIMINATION SCENARIOS
-           ================================================= */
+           ELIMINATION
+        ================================================= */
+
+        const eliminationTotal =
+            Object.values(
+                events.elimination
+            ).reduce(
+                (sum, value) =>
+                    sum + value,
+                0
+            );
 
         if (
-            events.elimination.length > 0
+            eliminationTotal > 0
         ) {
 
-            renderedSomething =
-                true;
+            renderedSomething = true;
 
-            const box =
+            container.appendChild(
                 createScenarioTeamBox(
                     team,
                     "ELIMINATED",
-                    events.elimination
-                );
-
-            container.appendChild(
-                box
+                    events.elimination,
+                    eliminationTotal
+                )
             );
-
         }
-
     }
 
 
@@ -2361,19 +2286,19 @@ function renderScenarioResults(
                 clinch or elimination.
             </div>
         `;
-
     }
 }
 
 
 /* =========================================================
-   SCENARIO BOX
-   ========================================================= */
+   SCENARIO TEAM BOX
+========================================================= */
 
 function createScenarioTeamBox(
     team,
     type,
-    scenarios
+    counts,
+    total
 ) {
 
     const box =
@@ -2388,6 +2313,11 @@ function createScenarioTeamBox(
                 ? "clinch"
                 : "elimination"
         );
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
     const header =
         document.createElement(
@@ -2436,6 +2366,11 @@ function createScenarioTeamBox(
         header
     );
 
+
+    /* =====================================================
+       DESCRIPTION
+    ===================================================== */
+
     const description =
         document.createElement(
             "div"
@@ -2444,134 +2379,99 @@ function createScenarioTeamBox(
     description.className =
         "scenario-description";
 
-    if (type === "CLINCHED") {
+    description.textContent =
+        `${total.toLocaleString()} `
+        + `possible Week ${currentWeek} `
+        + `result combinations `;
 
-        description.textContent =
-            `${scenarios.length.toLocaleString()} `
-            + `possible Week ${currentWeek} `
-            + `result combinations guarantee `
-            + `this team a playoff spot.`;
+    if (
+        type === "CLINCHED"
+    ) {
+
+        description.textContent +=
+            "clinch this team for the playoffs.";
 
     } else {
 
-        description.textContent =
-            `${scenarios.length.toLocaleString()} `
-            + `possible Week ${currentWeek} `
-            + `result combinations mathematically `
-            + `eliminate this team.`;
-
+        description.textContent +=
+            "eliminate this team from the playoffs.";
     }
 
     box.appendChild(
         description
     );
 
-    const list =
+
+    /* =====================================================
+       FOUR RESULT BUTTONS
+    ===================================================== */
+
+    const resultContainer =
         document.createElement(
             "div"
         );
 
-    list.className =
-        "scenario-list";
+    resultContainer.className =
+        "scenario-result-groups";
 
-    const MAX_DISPLAY =
-        100;
+    const resultOrder = [
+        "3-0",
+        "2-1",
+        "1-2",
+        "0-3"
+    ];
 
-    const displayed =
-        scenarios.slice(
-            0,
-            MAX_DISPLAY
-        );
-
-    displayed.forEach(
-        function(record) {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "scenario-item";
-
-            const matchLine =
-                document.createElement(
-                    "div"
-                );
-
-            matchLine.className =
-                "scenario-match-line";
-
-            matchLine.textContent =
-                `Scenario #${record.scenarioNumber}: ` +
-                formatScenario(
-                    record.matches
-                ).join(" • ");
-
-            const finalLine =
-                document.createElement(
-                    "div"
-                );
-
-            finalLine.className =
-                "scenario-final-line";
-
-            const diff =
-                record.differential > 0
-                    ? "+" +
-                      record.differential
-                    : String(
-                        record.differential
-                    );
-
-            finalLine.textContent =
-                `After Week ${currentWeek}: `
-                + `${record.wins}-${record.losses}, `
-                + `Diff ${diff}`;
-
-            item.appendChild(
-                matchLine
-            );
-
-            item.appendChild(
-                finalLine
-            );
-
-            list.appendChild(
-                item
-            );
-
-        }
-    );
-
-    box.appendChild(
-        list
-    );
-
-    if (
-        scenarios.length >
-        MAX_DISPLAY
+    for (
+        const result of resultOrder
     ) {
 
-        const more =
+        const count =
+            counts[result] || 0;
+
+        const button =
             document.createElement(
-                "div"
+                "button"
             );
 
-        more.className =
-            "scenario-more";
+        button.type =
+            "button";
 
-        more.textContent =
-            `Showing the first ${MAX_DISPLAY} `
-            + `of ${scenarios.length.toLocaleString()} `
-            + `scenarios. All ${scenarios.length.toLocaleString()} `
-            + `were analyzed by the engine.`;
+        button.className =
+            "scenario-result-button " +
+            (
+                type === "CLINCHED"
+                    ? "clinch-button"
+                    : "elimination-button"
+            );
 
-        box.appendChild(
-            more
+        if (
+            count === 0
+        ) {
+
+            button.classList.add(
+                "zero-scenario"
+            );
+        }
+
+        button.innerHTML = `
+            <span class="scenario-result-score">
+                ${result}
+            </span>
+
+            <span class="scenario-result-count">
+                ${count.toLocaleString()}
+                scenario${count === 1 ? "" : "s"}
+            </span>
+        `;
+
+        resultContainer.appendChild(
+            button
         );
-
     }
+
+    box.appendChild(
+        resultContainer
+    );
 
     return box;
 }
@@ -2579,7 +2479,7 @@ function createScenarioTeamBox(
 
 /* =========================================================
    RESET
-   ========================================================= */
+========================================================= */
 
 function resetAllScores() {
 
@@ -2598,7 +2498,9 @@ function resetAllScores() {
         STORAGE_KEY
     );
 
-    for (const week of weeks) {
+    for (
+        const week of weeks
+    ) {
 
         if (week.locked) {
             continue;
@@ -2609,9 +2511,7 @@ function resetAllScores() {
         ) {
 
             match.length = 2;
-
         }
-
     }
 
     updateStandings();
@@ -2630,11 +2530,17 @@ function resetAllScores() {
 
 /* =========================================================
    INITIALIZATION
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function() {
+
+        /*
+            Build the future schedule cache FIRST.
+        */
+
+        buildFutureScheduleCache();
 
         loadSavedScores();
 
@@ -2657,8 +2563,6 @@ document.addEventListener(
                 "click",
                 resetAllScores
             );
-
         }
-
     }
 );

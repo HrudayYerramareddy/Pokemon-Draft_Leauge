@@ -1,5 +1,5 @@
 /* =========================================================
-GLOBAL
+   GLOBAL
 ========================================================= */
 
 * {
@@ -51,19 +51,16 @@ body {
             rgba(59, 130, 246, 0.18),
             transparent 30%
         ),
-
         radial-gradient(
             circle at 90% 20%,
             rgba(99, 102, 241, 0.14),
             transparent 28%
         ),
-
         radial-gradient(
             circle at 50% 100%,
             rgba(14, 165, 233, 0.08),
             transparent 35%
         ),
-
         var(--bg);
 
     color: var(--text);
@@ -78,7 +75,7 @@ input {
 
 
 /* =========================================================
-BACKGROUND
+   BACKGROUND
 ========================================================= */
 
 body::before {
@@ -103,7 +100,7 @@ body::before {
 
 
 /* =========================================================
-HEADER
+   HEADER
 ========================================================= */
 
 .site-header {
@@ -191,7 +188,7 @@ HEADER
 
 
 /* =========================================================
-RESET
+   RESET
 ========================================================= */
 
 .reset-button {
@@ -237,7 +234,7 @@ RESET
 
 
 /* =========================================================
-MAIN
+   MAIN
 ========================================================= */
 
 .container {
@@ -248,7 +245,7 @@ MAIN
 
 
 /* =========================================================
-GLASS CARDS
+   GLASS CARDS
 ========================================================= */
 
 .glass-card {
@@ -308,7 +305,7 @@ GLASS CARDS
 
 
 /* =========================================================
-SECTION HEADER
+   SECTION HEADER
 ========================================================= */
 
 .section-header {
@@ -344,7 +341,7 @@ SECTION HEADER
 
 
 /* =========================================================
-PLAYOFF BADGE
+   PLAYOFF BADGE
 ========================================================= */
 
 .playoff-badge {
@@ -387,7 +384,7 @@ PLAYOFF BADGE
 
 
 /* =========================================================
-STANDINGS
+   STANDINGS
 ========================================================= */
 
 .standings-wrapper {
@@ -467,7 +464,7 @@ STANDINGS
 
 
 /* =========================================================
-PLAYOFF TEAMS
+   PLAYOFF TEAMS
 ========================================================= */
 
 .playoff-team {
@@ -477,7 +474,7 @@ PLAYOFF TEAMS
 
 
 /* =========================================================
-PLAYOFF CUTOFF
+   PLAYOFF CUTOFF
 ========================================================= */
 
 .playoff-cutoff td {
@@ -515,7 +512,7 @@ PLAYOFF CUTOFF
 
 
 /* =========================================================
-STATUS BADGES
+   STATUS BADGES
 ========================================================= */
 
 .status-badge {
@@ -570,7 +567,7 @@ STATUS BADGES
 
 
 /* =========================================================
-SCHEDULE
+   SCHEDULE
 ========================================================= */
 
 .schedule-section > h2 {
@@ -584,7 +581,7 @@ SCHEDULE
 
 
 /* =========================================================
-WEEK BUTTONS
+   WEEK BUTTONS
 ========================================================= */
 
 .week-selector {
@@ -661,7 +658,7 @@ WEEK BUTTONS
 
 
 /* =========================================================
-SELECTED WEEK
+   SELECTED WEEK
 ========================================================= */
 
 .selected-week {
@@ -699,7 +696,7 @@ SELECTED WEEK
 
 
 /* =========================================================
-WEEK STATUS
+   WEEK STATUS
 ========================================================= */
 
 .week-status {
@@ -736,7 +733,7 @@ WEEK STATUS
 
 
 /* =========================================================
-MATCHES
+   MATCHES
 ========================================================= */
 
 .matches {
@@ -803,7 +800,7 @@ MATCHES
 
 
 /* =========================================================
-WINNER / LOSER
+   WINNER / LOSER
 ========================================================= */
 
 .match-team.winner {
@@ -826,7 +823,7 @@ WINNER / LOSER
 
 
 /* =========================================================
-SCORES
+   SCORES
 ========================================================= */
 
 .score-area {
@@ -858,7 +855,7 @@ SCORES
 
 
 /* =========================================================
-SCORE INPUT
+   SCORE INPUT
 ========================================================= */
 
 .score-input {
@@ -927,7 +924,7 @@ SCORE INPUT
 
 
 /* =========================================================
-CONTROLS
+   CONTROLS
 ========================================================= */
 
 .week-controls {
@@ -952,7 +949,7 @@ CONTROLS
 
 
 /* =========================================================
-SCENARIO ANALYSIS
+   SCENARIO ANALYSIS
 ========================================================= */
 
 .scenario-section {
@@ -1014,7 +1011,7 @@ SCENARIO ANALYSIS
 
 
 /* =========================================================
-SCENARIO RESULTS
+   SCENARIO RESULTS
 ========================================================= */
 
 .scenario-results {
@@ -1117,63 +1114,117 @@ SCENARIO RESULTS
     margin-bottom: 14px;
 }
 
-.scenario-list {
+
+/* =========================================================
+   RESULT COUNT BUTTONS
+========================================================= */
+
+.scenario-result-groups {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.scenario-result-button {
     display: flex;
 
     flex-direction: column;
 
-    gap: 8px;
+    align-items: center;
 
-    max-height: 450px;
+    justify-content: center;
 
-    overflow-y: auto;
+    min-height: 76px;
 
-    padding-right: 4px;
-}
+    padding: 12px 8px;
 
-.scenario-item {
-    padding: 10px 12px;
-
-    border-radius: 11px;
+    border-radius: 13px;
 
     background:
-        rgba(255,255,255,0.035);
+        rgba(255,255,255,0.045);
+
+    color: var(--text);
 
     border:
-        1px solid rgba(255,255,255,0.05);
+        1px solid rgba(255,255,255,0.12);
 
-    font-size: 12px;
+    font-family: inherit;
+
+    cursor: default;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border 0.2s ease;
 }
 
-.scenario-match-line {
-    color: #cbd5e1;
+.scenario-result-button:hover {
+    transform: translateY(-2px);
+
+    background:
+        rgba(255,255,255,0.075);
+}
+
+.clinch-button {
+    border-color:
+        rgba(74,222,128,0.35);
+}
+
+.clinch-button:hover {
+    border-color:
+        rgba(74,222,128,0.65);
+
+    background:
+        rgba(74,222,128,0.08);
+}
+
+.elimination-button {
+    border-color:
+        rgba(248,113,113,0.35);
+}
+
+.elimination-button:hover {
+    border-color:
+        rgba(248,113,113,0.65);
+
+    background:
+        rgba(248,113,113,0.08);
+}
+
+.scenario-result-score {
+    font-size: 18px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.5px;
+}
+
+.scenario-result-count {
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 11px;
 
     font-weight: 700;
-
-    line-height: 1.5;
 }
 
-.scenario-final-line {
-    margin-top: 4px;
-
-    color: #64748b;
-
-    font-size: 11px;
+.scenario-result-button.zero-scenario {
+    opacity: 0.38;
 }
 
-.scenario-more {
-    color: #64748b;
-
-    text-align: center;
-
-    padding: 8px;
-
-    font-size: 11px;
+.scenario-result-button.zero-scenario:hover {
+    opacity: 0.55;
 }
 
 
 /* =========================================================
-FOOTER
+   FOOTER
 ========================================================= */
 
 footer {
@@ -1188,7 +1239,7 @@ footer {
 
 
 /* =========================================================
-MOBILE
+   MOBILE
 ========================================================= */
 
 @media (max-width: 700px) {
@@ -1268,6 +1319,11 @@ MOBILE
         grid-template-columns: 1fr;
     }
 
+    .scenario-result-groups {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
     .week-controls {
         justify-content: stretch;
     }
@@ -1275,7 +1331,7 @@ MOBILE
 
 
 /* =========================================================
-VERY SMALL SCREENS
+   VERY SMALL SCREENS
 ========================================================= */
 
 @media (max-width: 430px) {
