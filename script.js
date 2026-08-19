@@ -122,15 +122,15 @@ const weeks = [
     {
         number: 7,
         dates: "August 14-16",
-        locked: false,
+        locked: true,
 
         matches: [
-            ["Great Lakes Glimmora", "New Braunfels Ninetails"],
-            ["Texas State Disasters", "Niagara Stampede"],
-            ["Southern Tier Supporters", "Amarillo Archaludon"],
-            ["Colorado Avalugg", "Florida Floettes"],
-            ["Durham Drills", "Garden State Garchomps"],
-            ["Houston Heat Wave", "Ontario Fightin' Palafin"]
+            ["Great Lakes Glimmora", "New Braunfels Ninetails", 2, 1],
+            ["Texas State Disasters", "Niagara Stampede", 2, 1],
+            ["Southern Tier Supporters", "Amarillo Archaludon", 2, 1],
+            ["Colorado Avalugg", "Florida Floettes", 1, 2],
+            ["Durham Drills", "Garden State Garchomps", 1, 2],
+            ["Houston Heat Wave", "Ontario Fightin' Palafin", 3, 0]
         ]
     },
 
