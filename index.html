@@ -19,12 +19,17 @@
     <div class="header-content">
 
         <div>
-            <div class="eyebrow">POKÉMON DRAFT LEAGUE</div>
+            <div class="eyebrow">
+                POKÉMON DRAFT LEAGUE
+            </div>
 
-            <h1>Season Standings</h1>
+            <h1>
+                Season Dashboard
+            </h1>
 
             <p>
-                Track results, standings, and the road to the playoffs.
+                Track standings, match results, rosters,
+                and the road to the playoffs.
             </p>
         </div>
 
@@ -38,206 +43,399 @@
 
     </div>
 
+
+    <nav class="main-nav">
+
+        <button
+            class="nav-button active"
+            data-tab="standingsTab"
+            type="button"
+        >
+            STANDINGS
+        </button>
+
+        <button
+            class="nav-button"
+            data-tab="rostersTab"
+            type="button"
+        >
+            ROSTERS
+        </button>
+
+    </nav>
+
 </header>
 
 
 <main class="container">
 
-    <!-- =====================================================
-         STANDINGS
-         ===================================================== -->
-
-    <section class="glass-card standings-section">
-
-        <div class="section-header">
-
-            <div>
-
-                <div class="section-label">
-                    CURRENT STANDINGS
-                </div>
-
-                <h2>League Table</h2>
-
-                <p>
-                    Updated automatically when results are saved.
-                </p>
-
-            </div>
-
-            <div class="playoff-badge">
-                <span class="badge-dot"></span>
-                Top 8 Make Playoffs
-            </div>
-
-        </div>
-
-
-        <div class="standings-wrapper">
-
-            <table class="standings-table">
-
-                <thead>
-
-                    <tr>
-                        <th>#</th>
-                        <th>Team</th>
-                        <th>W</th>
-                        <th>L</th>
-                        <th>Diff</th>
-                        <th>Status</th>
-                    </tr>
-
-                </thead>
-
-                <tbody id="standingsBody"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
 
     <!-- =====================================================
-         SCHEDULE
-         ===================================================== -->
+         STANDINGS TAB
+    ====================================================== -->
 
-    <section class="glass-card schedule-section">
+    <div
+        id="standingsTab"
+        class="tab-content active-tab"
+    >
 
-        <div class="section-label">
-            SEASON SCHEDULE
-        </div>
+        <section class="glass-card standings-section">
 
-        <h2>Match Results</h2>
-
-        <p class="section-description">
-            Select a week to view or enter results.
-        </p>
-
-
-        <!-- WEEK SELECTOR -->
-
-        <div class="week-selector">
-
-            <div
-                id="weekButtons"
-                class="week-buttons"
-            ></div>
-
-        </div>
-
-
-        <!-- SELECTED WEEK -->
-
-        <div class="selected-week">
-
-            <div class="week-heading">
+            <div class="section-header">
 
                 <div>
 
-                    <div
-                        id="weekTitle"
-                        class="week-title"
-                    >
-                        Week 1
+                    <div class="section-label">
+                        CURRENT STANDINGS
                     </div>
 
-                    <p id="weekDates"></p>
+                    <h2>
+                        League Table
+                    </h2>
+
+                    <p>
+                        Updated automatically when results are saved.
+                    </p>
 
                 </div>
 
+                <div class="playoff-badge">
+
+                    <span class="badge-dot"></span>
+
+                    Top 8 Make Playoffs
+
+                </div>
+
+            </div>
+
+
+            <div class="standings-wrapper">
+
+                <table class="standings-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Team</th>
+                            <th>W</th>
+                            <th>L</th>
+                            <th>Diff</th>
+                            <th>Status</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="standingsBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SCHEDULE
+        ================================================== -->
+
+        <section class="glass-card schedule-section">
+
+            <div class="section-label">
+                SEASON SCHEDULE
+            </div>
+
+            <h2>
+                Match Results
+            </h2>
+
+            <p class="section-description">
+                Select a week to view or enter results.
+            </p>
+
+
+            <div class="week-selector">
+
                 <div
-                    id="weekStatus"
-                    class="week-status"
+                    id="weekButtons"
+                    class="week-buttons"
                 ></div>
 
             </div>
 
 
-            <div
-                id="matches"
-                class="matches"
-            ></div>
+            <div class="selected-week">
+
+                <div class="week-heading">
+
+                    <div>
+
+                        <div
+                            id="weekTitle"
+                            class="week-title"
+                        >
+                            Week 1
+                        </div>
+
+                        <p id="weekDates"></p>
+
+                    </div>
+
+                    <div
+                        id="weekStatus"
+                        class="week-status"
+                    ></div>
+
+                </div>
+
+
+                <div
+                    id="matches"
+                    class="matches"
+                ></div>
+
+
+                <div
+                    id="weekControls"
+                    class="week-controls"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             SCENARIO ANALYSIS
+        ================================================== -->
+
+        <section
+            id="scenarioSection"
+            class="glass-card scenario-section"
+        >
+
+            <div class="section-label">
+                PLAYOFF SCENARIO ANALYSIS
+            </div>
+
+            <h2>
+                Week
+                <span id="scenarioWeekNumber">8</span>
+                Clinch / Elimination Scenarios
+            </h2>
+
+            <p class="section-description">
+                Every possible result combination for the selected
+                open week is analyzed against the remaining schedule.
+            </p>
+
+
+            <div class="scenario-summary">
+
+                <div class="scenario-stat">
+
+                    <span
+                        class="scenario-stat-number"
+                        id="scenarioCount"
+                    >
+                        —
+                    </span>
+
+                    <span class="scenario-stat-label">
+                        Possible Week Results
+                    </span>
+
+                </div>
+
+
+                <div class="scenario-stat">
+
+                    <span
+                        class="scenario-stat-number"
+                        id="clinchCount"
+                    >
+                        —
+                    </span>
+
+                    <span class="scenario-stat-label">
+                        Clinch Scenarios
+                    </span>
+
+                </div>
+
+
+                <div class="scenario-stat">
+
+                    <span
+                        class="scenario-stat-number"
+                        id="elimCount"
+                    >
+                        —
+                    </span>
+
+                    <span class="scenario-stat-label">
+                        Elimination Scenarios
+                    </span>
+
+                </div>
+
+            </div>
 
 
             <div
-                id="weekControls"
-                class="week-controls"
+                id="scenarioResults"
+                class="scenario-results"
             ></div>
 
-        </div>
+        </section>
 
-    </section>
+    </div>
+
 
 
     <!-- =====================================================
-         CLINCH / ELIMINATION ANALYSIS
-         ===================================================== -->
+         ROSTERS TAB
+    ====================================================== -->
 
-    <section
-        id="scenarioSection"
-        class="glass-card scenario-section"
+    <div
+        id="rostersTab"
+        class="tab-content"
     >
 
-        <div class="section-label">
-            PLAYOFF SCENARIO ANALYSIS
-        </div>
+        <section class="glass-card rosters-section">
 
-        <h2>
-            Week <span id="scenarioWeekNumber">7</span>
-            Clinch / Elimination Scenarios
-        </h2>
+            <div class="section-header">
 
-        <p class="section-description">
-            Every possible result combination for this week's
-            6 matches is analyzed.
-        </p>
+                <div>
 
+                    <div class="section-label">
+                        DRAFT ROSTERS
+                    </div>
 
-        <div class="scenario-summary">
+                    <h2>
+                        League Rosters
+                    </h2>
 
-            <div class="scenario-stat">
-                <span class="scenario-stat-number" id="scenarioCount">
-                    4096
-                </span>
+                    <p>
+                        Select a team to view its roster.
+                    </p>
 
-                <span class="scenario-stat-label">
-                    Possible Week Results
-                </span>
+                </div>
+
+                <div class="roster-count-badge">
+                    12 TEAMS
+                </div>
+
             </div>
 
-            <div class="scenario-stat">
-                <span class="scenario-stat-number" id="clinchCount">
-                    0
-                </span>
 
-                <span class="scenario-stat-label">
-                    Clinch Scenarios
-                </span>
+            <!-- TEAM TABS -->
+
+            <div
+                id="teamTabs"
+                class="team-tabs"
+            ></div>
+
+
+            <!-- SELECTED TEAM -->
+
+            <div
+                id="selectedRoster"
+                class="selected-roster"
+            ></div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+
+<!-- =========================================================
+     POKÉMON MODAL
+========================================================= -->
+
+<div
+    id="pokemonModal"
+    class="pokemon-modal"
+    aria-hidden="true"
+>
+
+    <div
+        id="pokemonModalBackdrop"
+        class="pokemon-modal-backdrop"
+    ></div>
+
+
+    <div class="pokemon-modal-card">
+
+        <button
+            id="closePokemonModal"
+            class="close-modal"
+            type="button"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+
+        <div class="pokemon-modal-top">
+
+            <div
+                id="pokemonImageContainer"
+                class="pokemon-image-container"
+            >
+
+                <div class="pokemon-loading">
+                    Loading...
+                </div>
+
             </div>
 
-            <div class="scenario-stat">
-                <span class="scenario-stat-number" id="elimCount">
-                    0
-                </span>
 
-                <span class="scenario-stat-label">
-                    Elimination Scenarios
-                </span>
+            <div class="pokemon-modal-info">
+
+                <div
+                    id="pokemonTeam"
+                    class="pokemon-team-label"
+                ></div>
+
+                <h2 id="pokemonName">
+                    Pokémon
+                </h2>
+
+                <div
+                    id="pokemonTypes"
+                    class="pokemon-types"
+                ></div>
+
+                <div
+                    id="pokemonId"
+                    class="pokemon-id"
+                ></div>
+
             </div>
 
         </div>
 
 
         <div
-            id="scenarioResults"
-            class="scenario-results"
-        ></div>
+            id="pokemonStats"
+            class="pokemon-stats"
+        >
 
-    </section>
+            <div class="pokemon-loading">
+                Loading stats...
+            </div>
 
-</main>
+        </div>
+
+    </div>
+
+</div>
+
 
 
 <footer>

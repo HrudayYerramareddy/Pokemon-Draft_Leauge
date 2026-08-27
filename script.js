@@ -1,6 +1,5 @@
 /* =========================================================
    POKÉMON DRAFT LEAGUE
-   FAST NFL-STYLE CLINCH / ELIMINATION ANALYSIS
 ========================================================= */
 
 
@@ -25,6 +24,253 @@ const teams = [
 
 
 /* =========================================================
+   ROSTERS
+========================================================= */
+
+const rosters = {
+
+    "Great Lakes Glimmora": [
+        "Glimmora",
+        "Orthworm",
+        "Ninetales (K)",
+        "Typhlosion (J)",
+        "Pidgeot",
+        "Tauros (Aqua)",
+        "Ampharos",
+        "Avalugg (Kalos)",
+        "Heliolisk",
+        "Victreebel"
+    ],
+
+    "Garden State Garchomps": [
+        "Garchomp",
+        "Corviknight",
+        "Manectric",
+        "Primarina",
+        "Arcanine (K)",
+        "Hydrapple",
+        "Rotom",
+        "Forretress",
+        "Cofagrigus",
+        "Passimian"
+    ],
+
+    "Florida Floettes": [
+        "Floette EF",
+        "Rotom Wash",
+        "Aerodactyl",
+        "Krookodile",
+        "Ariados",
+        "Pangoro",
+        "Meowstic (M)",
+        "Simisage",
+        "Flareon",
+        "Zoroark (U)"
+    ],
+
+    "Amarillo Archaludon": [
+        "Archaludon",
+        "Pelipper",
+        "Scizor",
+        "Scovillain",
+        "Luxray",
+        "Lycanroc (D)",
+        "Dedenne",
+        "Watchog",
+        "Toxicroak",
+        "Flapple"
+    ],
+
+    "Niagara Stampede": [
+        "Incineroar",
+        "Sinistcha",
+        "Mudsdale",
+        "Blastoise",
+        "Rotom (Fan)",
+        "Bastiodon",
+        "Serperior",
+        "Espeon",
+        "Tyrantrum",
+        "Leafeon"
+    ],
+
+    "New Braunfels Ninetails": [
+        "Kingambit",
+        "Gengar",
+        "Ninetales (A)",
+        "Araquanid",
+        "Goodra (K)",
+        "Aromatisse",
+        "Mr. Rime",
+        "Beartic",
+        "Skeledirge",
+        "Meowstic (F)"
+    ],
+
+    "Texas State Disasters": [
+        "Basculegion Male",
+        "Froslass",
+        "Volcarona",
+        "Tauros (P - Blaze)",
+        "Liepard",
+        "Rotom Frost",
+        "Florges",
+        "Simisear",
+        "Kommo-O",
+        "Absol"
+    ],
+
+    "Southern Tier Supporters": [
+        "Sableye",
+        "Maushold",
+        "Meganium",
+        "Steelix",
+        "Reuniclus",
+        "Simipour",
+        "Golurk",
+        "Polteageist",
+        "Arcanine (Hisui)",
+        "Castform"
+    ],
+
+    "Colorado Avalugg": [
+        "Dragonite",
+        "Gardevoir",
+        "Skarmory",
+        "Hippowdon",
+        "Decidueye (A)",
+        "Tauros (P-C)",
+        "Runerigus",
+        "Salazzle",
+        "Raichu (A)",
+        "Kleavor"
+    ],
+
+    "Durham Drills": [
+        "Sneasler",
+        "Aegislash",
+        "Tyranitar",
+        "Excadrill",
+        "Rotom Mow",
+        "Tauros (K)",
+        "Noivern",
+        "Appletun",
+        "Wyrdeer",
+        "Stunfisk (G)"
+    ],
+
+    "Houston Heat Wave": [
+        "Charizard",
+        "Venusaur",
+        "Hydreigon",
+        "Aggron",
+        "Arbok",
+        "Klefki",
+        "Slurpuff",
+        "Feraligatr",
+        "Rampardos",
+        "Furfrou"
+    ],
+
+    "Ontario Fightin' Palafin": [
+        "Sylveon",
+        "Dragapult",
+        "Palafin",
+        "Talonflame",
+        "Heracross",
+        "Hatterene",
+        "Samurott (U)",
+        "Avalugg (Hisui)",
+        "Roserade",
+        "Emolga"
+    ]
+};
+
+
+/* =========================================================
+   API NAME MAPPING
+========================================================= */
+
+const pokemonApiNames = {
+
+    "Ninetales (K)": "ninetales",
+
+    "Typhlosion (J)": "typhlosion-hisui",
+
+    "Tauros (Aqua)": "tauros-paldea-aqua-breed",
+
+    "Avalugg (Kalos)": "avalugg",
+
+    "Arcanine (K)": "arcanine",
+
+    "Rotom Wash": "rotom-wash",
+
+    "Meowstic (M)": "meowstic-male",
+
+    "Zoroark (U)": "zoroark-hisui",
+
+    "Lycanroc (D)": "lycanroc-dusk",
+
+    "Rotom (Fan)": "rotom-fan",
+
+    "Ninetales (A)": "ninetales-alola",
+
+    "Goodra (K)": "goodra-hisui",
+
+    "Mr. Rime": "mr-rime",
+
+    "Tauros (P - Blaze)": "tauros-paldea-blaze-breed",
+
+    "Rotom Frost": "rotom-frost",
+
+    "Kommo-O": "kommo-o",
+
+    "Arcanine (Hisui)": "arcanine-hisui",
+
+    "Decidueye (A)": "decidueye-hisui",
+
+    "Tauros (P-C)": "tauros-paldea-combat-breed",
+
+    "Raichu (A)": "raichu-alola",
+
+    "Rotom Mow": "rotom-mow",
+
+    "Tauros (K)": "tauros",
+
+    "Stunfisk (G)": "stunfisk-galar",
+
+    "Basculegion Male": "basculegion-male",
+
+    "Samurott (U)": "samurott-hisui",
+
+    "Avalugg (Hisui)": "avalugg-hisui",
+
+    "Floette EF": "floette-eternal",
+
+    "Floette (Eternal)": "floette-eternal",
+
+    "Floette Eternal": "floette-eternal",
+
+    "Floette Eternal Flower": "floette-eternal",
+
+    "Eternal Flower Floette": "floette-eternal",
+
+    "Aegislash": "aegislash-shield",
+
+    "Aegislash-Shield": "aegislash-shield",
+
+    "Palafin": "palafin-zero",
+
+    "Palafin-Zero": "palafin-zero",
+
+    "Meowstic (F)": "meowstic-female",
+
+    "Maushold": "maushold-family-of-four"
+
+};
+
+
+/* =========================================================
    WEEKS
 ========================================================= */
 
@@ -34,7 +280,6 @@ const weeks = [
         number: 1,
         dates: "July 1-5",
         locked: true,
-
         matches: [
             ["Great Lakes Glimmora", "Ontario Fightin' Palafin", 1, 2],
             ["Garden State Garchomps", "Houston Heat Wave", 1, 2],
@@ -49,7 +294,6 @@ const weeks = [
         number: 2,
         dates: "July 10-12",
         locked: true,
-
         matches: [
             ["Great Lakes Glimmora", "Houston Heat Wave", 2, 1],
             ["Ontario Fightin' Palafin", "Durham Drills", 0, 3],
@@ -64,7 +308,6 @@ const weeks = [
         number: 3,
         dates: "July 17-19",
         locked: true,
-
         matches: [
             ["Great Lakes Glimmora", "Durham Drills", 2, 1],
             ["Houston Heat Wave", "Colorado Avalugg", 2, 1],
@@ -79,7 +322,6 @@ const weeks = [
         number: 4,
         dates: "July 24-26",
         locked: true,
-
         matches: [
             ["Great Lakes Glimmora", "Colorado Avalugg", 1, 2],
             ["Durham Drills", "Southern Tier Supporters", 2, 1],
@@ -94,7 +336,6 @@ const weeks = [
         number: 5,
         dates: "July 31-August 2",
         locked: true,
-
         matches: [
             ["Great Lakes Glimmora", "Southern Tier Supporters", 1, 2],
             ["Colorado Avalugg", "Texas State Disasters", 2, 1],
@@ -109,7 +350,6 @@ const weeks = [
         number: 6,
         dates: "August 7-9",
         locked: true,
-
         matches: [
             ["Great Lakes Glimmora", "Texas State Disasters", 1, 2],
             ["Southern Tier Supporters", "New Braunfels Ninetails", 0, 3],
@@ -124,7 +364,6 @@ const weeks = [
         number: 7,
         dates: "August 14-16",
         locked: true,
-
         matches: [
             ["Great Lakes Glimmora", "New Braunfels Ninetails", 2, 1],
             ["Texas State Disasters", "Niagara Stampede", 2, 1],
@@ -139,7 +378,6 @@ const weeks = [
         number: 8,
         dates: "August 21-23",
         locked: false,
-
         matches: [
             ["Great Lakes Glimmora", "Niagara Stampede"],
             ["New Braunfels Ninetails", "Amarillo Archaludon"],
@@ -154,7 +392,6 @@ const weeks = [
         number: 9,
         dates: "August 28-30",
         locked: false,
-
         matches: [
             ["Great Lakes Glimmora", "Amarillo Archaludon"],
             ["Niagara Stampede", "Florida Floettes"],
@@ -169,7 +406,6 @@ const weeks = [
         number: 10,
         dates: "September 4-6",
         locked: false,
-
         matches: [
             ["Great Lakes Glimmora", "Florida Floettes"],
             ["Amarillo Archaludon", "Garden State Garchomps"],
@@ -184,7 +420,6 @@ const weeks = [
         number: 11,
         dates: "September 11-13",
         locked: false,
-
         matches: [
             ["Great Lakes Glimmora", "Garden State Garchomps"],
             ["Florida Floettes", "Ontario Fightin' Palafin"],
@@ -203,6 +438,8 @@ const weeks = [
 
 let currentWeek = 1;
 
+let selectedTeam = "Durham Drills";
+
 const STORAGE_KEY =
     "pokemonDraftLeagueScores";
 
@@ -213,52 +450,992 @@ const POSSIBLE_SCORES = [
     [0, 3]
 ];
 
-
-/* =========================================================
-   CACHED FUTURE SCHEDULE
-========================================================= */
-
-/*
-    This is built ONCE.
-
-    The old code repeatedly searched through every week
-    for every scenario and every team.
-
-    This cache eliminates that work.
-*/
-
 const futureScheduleCache = new Map();
 
+const pokemonCache = new Map();
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+function initializeTabs() {
+
+    const buttons =
+        document.querySelectorAll(".nav-button");
+
+    const tabs =
+        document.querySelectorAll(".tab-content");
+
+    buttons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const target =
+                button.dataset.tab;
+
+            buttons.forEach(b => {
+
+                b.classList.remove("active");
+
+            });
+
+            tabs.forEach(tab => {
+
+                tab.classList.remove(
+                    "active-tab"
+                );
+
+            });
+
+            button.classList.add("active");
+
+            const targetElement =
+                document.getElementById(target);
+
+            if (targetElement) {
+
+                targetElement.classList.add(
+                    "active-tab"
+                );
+
+            }
+
+        });
+
+    });
+}
+
+
+/* =========================================================
+   POKÉMON API NAME
+========================================================= */
+
+function getPokemonApiName(
+    pokemonName
+) {
+
+    if (
+        pokemonApiNames[pokemonName]
+    ) {
+
+        return pokemonApiNames[pokemonName];
+
+    }
+
+    return pokemonName
+        .toLowerCase()
+        .replace(/[.'’()]/g, "")
+        .trim()
+        .replace(/\s+/g, "-");
+
+}
+
+
+/* =========================================================
+   FETCH POKÉMON
+========================================================= */
+
+async function fetchPokemonData(
+    pokemonName
+) {
+
+    if (
+        pokemonCache.has(pokemonName)
+    ) {
+
+        return pokemonCache.get(
+            pokemonName
+        );
+
+    }
+
+    const apiName =
+        getPokemonApiName(
+            pokemonName
+        );
+
+    const response =
+        await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${apiName}`
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Pokémon not found: ${pokemonName}`
+        );
+
+    }
+
+    const data =
+        await response.json();
+
+    pokemonCache.set(
+        pokemonName,
+        data
+    );
+
+    return data;
+}
+
+
+/* =========================================================
+   GET POKÉMON IMAGE
+========================================================= */
+
+async function getPokemonImage(
+    pokemonName
+) {
+
+    try {
+
+        const data =
+            await fetchPokemonData(
+                pokemonName
+            );
+
+        return (
+            data.sprites &&
+            data.sprites.other &&
+            data.sprites.other[
+                "official-artwork"
+            ] &&
+            data.sprites.other[
+                "official-artwork"
+            ].front_default
+        );
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        return null;
+
+    }
+}
+
+
+/* =========================================================
+   ROSTER TABS
+========================================================= */
+
+function renderTeamTabs() {
+
+    const container =
+        document.getElementById(
+            "teamTabs"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+    teams.forEach(
+        (team, index) => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.type = "button";
+
+            button.className =
+                "team-tab";
+
+            if (
+                team === selectedTeam
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+            button.textContent =
+                team;
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedTeam =
+                        team;
+
+                    renderTeamTabs();
+
+                    renderSelectedRoster();
+
+                }
+            );
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   SELECTED ROSTER
+========================================================= */
+
+function renderSelectedRoster() {
+
+    const container =
+        document.getElementById(
+            "selectedRoster"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    const roster =
+        rosters[selectedTeam] || [];
+
+    container.innerHTML = "";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+    header.className =
+        "selected-roster-header";
+
+
+    const title =
+        document.createElement(
+            "h3"
+        );
+
+    title.textContent =
+        selectedTeam;
+
+
+    const count =
+        document.createElement(
+            "span"
+        );
+
+    count.textContent =
+        `${roster.length} POKÉMON`;
+
+
+    header.appendChild(title);
+
+    header.appendChild(count);
+
+    container.appendChild(header);
+
+
+    const grid =
+        document.createElement(
+            "div"
+        );
+
+    grid.className =
+        "roster-pokemon-grid";
+
+
+    roster.forEach(
+        pokemon => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.type = "button";
+
+            button.className =
+                "pokemon-button";
+
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.className =
+                "pokemon-mini-icon";
+
+            image.alt =
+                pokemon;
+
+            image.loading =
+                "lazy";
+
+
+            /*
+             * Start with a loading placeholder.
+             */
+
+            image.src =
+                createPlaceholderImage();
+
+
+            loadRosterImage(
+                image,
+                pokemon
+            );
+
+
+            const name =
+                document.createElement(
+                    "span"
+                );
+
+            name.className =
+                "pokemon-button-name";
+
+            name.textContent =
+                pokemon;
+
+
+            button.appendChild(image);
+
+            button.appendChild(name);
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    openPokemonModal(
+                        pokemon,
+                        selectedTeam
+                    );
+
+                }
+            );
+
+
+            grid.appendChild(button);
+
+        }
+    );
+
+
+    container.appendChild(grid);
+}
+
+
+/* =========================================================
+   PLACEHOLDER
+========================================================= */
+
+function createPlaceholderImage() {
+
+    return (
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(`
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="150"
+                height="150"
+                viewBox="0 0 150 150"
+            >
+                <circle
+                    cx="75"
+                    cy="75"
+                    r="45"
+                    fill="none"
+                    stroke="#4daeff"
+                    stroke-width="5"
+                    stroke-dasharray="20 10"
+                />
+            </svg>
+        `)
+    );
+
+}
+
+
+/* =========================================================
+   LOAD ROSTER IMAGE
+========================================================= */
+
+async function loadRosterImage(
+    image,
+    pokemonName
+) {
+
+    const url =
+        await getPokemonImage(
+            pokemonName
+        );
+
+    if (url) {
+
+        image.src = url;
+
+    } else {
+
+        image.alt =
+            `${pokemonName} image unavailable`;
+
+    }
+
+}
+
+
+/* =========================================================
+   POKÉMON MODAL
+========================================================= */
+
+function openPokemonModal(
+    pokemonName,
+    teamName
+) {
+
+    const modal =
+        document.getElementById(
+            "pokemonModal"
+        );
+
+    const team =
+        document.getElementById(
+            "pokemonTeam"
+        );
+
+    const name =
+        document.getElementById(
+            "pokemonName"
+        );
+
+    const types =
+        document.getElementById(
+            "pokemonTypes"
+        );
+
+    const id =
+        document.getElementById(
+            "pokemonId"
+        );
+
+    const imageContainer =
+        document.getElementById(
+            "pokemonImageContainer"
+        );
+
+    const stats =
+        document.getElementById(
+            "pokemonStats"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.add("open");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.style.overflow =
+        "hidden";
+
+    team.textContent =
+        teamName;
+
+    name.textContent =
+        pokemonName;
+
+    types.innerHTML = "";
+
+    id.textContent = "";
+
+    imageContainer.innerHTML = `
+        <div class="pokemon-loading">
+            Loading...
+        </div>
+    `;
+
+    stats.innerHTML = `
+        <div class="pokemon-loading">
+            Loading stats...
+        </div>
+    `;
+
+    loadPokemonData(
+        pokemonName
+    );
+}
+
+
+/* =========================================================
+   LOAD MODAL DATA
+========================================================= */
+
+async function loadPokemonData(
+    pokemonName
+) {
+
+    const imageContainer =
+        document.getElementById(
+            "pokemonImageContainer"
+        );
+
+    const typesContainer =
+        document.getElementById(
+            "pokemonTypes"
+        );
+
+    const idContainer =
+        document.getElementById(
+            "pokemonId"
+        );
+
+    const statsContainer =
+        document.getElementById(
+            "pokemonStats"
+        );
+
+    try {
+
+        const data =
+            await fetchPokemonData(
+                pokemonName
+            );
+
+
+        const artwork =
+            data.sprites &&
+            data.sprites.other &&
+            data.sprites.other[
+                "official-artwork"
+            ] &&
+            data.sprites.other[
+                "official-artwork"
+            ].front_default;
+
+
+        if (artwork) {
+
+            imageContainer.innerHTML = `
+                <img
+                    src="${artwork}"
+                    alt="${pokemonName}"
+                >
+            `;
+
+        } else {
+
+            imageContainer.innerHTML = `
+                <div class="pokemon-loading">
+                    No image available
+                </div>
+            `;
+
+        }
+
+
+        typesContainer.innerHTML = "";
+
+
+        data.types
+            .sort(
+                (a, b) =>
+                    a.slot - b.slot
+            )
+            .forEach(
+                typeData => {
+
+                    const badge =
+                        document.createElement(
+                            "span"
+                        );
+
+                    badge.className =
+                        "type-badge";
+
+                    badge.textContent =
+                        typeData.type.name;
+
+                    typesContainer.appendChild(
+                        badge
+                    );
+
+                }
+            );
+
+
+        idContainer.textContent =
+            "#" +
+            String(data.id).padStart(
+                3,
+                "0"
+            );
+
+
+        renderPokemonStats(
+            data.stats
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        imageContainer.innerHTML = `
+            <div class="pokemon-loading">
+                Image unavailable
+            </div>
+        `;
+
+        typesContainer.innerHTML = "";
+
+        idContainer.textContent = "";
+
+        statsContainer.innerHTML = `
+            <div class="no-scenarios">
+                Could not load Pokémon data.
+                Make sure the device is connected
+                to the internet.
+            </div>
+        `;
+
+    }
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function renderPokemonStats(
+    stats
+) {
+
+    const container =
+        document.getElementById(
+            "pokemonStats"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = "";
+
+
+    const statNames = {
+
+        hp: "HP",
+
+        attack: "Attack",
+
+        defense: "Defense",
+
+        "special-attack":
+            "Sp. Atk",
+
+        "special-defense":
+            "Sp. Def",
+
+        speed: "Speed"
+
+    };
+
+
+    let total = 0;
+
+
+    stats.forEach(
+        stat => {
+
+            const statName =
+                stat.stat.name;
+
+            const value =
+                stat.base_stat;
+
+
+            if (
+                !statNames[statName]
+            ) {
+
+                return;
+
+            }
+
+
+            total += value;
+
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "stat-row";
+
+
+            const label =
+                document.createElement(
+                    "span"
+                );
+
+            label.className =
+                "stat-name";
+
+            label.textContent =
+                statNames[statName];
+
+
+            const number =
+                document.createElement(
+                    "span"
+                );
+
+            number.className =
+                "stat-value";
+
+            number.textContent =
+                value;
+
+
+            const bar =
+                document.createElement(
+                    "div"
+                );
+
+            bar.className =
+                "stat-bar";
+
+
+            const fill =
+                document.createElement(
+                    "div"
+                );
+
+            fill.className =
+                "stat-bar-fill";
+
+
+            const percentage =
+                Math.min(
+                    100,
+                    (value / 255) * 100
+                );
+
+
+            fill.style.width =
+                percentage + "%";
+
+
+            bar.appendChild(fill);
+
+            row.appendChild(label);
+
+            row.appendChild(number);
+
+            row.appendChild(bar);
+
+            container.appendChild(row);
+
+        }
+    );
+
+
+    const totalRow =
+        document.createElement(
+            "div"
+        );
+
+    totalRow.className =
+        "stat-row stat-total";
+
+
+    const totalLabel =
+        document.createElement(
+            "span"
+        );
+
+    totalLabel.className =
+        "stat-name";
+
+    totalLabel.textContent =
+        "Base Total";
+
+
+    const totalNumber =
+        document.createElement(
+            "span"
+        );
+
+    totalNumber.className =
+        "stat-value";
+
+    totalNumber.textContent =
+        total;
+
+
+    totalRow.appendChild(
+        totalLabel
+    );
+
+    totalRow.appendChild(
+        totalNumber
+    );
+
+    totalRow.appendChild(
+        document.createElement("div")
+    );
+
+
+    container.appendChild(
+        totalRow
+    );
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closePokemonModal() {
+
+    const modal =
+        document.getElementById(
+            "pokemonModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove(
+        "open"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   MODAL EVENTS
+========================================================= */
+
+function initializePokemonModal() {
+
+    const closeButton =
+        document.getElementById(
+            "closePokemonModal"
+        );
+
+    const backdrop =
+        document.getElementById(
+            "pokemonModalBackdrop"
+        );
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closePokemonModal
+        );
+
+    }
+
+
+    if (backdrop) {
+
+        backdrop.addEventListener(
+            "click",
+            closePokemonModal
+        );
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closePokemonModal();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FUTURE SCHEDULE
+========================================================= */
 
 function buildFutureScheduleCache() {
 
     futureScheduleCache.clear();
 
+
     for (const team of teams) {
 
         const gamesByWeek = {};
+
 
         for (const week of weeks) {
 
             let count = 0;
 
-            for (const match of week.matches) {
+
+            for (
+                const match of week.matches
+            ) {
 
                 if (
                     match[0] === team ||
                     match[1] === team
                 ) {
+
                     count++;
+
                 }
+
             }
 
-            gamesByWeek[week.number] = count;
+
+            gamesByWeek[
+                week.number
+            ] = count;
+
         }
+
 
         futureScheduleCache.set(
             team,
             gamesByWeek
         );
+
     }
 }
 
@@ -269,23 +1446,32 @@ function getRemainingGameCount(
 ) {
 
     const schedule =
-        futureScheduleCache.get(teamName);
+        futureScheduleCache.get(
+            teamName
+        );
 
     if (!schedule) {
         return 0;
     }
 
+
     let count = 0;
 
+
     for (
-        let weekNumber = afterWeek + 1;
+        let weekNumber =
+            afterWeek + 1;
+
         weekNumber <= weeks.length;
+
         weekNumber++
     ) {
 
         count +=
             schedule[weekNumber] || 0;
+
     }
+
 
     return count;
 }
@@ -298,16 +1484,20 @@ function getRemainingGameCount(
 function loadSavedScores() {
 
     const saved =
-        localStorage.getItem(STORAGE_KEY);
+        localStorage.getItem(
+            STORAGE_KEY
+        );
 
     if (!saved) {
         return;
     }
 
+
     try {
 
         const savedWeeks =
             JSON.parse(saved);
+
 
         for (
             let w = 0;
@@ -315,13 +1505,17 @@ function loadSavedScores() {
             w++
         ) {
 
-            if (weeks[w].locked) {
+            if (
+                weeks[w].locked
+            ) {
                 continue;
             }
+
 
             if (!savedWeeks[w]) {
                 continue;
             }
+
 
             for (
                 let m = 0;
@@ -331,6 +1525,7 @@ function loadSavedScores() {
 
                 const savedMatch =
                     savedWeeks[w][m];
+
 
                 if (
                     savedMatch &&
@@ -346,9 +1541,13 @@ function loadSavedScores() {
 
                     weeks[w].matches[m][3] =
                         savedMatch[3];
+
                 }
+
             }
+
         }
+
 
     } catch (error) {
 
@@ -356,13 +1555,16 @@ function loadSavedScores() {
             "Could not load saved scores:",
             error
         );
+
     }
+
 }
 
 
 function saveScoresToStorage() {
 
     const data = [];
+
 
     for (
         let w = 0;
@@ -371,6 +1573,7 @@ function saveScoresToStorage() {
     ) {
 
         data[w] = [];
+
 
         for (
             let m = 0;
@@ -381,23 +1584,33 @@ function saveScoresToStorage() {
             const match =
                 weeks[w].matches[m];
 
+
             data[w][m] = [
+
                 match[0],
+
                 match[1],
+
                 match.length >= 4
                     ? match[2]
                     : null,
+
                 match.length >= 4
                     ? match[3]
                     : null
+
             ];
+
         }
+
     }
+
 
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(data)
     );
+
 }
 
 
@@ -405,7 +1618,10 @@ function saveScoresToStorage() {
    SCORE VALIDATION
 ========================================================= */
 
-function validScore(scoreA, scoreB) {
+function validScore(
+    scoreA,
+    scoreB
+) {
 
     if (
         scoreA === "" ||
@@ -415,18 +1631,28 @@ function validScore(scoreA, scoreB) {
         scoreA === undefined ||
         scoreB === undefined
     ) {
+
         return false;
+
     }
 
-    const a = Number(scoreA);
-    const b = Number(scoreB);
+
+    const a =
+        Number(scoreA);
+
+    const b =
+        Number(scoreB);
+
 
     if (
         !Number.isInteger(a) ||
         !Number.isInteger(b)
     ) {
+
         return false;
+
     }
+
 
     if (
         a < 0 ||
@@ -434,10 +1660,14 @@ function validScore(scoreA, scoreB) {
         a > 3 ||
         b > 3
     ) {
+
         return false;
+
     }
 
+
     return a + b === 3;
+
 }
 
 
@@ -445,16 +1675,21 @@ function validScore(scoreA, scoreB) {
    WEEK COMPLETION
 ========================================================= */
 
-function isWeekComplete(weekNumber) {
+function isWeekComplete(
+    weekNumber
+) {
 
     const week =
         weeks.find(
-            w => w.number === weekNumber
+            w =>
+                w.number ===
+                weekNumber
         );
 
     if (!week) {
         return false;
     }
+
 
     return week.matches.every(
         match =>
@@ -464,18 +1699,27 @@ function isWeekComplete(weekNumber) {
                 match[3]
             )
     );
+
 }
 
 
-function canAnalyzeWeek(weekNumber) {
+function canAnalyzeWeek(
+    weekNumber
+) {
 
-    if (weekNumber <= 1) {
+    if (
+        weekNumber <= 1
+    ) {
+
         return true;
+
     }
+
 
     return isWeekComplete(
         weekNumber - 1
     );
+
 }
 
 
@@ -485,12 +1729,20 @@ function canAnalyzeWeek(weekNumber) {
 
 function createEmptyStandings() {
 
-    return teams.map(team => ({
-        team,
-        wins: 0,
-        losses: 0,
-        differential: 0
-    }));
+    return teams.map(
+        team => ({
+
+            team,
+
+            wins: 0,
+
+            losses: 0,
+
+            differential: 0
+
+        })
+    );
+
 }
 
 
@@ -506,8 +1758,11 @@ function applyMatch(
             match[3]
         )
     ) {
+
         return;
+
     }
+
 
     const scoreA =
         Number(match[2]);
@@ -515,36 +1770,57 @@ function applyMatch(
     const scoreB =
         Number(match[3]);
 
+
     const teamA =
         standings.find(
-            t => t.team === match[0]
+            t =>
+                t.team ===
+                match[0]
         );
+
 
     const teamB =
         standings.find(
-            t => t.team === match[1]
+            t =>
+                t.team ===
+                match[1]
         );
 
-    if (!teamA || !teamB) {
+
+    if (
+        !teamA ||
+        !teamB
+    ) {
+
         return;
+
     }
+
 
     teamA.differential +=
         scoreA - scoreB;
 
+
     teamB.differential +=
         scoreB - scoreA;
 
-    if (scoreA > scoreB) {
+
+    if (
+        scoreA > scoreB
+    ) {
 
         teamA.wins++;
+
         teamB.losses++;
 
     } else {
 
         teamB.wins++;
+
         teamA.losses++;
+
     }
+
 }
 
 
@@ -555,9 +1831,18 @@ function sortStandings(
     return standings.sort(
         (a, b) => {
 
-            if (a.wins !== b.wins) {
-                return b.wins - a.wins;
+            if (
+                a.wins !==
+                b.wins
+            ) {
+
+                return (
+                    b.wins -
+                    a.wins
+                );
+
             }
+
 
             if (
                 a.differential !==
@@ -568,13 +1853,17 @@ function sortStandings(
                     b.differential -
                     a.differential
                 );
+
             }
+
 
             return a.team.localeCompare(
                 b.team
             );
+
         }
     );
+
 }
 
 
@@ -583,25 +1872,34 @@ function calculateStandings() {
     const standings =
         createEmptyStandings();
 
-    for (const week of weeks) {
 
-        for (const match of week.matches) {
+    for (
+        const week of weeks
+    ) {
+
+        for (
+            const match of week.matches
+        ) {
 
             applyMatch(
                 standings,
                 match
             );
+
         }
+
     }
+
 
     return sortStandings(
         standings
     );
+
 }
 
 
 /* =========================================================
-   TOP 8
+   PLAYOFF STATUS
 ========================================================= */
 
 function isTeamCurrentlyTopEight(
@@ -611,57 +1909,19 @@ function isTeamCurrentlyTopEight(
 
     const position =
         standings.findIndex(
-            t => t.team === teamName
+            t =>
+                t.team ===
+                teamName
         );
+
 
     return (
         position >= 0 &&
         position < 8
     );
+
 }
 
-
-/* =========================================================
-   REMAINING GAMES
-========================================================= */
-
-function getRemainingGames(
-    teamName,
-    afterWeek
-) {
-
-    const games = [];
-
-    for (
-        let w = afterWeek;
-        w < weeks.length;
-        w++
-    ) {
-
-        const week =
-            weeks[w];
-
-        for (
-            const match of week.matches
-        ) {
-
-            if (
-                match[0] === teamName ||
-                match[1] === teamName
-            ) {
-
-                games.push(match);
-            }
-        }
-    }
-
-    return games;
-}
-
-
-/* =========================================================
-   FAST MAXIMUM WINS
-========================================================= */
 
 function getMaximumPossibleWinsFast(
     teamName,
@@ -671,12 +1931,16 @@ function getMaximumPossibleWinsFast(
 
     const team =
         standings.find(
-            t => t.team === teamName
+            t =>
+                t.team ===
+                teamName
         );
+
 
     if (!team) {
         return -Infinity;
     }
+
 
     return (
         team.wins +
@@ -685,37 +1949,9 @@ function getMaximumPossibleWinsFast(
             afterWeek
         )
     );
+
 }
 
-
-/* =========================================================
-   FAST MATHEMATICAL STATUS
-========================================================= */
-
-/*
-    This is the NFL-style mathematical calculation.
-
-    We don't simulate every possible future season.
-
-    Instead we calculate:
-
-        MAX WINS
-        = current wins + every remaining game won
-
-        MIN WINS
-        = current wins
-
-    A team is eliminated when eight opponents are
-    mathematically guaranteed to finish above its maximum.
-
-    A team is clinched when fewer than eight opponents
-    can mathematically finish above its minimum.
-
-    Differential is used when the win totals are tied.
-
-    This is dramatically faster than recursively simulating
-    every future matchup.
-*/
 
 function calculateFastTeamStatus(
     teamName,
@@ -725,12 +1961,16 @@ function calculateFastTeamStatus(
 
     const team =
         standings.find(
-            t => t.team === teamName
+            t =>
+                t.team ===
+                teamName
         );
+
 
     if (!team) {
         return "CONTENTION";
     }
+
 
     const remaining =
         getRemainingGameCount(
@@ -739,11 +1979,9 @@ function calculateFastTeamStatus(
         );
 
 
-    /* =====================================================
-       NO GAMES LEFT
-    ===================================================== */
-
-    if (remaining === 0) {
+    if (
+        remaining === 0
+    ) {
 
         return isTeamCurrentlyTopEight(
             teamName,
@@ -751,56 +1989,40 @@ function calculateFastTeamStatus(
         )
             ? "CLINCHED"
             : "ELIMINATED";
+
     }
 
-
-    /* =====================================================
-       MAXIMUM POSSIBLE WINS
-    ===================================================== */
 
     const maximumWins =
         team.wins +
         remaining;
 
 
-    /* =====================================================
-       MINIMUM POSSIBLE WINS
-    ===================================================== */
-
     const minimumWins =
         team.wins;
 
 
-    /* =====================================================
-       ELIMINATION TEST
-    ===================================================== */
+    let guaranteedAboveMaximum =
+        0;
 
-    let guaranteedAboveMaximum = 0;
 
     for (
         const opponent of standings
     ) {
 
         if (
-            opponent.team === teamName
+            opponent.team ===
+            teamName
         ) {
+
             continue;
+
         }
 
-        const opponentMaximum =
-            getMaximumPossibleWinsFast(
-                opponent.team,
-                standings,
-                afterWeek
-            );
-
-        /*
-            If opponent's minimum already exceeds
-            our maximum, opponent is definitely above us.
-        */
 
         const opponentMinimum =
             opponent.wins;
+
 
         if (
             opponentMinimum >
@@ -810,49 +2032,50 @@ function calculateFastTeamStatus(
             guaranteedAboveMaximum++;
 
             continue;
+
         }
 
-        /*
-            If tied in wins, differential gives us
-            a possible tie-break advantage/disadvantage.
-
-            We use the current differential as the
-            mathematical baseline.
-        */
 
         if (
-            opponentMinimum === maximumWins &&
+            opponentMinimum ===
+            maximumWins &&
             opponent.differential >
             team.differential
         ) {
 
             guaranteedAboveMaximum++;
+
         }
+
     }
+
 
     if (
         guaranteedAboveMaximum >= 8
     ) {
 
         return "ELIMINATED";
+
     }
 
 
-    /* =====================================================
-       CLINCH TEST
-    ===================================================== */
+    let possibleAboveMinimum =
+        0;
 
-    let possibleAboveMinimum = 0;
 
     for (
         const opponent of standings
     ) {
 
         if (
-            opponent.team === teamName
+            opponent.team ===
+            teamName
         ) {
+
             continue;
+
         }
+
 
         const opponentMaximum =
             getMaximumPossibleWinsFast(
@@ -861,9 +2084,6 @@ function calculateFastTeamStatus(
                 afterWeek
             );
 
-        /*
-            Opponent can finish with more wins.
-        */
 
         if (
             opponentMaximum >
@@ -873,57 +2093,50 @@ function calculateFastTeamStatus(
             possibleAboveMinimum++;
 
             continue;
+
         }
 
-        /*
-            Same wins but opponent has better
-            current differential.
-        */
 
         if (
-            opponentMaximum === minimumWins &&
+            opponentMaximum ===
+            minimumWins &&
             opponent.differential >
             team.differential
         ) {
 
             possibleAboveMinimum++;
+
         }
+
     }
 
-    /*
-        If fewer than eight teams can finish above
-        us, playoff qualification is mathematically
-        guaranteed.
-    */
 
     if (
         possibleAboveMinimum < 8
     ) {
 
         return "CLINCHED";
+
     }
 
 
     return "CONTENTION";
+
 }
 
-
-/* =========================================================
-   CURRENT TEAM STATUS
-========================================================= */
 
 function getCurrentTeamStatus(
     teamName,
     standings
 ) {
 
-    /*
-        Find the last completed week.
-    */
+    let completedThrough =
+        0;
 
-    let completedThrough = 0;
 
-    for (const week of weeks) {
+    for (
+        const week of weeks
+    ) {
 
         if (
             isWeekComplete(
@@ -937,17 +2150,15 @@ function getCurrentTeamStatus(
         } else {
 
             break;
+
         }
+
     }
 
 
-    /*
-        If all 11 weeks are complete,
-        simply use the final standings.
-    */
-
     if (
-        completedThrough >= weeks.length
+        completedThrough >=
+        weeks.length
     ) {
 
         return isTeamCurrentlyTopEight(
@@ -956,6 +2167,7 @@ function getCurrentTeamStatus(
         )
             ? "CLINCHED"
             : "ELIMINATED";
+
     }
 
 
@@ -964,11 +2176,12 @@ function getCurrentTeamStatus(
         standings,
         completedThrough
     );
+
 }
 
 
 /* =========================================================
-   STANDINGS DISPLAY
+   UPDATE STANDINGS
 ========================================================= */
 
 function updateStandings() {
@@ -982,23 +2195,30 @@ function updateStandings() {
         return;
     }
 
+
     const standings =
         calculateStandings();
 
+
     body.innerHTML = "";
 
-    standings.forEach(
-        function(team, index) {
 
-            if (index === 8) {
+    standings.forEach(
+        (team, index) => {
+
+            if (
+                index === 8
+            ) {
 
                 const cutoff =
                     document.createElement(
                         "tr"
                     );
 
+
                 cutoff.className =
                     "playoff-cutoff";
+
 
                 cutoff.innerHTML = `
                     <td colspan="6">
@@ -1007,30 +2227,40 @@ function updateStandings() {
                     </td>
                 `;
 
+
                 body.appendChild(
                     cutoff
                 );
+
             }
+
 
             const row =
                 document.createElement(
                     "tr"
                 );
 
-            if (index < 8) {
+
+            if (
+                index < 8
+            ) {
 
                 row.classList.add(
                     "playoff-team"
                 );
+
             }
+
 
             const differential =
                 team.differential;
+
 
             const differentialText =
                 differential > 0
                     ? "+" + differential
                     : String(differential);
+
 
             const status =
                 getCurrentTeamStatus(
@@ -1038,52 +2268,75 @@ function updateStandings() {
                     standings
                 );
 
+
             let statusClass =
                 "status-contention";
 
+
             if (
-                status === "CLINCHED"
+                status ===
+                "CLINCHED"
             ) {
 
                 statusClass =
                     "status-clinched";
+
             }
 
+
             if (
-                status === "ELIMINATED"
+                status ===
+                "ELIMINATED"
             ) {
 
                 statusClass =
                     "status-eliminated";
+
             }
 
+
             row.innerHTML = `
-                <td>${index + 1}</td>
+
+                <td>
+                    ${index + 1}
+                </td>
 
                 <td class="team-name">
                     ${team.team}
                 </td>
 
-                <td>${team.wins}</td>
-
-                <td>${team.losses}</td>
-
-                <td>${differentialText}</td>
+                <td>
+                    ${team.wins}
+                </td>
 
                 <td>
+                    ${team.losses}
+                </td>
+
+                <td>
+                    ${differentialText}
+                </td>
+
+                <td>
+
                     <span
                         class="status-badge ${statusClass}"
                     >
                         ${status}
                     </span>
+
                 </td>
+
             `;
+
 
             body.appendChild(
                 row
             );
+
         }
     );
+
 }
 
 
@@ -1099,6 +2352,7 @@ function calculateStandingsThroughWeek(
     const standings =
         createEmptyStandings();
 
+
     for (
         let w = 0;
         w < weekNumber;
@@ -1108,9 +2362,11 @@ function calculateStandingsThroughWeek(
         const week =
             weeks[w];
 
+
         if (
             scenarioMatches &&
-            week.number === weekNumber
+            week.number ===
+            weekNumber
         ) {
 
             for (
@@ -1121,6 +2377,7 @@ function calculateStandingsThroughWeek(
                     standings,
                     match
                 );
+
             }
 
         } else {
@@ -1133,13 +2390,18 @@ function calculateStandingsThroughWeek(
                     standings,
                     match
                 );
+
             }
+
         }
+
     }
+
 
     return sortStandings(
         standings
     );
+
 }
 
 
@@ -1158,18 +2420,22 @@ function renderWeekButtons() {
         return;
     }
 
+
     container.innerHTML = "";
 
+
     weeks.forEach(
-        function(week) {
+        week => {
 
             const button =
                 document.createElement(
                     "button"
                 );
 
+
             button.className =
                 "week-button";
+
 
             if (
                 week.number ===
@@ -1179,14 +2445,20 @@ function renderWeekButtons() {
                 button.classList.add(
                     "active"
                 );
+
             }
 
-            if (week.locked) {
+
+            if (
+                week.locked
+            ) {
 
                 button.classList.add(
                     "locked"
                 );
+
             }
+
 
             button.textContent =
                 "Week " +
@@ -1197,9 +2469,10 @@ function renderWeekButtons() {
                         : ""
                 );
 
+
             button.addEventListener(
                 "click",
-                function() {
+                () => {
 
                     currentWeek =
                         week.number;
@@ -1209,14 +2482,18 @@ function renderWeekButtons() {
                     renderWeek();
 
                     analyzeCurrentWeekScenarios();
+
                 }
             );
+
 
             container.appendChild(
                 button
             );
+
         }
     );
+
 }
 
 
@@ -1229,47 +2506,65 @@ function renderWeek() {
     const week =
         weeks[currentWeek - 1];
 
+
     if (!week) {
         return;
     }
+
 
     const title =
         document.getElementById(
             "weekTitle"
         );
 
+
     const dates =
         document.getElementById(
             "weekDates"
         );
+
 
     const status =
         document.getElementById(
             "weekStatus"
         );
 
+
     const matches =
         document.getElementById(
             "matches"
         );
 
+
     if (title) {
+
         title.textContent =
-            "Week " + week.number;
+            "Week " +
+            week.number;
+
     }
+
 
     if (dates) {
+
         dates.textContent =
             week.dates;
+
     }
 
+
     if (matches) {
+
         matches.innerHTML = "";
+
     }
+
 
     if (status) {
 
-        if (week.locked) {
+        if (
+            week.locked
+        ) {
 
             status.textContent =
                 "🔒 LOCKED";
@@ -1284,15 +2579,19 @@ function renderWeek() {
 
             status.className =
                 "week-status open";
+
         }
+
     }
+
 
     if (!matches) {
         return;
     }
 
+
     week.matches.forEach(
-        function(match, index) {
+        (match, index) => {
 
             renderMatch(
                 match,
@@ -1300,15 +2599,18 @@ function renderWeek() {
                 week.locked,
                 matches
             );
+
         }
     );
 
+
     renderControls();
+
 }
 
 
 /* =========================================================
-   RENDER MATCH
+   MATCH
 ========================================================= */
 
 function renderMatch(
@@ -1323,75 +2625,93 @@ function renderMatch(
             "div"
         );
 
+
     matchDiv.className =
         "match";
+
 
     const teamA =
         document.createElement(
             "div"
         );
 
+
     const teamB =
         document.createElement(
             "div"
         );
 
+
     teamA.className =
         "match-team";
+
 
     teamB.className =
         "match-team";
 
+
     teamA.textContent =
         match[0];
 
+
     teamB.textContent =
         match[1];
+
 
     const scoreArea =
         document.createElement(
             "div"
         );
 
+
     scoreArea.className =
         "score-area";
 
 
-    /* =====================================================
-       LOCKED
-    ===================================================== */
-
-    if (locked) {
+    if (
+        locked
+    ) {
 
         const scoreA =
             Number(match[2]);
 
+
         const scoreB =
             Number(match[3]);
+
 
         const scoreElementA =
             document.createElement(
                 "span"
             );
 
+
         const scoreElementB =
             document.createElement(
                 "span"
             );
 
+
         scoreElementA.className =
             "score";
+
 
         scoreElementB.className =
             "score";
 
+
         scoreElementA.textContent =
             scoreA;
+
 
         scoreElementB.textContent =
             scoreB;
 
-        if (scoreA > scoreB) {
+
+        if (
+            scoreA >
+            scoreB
+        ) {
 
             teamA.classList.add(
                 "winner"
@@ -1418,68 +2738,92 @@ function renderMatch(
             scoreElementB.classList.add(
                 "winner-score"
             );
+
         }
+
 
         scoreArea.appendChild(
             scoreElementA
         );
+
 
         const dash =
             document.createElement(
                 "span"
             );
 
+
         dash.textContent =
             "-";
+
 
         scoreArea.appendChild(
             dash
         );
 
+
         scoreArea.appendChild(
             scoreElementB
         );
-    }
 
 
-    /* =====================================================
-       OPEN
-    ===================================================== */
-
-    else {
+    } else {
 
         const inputA =
             document.createElement(
                 "input"
             );
 
+
         const inputB =
             document.createElement(
                 "input"
             );
 
-        inputA.type = "number";
-        inputB.type = "number";
 
-        inputA.min = "0";
-        inputA.max = "3";
+        inputA.type =
+            "number";
 
-        inputB.min = "0";
-        inputB.max = "3";
+
+        inputB.type =
+            "number";
+
+
+        inputA.min =
+            "0";
+
+
+        inputA.max =
+            "3";
+
+
+        inputB.min =
+            "0";
+
+
+        inputB.max =
+            "3";
+
 
         inputA.className =
             "score-input";
 
+
         inputB.className =
             "score-input";
 
-        if (match.length >= 4) {
+
+        if (
+            match.length >= 4
+        ) {
 
             inputA.value =
                 match[2];
 
+
             inputB.value =
                 match[3];
+
         }
 
 
@@ -1490,18 +2834,22 @@ function renderMatch(
                 "loser"
             );
 
+
             teamB.classList.remove(
                 "winner",
                 "loser"
             );
 
+
             inputA.classList.remove(
                 "invalid-score"
             );
 
+
             inputB.classList.remove(
                 "invalid-score"
             );
+
 
             if (
                 inputA.value === "" ||
@@ -1509,28 +2857,40 @@ function renderMatch(
             ) {
 
                 return;
+
             }
+
 
             const a =
                 Number(inputA.value);
 
+
             const b =
                 Number(inputB.value);
 
-            if (!validScore(a, b)) {
+
+            if (
+                !validScore(a, b)
+            ) {
 
                 inputA.classList.add(
                     "invalid-score"
                 );
 
+
                 inputB.classList.add(
                     "invalid-score"
                 );
 
+
                 return;
+
             }
 
-            if (a > b) {
+
+            if (
+                a > b
+            ) {
 
                 teamA.classList.add(
                     "winner"
@@ -1549,7 +2909,9 @@ function renderMatch(
                 teamA.classList.add(
                     "loser"
                 );
+
             }
+
         }
 
 
@@ -1558,8 +2920,10 @@ function renderMatch(
             const scoreA =
                 inputA.value;
 
+
             const scoreB =
                 inputB.value;
+
 
             if (
                 !validScore(
@@ -1572,9 +2936,11 @@ function renderMatch(
                     "invalid-score"
                 );
 
+
                 inputB.classList.add(
                     "invalid-score"
                 );
+
 
                 alert(
                     "Invalid score.\n\n" +
@@ -1586,16 +2952,27 @@ function renderMatch(
                     "0 - 3"
                 );
 
+
                 return;
+
             }
 
-            weeks[currentWeek - 1]
-                .matches[matchIndex][2] =
+
+            weeks[
+                currentWeek - 1
+            ].matches[
+                matchIndex
+            ][2] =
                 Number(scoreA);
 
-            weeks[currentWeek - 1]
-                .matches[matchIndex][3] =
+
+            weeks[
+                currentWeek - 1
+            ].matches[
+                matchIndex
+            ][3] =
                 Number(scoreB);
+
 
             saveScoresToStorage();
 
@@ -1604,6 +2981,7 @@ function renderMatch(
             renderWeek();
 
             analyzeCurrentWeekScenarios();
+
         }
 
 
@@ -1612,75 +2990,96 @@ function renderMatch(
             updateWinnerDisplay
         );
 
+
         inputB.addEventListener(
             "input",
             updateWinnerDisplay
         );
 
+
         inputA.addEventListener(
             "keydown",
-            function(event) {
+            event => {
 
                 if (
-                    event.key === "Enter"
+                    event.key ===
+                    "Enter"
                 ) {
 
                     saveMatch();
+
                 }
+
             }
         );
+
 
         inputB.addEventListener(
             "keydown",
-            function(event) {
+            event => {
 
                 if (
-                    event.key === "Enter"
+                    event.key ===
+                    "Enter"
                 ) {
 
                     saveMatch();
+
                 }
+
             }
         );
+
 
         scoreArea.appendChild(
             inputA
         );
+
 
         const dash =
             document.createElement(
                 "span"
             );
 
+
         dash.textContent =
             "-";
+
 
         scoreArea.appendChild(
             dash
         );
 
+
         scoreArea.appendChild(
             inputB
         );
 
+
         updateWinnerDisplay();
+
     }
+
 
     matchDiv.appendChild(
         teamA
     );
 
+
     matchDiv.appendChild(
         scoreArea
     );
+
 
     matchDiv.appendChild(
         teamB
     );
 
+
     container.appendChild(
         matchDiv
     );
+
 }
 
 
@@ -1695,24 +3094,32 @@ function renderControls() {
             "weekControls"
         );
 
+
     if (!controls) {
         return;
     }
 
+
     controls.innerHTML = "";
+
 
     const week =
         weeks[currentWeek - 1];
+
 
     const message =
         document.createElement(
             "span"
         );
 
+
     message.className =
         "locked-message";
 
-    if (week.locked) {
+
+    if (
+        week.locked
+    ) {
 
         message.textContent =
             "🔒 Results for this week are locked";
@@ -1721,24 +3128,20 @@ function renderControls() {
 
         message.textContent =
             "Press Enter after entering a score to save that match";
+
     }
+
 
     controls.appendChild(
         message
     );
+
 }
 
 
 /* =========================================================
-   BUILD ONE SCENARIO
+   SCENARIOS
 ========================================================= */
-
-/*
-    Instead of creating an array containing ALL 4096
-    scenarios, create one when needed.
-
-    This saves memory and is substantially faster.
-*/
 
 function buildScenarioFromNumber(
     scenarioNumber,
@@ -1748,7 +3151,9 @@ function buildScenarioFromNumber(
     let number =
         scenarioNumber;
 
+
     const scenario = [];
+
 
     for (
         let matchIndex = 0;
@@ -1760,24 +3165,25 @@ function buildScenarioFromNumber(
             number %
             POSSIBLE_SCORES.length;
 
+
         number =
             Math.floor(
                 number /
                 POSSIBLE_SCORES.length
             );
 
+
         scenario.push(
             POSSIBLE_SCORES[option]
         );
+
     }
 
+
     return scenario;
+
 }
 
-
-/* =========================================================
-   BUILD SCENARIO MATCHES
-========================================================= */
 
 function buildScenarioMatches(
     week,
@@ -1785,22 +3191,21 @@ function buildScenarioMatches(
 ) {
 
     return week.matches.map(
-        (match, index) => {
+        (match, index) => [
 
-            return [
-                match[0],
-                match[1],
-                scenario[index][0],
-                scenario[index][1]
-            ];
-        }
+            match[0],
+
+            match[1],
+
+            scenario[index][0],
+
+            scenario[index][1]
+
+        ]
     );
+
 }
 
-
-/* =========================================================
-   SCENARIO STATUS
-========================================================= */
 
 function analyzeTeamAfterScenario(
     teamName,
@@ -1808,23 +3213,14 @@ function analyzeTeamAfterScenario(
     weekNumber
 ) {
 
-    /*
-        Use the FAST mathematical calculation.
-
-        Future weeks are NOT brute-forced.
-    */
-
     return calculateFastTeamStatus(
         teamName,
         standingsAfterWeek,
         weekNumber
     );
+
 }
 
-
-/* =========================================================
-   ANALYZE ONE SCENARIO
-========================================================= */
 
 function analyzeScenario(
     week,
@@ -1837,13 +3233,16 @@ function analyzeScenario(
             scenario
         );
 
+
     const standings =
         calculateStandingsThroughWeek(
             week.number,
             scenarioMatches
         );
 
+
     const results = [];
+
 
     for (
         const team of teams
@@ -1856,6 +3255,7 @@ function analyzeScenario(
                 week.number
             );
 
+
         if (
             status === "CLINCHED" ||
             status === "ELIMINATED"
@@ -1863,32 +3263,44 @@ function analyzeScenario(
 
             const teamStanding =
                 standings.find(
-                    t => t.team === team
+                    t =>
+                        t.team ===
+                        team
                 );
 
+
             results.push({
+
                 team,
+
                 status,
+
                 wins:
                     teamStanding.wins,
+
                 losses:
                     teamStanding.losses,
+
                 differential:
                     teamStanding.differential
+
             });
+
         }
+
     }
 
+
     return {
+
         results,
+
         standings
+
     };
+
 }
 
-
-/* =========================================================
-   GROUP RESULT FOR A TEAM
-========================================================= */
 
 function getTeamWeekResult(
     teamName,
@@ -1905,12 +3317,16 @@ function getTeamWeekResult(
         const match =
             week.matches[m];
 
+
         if (
             match[0] !== teamName &&
             match[1] !== teamName
         ) {
+
             continue;
+
         }
+
 
         if (
             match[0] === teamName
@@ -1921,21 +3337,26 @@ function getTeamWeekResult(
                 "-" +
                 scenario[m][1]
             );
+
         }
+
 
         return (
             scenario[m][1] +
             "-" +
             scenario[m][0]
         );
+
     }
 
+
     return null;
+
 }
 
 
 /* =========================================================
-   ANALYZE CURRENT WEEK
+   SCENARIO ANALYSIS
 ========================================================= */
 
 function analyzeCurrentWeekScenarios() {
@@ -1943,30 +3364,36 @@ function analyzeCurrentWeekScenarios() {
     const week =
         weeks[currentWeek - 1];
 
+
     const countElement =
         document.getElementById(
             "scenarioCount"
         );
+
 
     const clinchCountElement =
         document.getElementById(
             "clinchCount"
         );
 
+
     const elimCountElement =
         document.getElementById(
             "elimCount"
         );
+
 
     const resultsElement =
         document.getElementById(
             "scenarioResults"
         );
 
+
     const weekNumberElement =
         document.getElementById(
             "scenarioWeekNumber"
         );
+
 
     if (
         !week ||
@@ -1977,20 +3404,21 @@ function analyzeCurrentWeekScenarios() {
     ) {
 
         return;
+
     }
+
 
     if (weekNumberElement) {
 
         weekNumberElement.textContent =
             week.number;
+
     }
 
 
-    /* =====================================================
-       LOCKED
-    ===================================================== */
-
-    if (week.locked) {
+    if (
+        week.locked
+    ) {
 
         countElement.textContent =
             "—";
@@ -2001,6 +3429,7 @@ function analyzeCurrentWeekScenarios() {
         elimCountElement.textContent =
             "—";
 
+
         resultsElement.innerHTML = `
             <div class="no-scenarios">
                 Week ${week.number} is locked.
@@ -2009,13 +3438,11 @@ function analyzeCurrentWeekScenarios() {
             </div>
         `;
 
+
         return;
+
     }
 
-
-    /* =====================================================
-       PREVIOUS WEEK REQUIRED
-    ===================================================== */
 
     if (
         !canAnalyzeWeek(
@@ -2032,6 +3459,7 @@ function analyzeCurrentWeekScenarios() {
         elimCountElement.textContent =
             "—";
 
+
         resultsElement.innerHTML = `
             <div class="no-scenarios">
                 Week ${week.number} scenario analysis
@@ -2041,13 +3469,11 @@ function analyzeCurrentWeekScenarios() {
             </div>
         `;
 
+
         return;
+
     }
 
-
-    /* =====================================================
-       4096 CURRENT-WEEK SCENARIOS
-    ===================================================== */
 
     const total =
         Math.pow(
@@ -2055,26 +3481,23 @@ function analyzeCurrentWeekScenarios() {
             week.matches.length
         );
 
+
     countElement.textContent =
         total.toLocaleString();
 
 
-    /*
-        Instead of storing:
-
-            4096 scenarios
-
-        we only store the COUNTS.
-    */
-
     const teamEvents =
         new Map();
 
-    for (const team of teams) {
+
+    for (
+        const team of teams
+    ) {
 
         teamEvents.set(
             team,
             {
+
                 clinch: {
                     "3-0": 0,
                     "2-1": 0,
@@ -2088,18 +3511,20 @@ function analyzeCurrentWeekScenarios() {
                     "1-2": 0,
                     "0-3": 0
                 }
+
             }
         );
+
     }
 
 
-    let totalClinchEvents = 0;
-    let totalEliminationEvents = 0;
+    let totalClinchEvents =
+        0;
 
 
-    /* =====================================================
-       PROCESS ONE SCENARIO AT A TIME
-    ===================================================== */
+    let totalEliminationEvents =
+        0;
+
 
     for (
         let scenarioNumber = 0;
@@ -2113,11 +3538,13 @@ function analyzeCurrentWeekScenarios() {
                 week.matches.length
             );
 
+
         const analysis =
             analyzeScenario(
                 week,
                 scenario
             );
+
 
         for (
             const event of analysis.results
@@ -2130,14 +3557,17 @@ function analyzeCurrentWeekScenarios() {
                     scenario
                 );
 
+
             if (!result) {
                 continue;
             }
+
 
             const storage =
                 teamEvents.get(
                     event.team
                 );
+
 
             if (
                 event.status ===
@@ -2148,7 +3578,10 @@ function analyzeCurrentWeekScenarios() {
 
                 totalClinchEvents++;
 
-            } else if (
+            }
+
+
+            else if (
                 event.status ===
                 "ELIMINATED"
             ) {
@@ -2156,34 +3589,31 @@ function analyzeCurrentWeekScenarios() {
                 storage.elimination[result]++;
 
                 totalEliminationEvents++;
+
             }
+
         }
+
     }
 
 
-    /* =====================================================
-       SUMMARY
-    ===================================================== */
-
     clinchCountElement.textContent =
         totalClinchEvents.toLocaleString();
+
 
     elimCountElement.textContent =
         totalEliminationEvents.toLocaleString();
 
 
-    /* =====================================================
-       RENDER
-    ===================================================== */
-
     renderScenarioResults(
         teamEvents
     );
+
 }
 
 
 /* =========================================================
-   RENDER SCENARIO RESULTS
+   SCENARIO RESULTS
 ========================================================= */
 
 function renderScenarioResults(
@@ -2195,14 +3625,18 @@ function renderScenarioResults(
             "scenarioResults"
         );
 
+
     if (!container) {
         return;
     }
 
+
     container.innerHTML = "";
+
 
     let renderedSomething =
         false;
+
 
     for (
         const team of teams
@@ -2211,14 +3645,11 @@ function renderScenarioResults(
         const events =
             teamEvents.get(team);
 
+
         if (!events) {
             continue;
         }
 
-
-        /* =================================================
-           CLINCH
-        ================================================= */
 
         const clinchTotal =
             Object.values(
@@ -2229,11 +3660,14 @@ function renderScenarioResults(
                 0
             );
 
+
         if (
             clinchTotal > 0
         ) {
 
-            renderedSomething = true;
+            renderedSomething =
+                true;
+
 
             container.appendChild(
                 createScenarioTeamBox(
@@ -2243,12 +3677,9 @@ function renderScenarioResults(
                     clinchTotal
                 )
             );
+
         }
 
-
-        /* =================================================
-           ELIMINATION
-        ================================================= */
 
         const eliminationTotal =
             Object.values(
@@ -2259,11 +3690,14 @@ function renderScenarioResults(
                 0
             );
 
+
         if (
             eliminationTotal > 0
         ) {
 
-            renderedSomething = true;
+            renderedSomething =
+                true;
+
 
             container.appendChild(
                 createScenarioTeamBox(
@@ -2273,11 +3707,15 @@ function renderScenarioResults(
                     eliminationTotal
                 )
             );
+
         }
+
     }
 
 
-    if (!renderedSomething) {
+    if (
+        !renderedSomething
+    ) {
 
         container.innerHTML = `
             <div class="no-scenarios">
@@ -2286,12 +3724,14 @@ function renderScenarioResults(
                 clinch or elimination.
             </div>
         `;
+
     }
+
 }
 
 
 /* =========================================================
-   SCENARIO TEAM BOX
+   SCENARIO BOX
 ========================================================= */
 
 function createScenarioTeamBox(
@@ -2306,6 +3746,7 @@ function createScenarioTeamBox(
             "div"
         );
 
+
     box.className =
         "team-scenario " +
         (
@@ -2315,33 +3756,35 @@ function createScenarioTeamBox(
         );
 
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
-
     const header =
         document.createElement(
             "div"
         );
 
+
     header.className =
         "team-scenario-header";
+
 
     const name =
         document.createElement(
             "div"
         );
 
+
     name.className =
         "team-scenario-name";
 
+
     name.textContent =
         team;
+
 
     const badge =
         document.createElement(
             "span"
         );
+
 
     badge.className =
         "scenario-type " +
@@ -2351,68 +3794,52 @@ function createScenarioTeamBox(
                 : "elimination"
         );
 
+
     badge.textContent =
         type;
 
-    header.appendChild(
-        name
-    );
 
-    header.appendChild(
-        badge
-    );
+    header.appendChild(name);
 
-    box.appendChild(
-        header
-    );
+    header.appendChild(badge);
 
+    box.appendChild(header);
 
-    /* =====================================================
-       DESCRIPTION
-    ===================================================== */
 
     const description =
         document.createElement(
             "div"
         );
 
+
     description.className =
         "scenario-description";
 
+
     description.textContent =
-        `${total.toLocaleString()} `
-        + `possible Week ${currentWeek} `
-        + `result combinations `;
+        `${total.toLocaleString()} possible Week ` +
+        `${currentWeek} result combinations ` +
+        (
+            type === "CLINCHED"
+                ? "clinch this team for the playoffs."
+                : "eliminate this team from the playoffs."
+        );
 
-    if (
-        type === "CLINCHED"
-    ) {
-
-        description.textContent +=
-            "clinch this team for the playoffs.";
-
-    } else {
-
-        description.textContent +=
-            "eliminate this team from the playoffs.";
-    }
 
     box.appendChild(
         description
     );
 
 
-    /* =====================================================
-       FOUR RESULT BUTTONS
-    ===================================================== */
-
     const resultContainer =
         document.createElement(
             "div"
         );
 
+
     resultContainer.className =
         "scenario-result-groups";
+
 
     const resultOrder = [
         "3-0",
@@ -2421,6 +3848,7 @@ function createScenarioTeamBox(
         "0-3"
     ];
 
+
     for (
         const result of resultOrder
     ) {
@@ -2428,13 +3856,16 @@ function createScenarioTeamBox(
         const count =
             counts[result] || 0;
 
+
         const button =
             document.createElement(
                 "button"
             );
 
+
         button.type =
             "button";
+
 
         button.className =
             "scenario-result-button " +
@@ -2444,6 +3875,7 @@ function createScenarioTeamBox(
                     : "elimination-button"
             );
 
+
         if (
             count === 0
         ) {
@@ -2451,7 +3883,9 @@ function createScenarioTeamBox(
             button.classList.add(
                 "zero-scenario"
             );
+
         }
+
 
         button.innerHTML = `
             <span class="scenario-result-score">
@@ -2464,16 +3898,21 @@ function createScenarioTeamBox(
             </span>
         `;
 
+
         resultContainer.appendChild(
             button
         );
+
     }
+
 
     box.appendChild(
         resultContainer
     );
 
+
     return box;
+
 }
 
 
@@ -2490,29 +3929,41 @@ function resetAllScores() {
             "All scores entered for Weeks 8-11 will be deleted."
         );
 
+
     if (!confirmed) {
         return;
     }
+
 
     localStorage.removeItem(
         STORAGE_KEY
     );
 
+
     for (
         const week of weeks
     ) {
 
-        if (week.locked) {
+        if (
+            week.locked
+        ) {
+
             continue;
+
         }
+
 
         for (
             const match of week.matches
         ) {
 
-            match.length = 2;
+            match.length =
+                2;
+
         }
+
     }
+
 
     updateStandings();
 
@@ -2522,9 +3973,11 @@ function resetAllScores() {
 
     analyzeCurrentWeekScenarios();
 
+
     alert(
         "All editable scores have been reset."
     );
+
 }
 
 
@@ -2534,15 +3987,19 @@ function resetAllScores() {
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
-
-        /*
-            Build the future schedule cache FIRST.
-        */
+    () => {
 
         buildFutureScheduleCache();
 
         loadSavedScores();
+
+        initializeTabs();
+
+        initializePokemonModal();
+
+        renderTeamTabs();
+
+        renderSelectedRoster();
 
         updateStandings();
 
@@ -2552,10 +4009,12 @@ document.addEventListener(
 
         analyzeCurrentWeekScenarios();
 
+
         const resetButton =
             document.getElementById(
                 "resetAll"
             );
+
 
         if (resetButton) {
 
@@ -2563,6 +4022,8 @@ document.addEventListener(
                 "click",
                 resetAllScores
             );
+
         }
+
     }
 );
