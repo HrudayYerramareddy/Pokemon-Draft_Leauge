@@ -1,1506 +1,1710 @@
 /* =========================================================
-   GLOBAL
+GLOBAL
 ========================================================= */
 
 * {
     box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    color: #eef6ff;
-
-    background:
-        radial-gradient(
-            circle at 20% 10%,
-            rgba(49, 106, 230, 0.30),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 80% 20%,
-            rgba(0, 183, 255, 0.18),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at 50% 100%,
-            rgba(73, 82, 255, 0.20),
-            transparent 40%
-        ),
-        linear-gradient(
-            135deg,
-            #071326,
-            #0b1b36 45%,
-            #06101f
-        );
-
-    background-attachment: fixed;
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.site-header {
-    position: relative;
-
-    padding: 35px 30px 0;
-
-    border-bottom:
-        1px solid rgba(120, 190, 255, 0.15);
-
-    background:
-        rgba(7, 19, 38, 0.72);
-
-    backdrop-filter:
-        blur(20px);
-
-    -webkit-backdrop-filter:
-        blur(20px);
-
-    box-shadow:
-        0 10px 40px rgba(0, 0, 0, 0.30);
-
-    overflow: hidden;
-}
-
-.header-glow {
-    position: absolute;
-
-    width: 500px;
-    height: 300px;
-
-    top: -180px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    background:
-        rgba(45, 125, 255, 0.28);
-
-    filter: blur(80px);
-
-    pointer-events: none;
-}
-
-.header-content {
-    position: relative;
-
-    max-width: 1250px;
-
-    margin: auto;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 30px;
-}
-
-.eyebrow,
-.section-label {
-    font-size: 12px;
-
-    font-weight: 800;
-
-    letter-spacing: 2px;
-
-    color: #65b8ff;
-}
-
-.header-content h1 {
-    margin: 7px 0 8px;
-
-    font-size: 42px;
-
-    line-height: 1.05;
-}
-
-.header-content p {
-    margin: 0;
-
-    color: #9db4cf;
-
-    font-size: 15px;
-}
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-.reset-button {
-    padding: 12px 18px;
-
-    border: 1px solid
-        rgba(100, 170, 255, 0.30);
-
-    border-radius: 12px;
-
-    color: #ddecff;
-
-    background:
-        rgba(35, 87, 160, 0.22);
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.reset-button:hover {
-    background:
-        rgba(50, 115, 220, 0.35);
-
-    border-color:
-        rgba(100, 190, 255, 0.55);
-
-    transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   MAIN NAV
-========================================================= */
-
-.main-nav {
-    max-width: 1250px;
-
-    margin: 30px auto 0;
-
-    display: flex;
-
-    gap: 8px;
-}
-
-.nav-button {
-    border: 0;
-
-    padding: 14px 25px;
-
-    background: transparent;
-
-    color: #7890ad;
-
-    font-weight: 800;
-
-    letter-spacing: 1px;
-
-    cursor: pointer;
-
-    border-bottom:
-        2px solid transparent;
-
-    transition: 0.2s;
-}
-
-.nav-button:hover {
-    color: #cce8ff;
-}
-
-.nav-button.active {
-    color: #6dc2ff;
-
-    border-bottom-color:
-        #3b9eff;
-}
-
-
-/* =========================================================
-   CONTAINER
-========================================================= */
-
-.container {
-    width: min(
-        1250px,
-        calc(100% - 30px)
-    );
-
-    margin: 35px auto 70px;
-}
-
-
-/* =========================================================
-   TABS
-========================================================= */
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active-tab {
-    display: block;
-}
-
-
-/* =========================================================
-   GLASS CARDS
-========================================================= */
-
-.glass-card {
-    margin-bottom: 25px;
-
-    padding: 28px;
-
-    border:
-        1px solid
-        rgba(120, 190, 255, 0.18);
-
-    border-radius: 22px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(30, 76, 130, 0.26),
-            rgba(9, 28, 55, 0.40)
-        );
-
-    backdrop-filter:
-        blur(22px);
-
-    -webkit-backdrop-filter:
-        blur(22px);
-
-    box-shadow:
-        0 20px 60px
-        rgba(0, 0, 0, 0.30),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.07);
-}
-
-.section-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: flex-start;
-
-    gap: 20px;
-
-    margin-bottom: 25px;
-}
-
-.section-header h2,
-.glass-card > h2 {
-    margin: 7px 0;
-
-    font-size: 28px;
-}
-
-.section-header p,
-.section-description {
-    color: #8fa8c5;
-
-    margin: 7px 0 0;
-
-    font-size: 14px;
-}
-
-
-/* =========================================================
-   PLAYOFF BADGE
-========================================================= */
-
-.playoff-badge,
-.roster-count-badge {
-    padding: 10px 14px;
-
-    border:
-        1px solid
-        rgba(90, 170, 255, 0.25);
-
-    border-radius: 999px;
-
-    background:
-        rgba(25, 85, 150, 0.22);
-
-    color: #a9d8ff;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    white-space: nowrap;
-}
-
-.badge-dot {
-    display: inline-block;
-
-    width: 7px;
-    height: 7px;
-
-    margin-right: 7px;
-
-    border-radius: 50%;
-
-    background: #49b4ff;
-
-    box-shadow:
-        0 0 10px #49b4ff;
-}
-
-
-/* =========================================================
-   STANDINGS
-========================================================= */
-
-.standings-wrapper {
-    overflow-x: auto;
-}
-
-.standings-table {
-    width: 100%;
-
-    border-collapse: collapse;
-
-    min-width: 700px;
-}
-
-.standings-table th {
-    padding: 13px 15px;
-
-    text-align: left;
-
-    color: #6e94ba;
-
-    font-size: 11px;
-
-    letter-spacing: 1.5px;
-
-    border-bottom:
-        1px solid
-        rgba(130, 190, 240, 0.15);
-}
-
-.standings-table td {
-    padding: 16px 15px;
-
-    border-bottom:
-        1px solid
-        rgba(130, 190, 240, 0.08);
-
-    color: #c8d9eb;
-}
-
-.standings-table tr {
-    transition: 0.2s;
-}
-
-.standings-table tr:hover {
-    background:
-        rgba(70, 140, 220, 0.08);
-}
-
-.standings-table .team-name {
-    color: #eaf4ff;
-
-    font-weight: 700;
-}
-
-.playoff-team td {
-    background:
-        rgba(30, 120, 220, 0.035);
-}
-
-.playoff-cutoff td {
-    padding: 9px 15px;
-
-    text-align: center;
-
-    color: #4aaeff;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-
-    border-top:
-        1px dashed
-        rgba(70, 170, 255, 0.35);
-
-    border-bottom:
-        1px dashed
-        rgba(70, 170, 255, 0.35);
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-.status-badge {
-    display: inline-block;
-
-    padding: 5px 9px;
-
-    border-radius: 999px;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    letter-spacing: 0.7px;
-}
-
-.status-clinched {
-    color: #7dffc3;
-
-    background:
-        rgba(40, 210, 130, 0.12);
-
-    border:
-        1px solid
-        rgba(60, 230, 150, 0.25);
-}
-
-.status-eliminated {
-    color: #ff8f9f;
-
-    background:
-        rgba(230, 50, 80, 0.12);
-
-    border:
-        1px solid
-        rgba(230, 60, 90, 0.25);
-}
-
-.status-contention {
-    color: #8fcaff;
-
-    background:
-        rgba(50, 140, 240, 0.12);
-
-    border:
-        1px solid
-        rgba(70, 150, 255, 0.22);
-}
-
-
-/* =========================================================
-   WEEK BUTTONS
-========================================================= */
-
-.week-buttons {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin: 22px 0;
-}
-
-.week-button {
-    padding: 10px 15px;
-
-    border-radius: 10px;
-
-    border:
-        1px solid
-        rgba(100, 170, 240, 0.18);
-
-    background:
-        rgba(30, 75, 130, 0.18);
-
-    color: #91abc7;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.week-button:hover {
-    background:
-        rgba(50, 120, 210, 0.25);
-
-    color: white;
-}
-
-.week-button.active {
-    color: white;
-
-    border-color:
-        rgba(80, 175, 255, 0.60);
-
-    background:
-        rgba(40, 125, 220, 0.30);
-
-    box-shadow:
-        0 0 18px
-        rgba(50, 150, 255, 0.15);
-}
-
-.week-button.locked {
-    opacity: 0.85;
-}
-
-
-/* =========================================================
-   WEEK
-========================================================= */
-
-.selected-week {
-    padding: 22px;
-
-    border:
-        1px solid
-        rgba(100, 170, 240, 0.12);
-
-    border-radius: 17px;
-
-    background:
-        rgba(4, 17, 34, 0.28);
-}
-
-.week-heading {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 18px;
-}
-
-.week-title {
-    font-size: 22px;
-
-    font-weight: 800;
-}
-
-#weekDates {
-    color: #7590ad;
-
-    margin: 5px 0 0;
-}
-
-.week-status {
-    padding: 7px 11px;
-
-    border-radius: 999px;
-
-    font-size: 11px;
-
-    font-weight: 800;
-}
-
-.week-status.locked {
-    color: #a8bad0;
-
-    background:
-        rgba(130, 150, 180, 0.12);
-}
-
-.week-status.open {
-    color: #72ffc0;
-
-    background:
-        rgba(40, 210, 130, 0.12);
-}
-
-
-/* =========================================================
-   MATCHES
-========================================================= */
-
-.matches {
-    display: grid;
-
-    gap: 10px;
-}
-
-.match {
-    display: grid;
-
-    grid-template-columns:
-        1fr 120px 1fr;
-
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 15px 18px;
-
-    border:
-        1px solid
-        rgba(110, 180, 240, 0.10);
-
-    border-radius: 13px;
-
-    background:
-        rgba(20, 55, 95, 0.18);
-}
-
-.match-team {
-    font-weight: 700;
-
-    color: #afc4dc;
-}
-
-.match-team:last-child {
-    text-align: right;
-}
-
-.match-team.winner {
-    color: #ffffff;
-}
-
-.match-team.loser {
-    color: #607995;
-}
-
-.score-area {
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 9px;
-}
-
-.score {
-    min-width: 25px;
-
-    text-align: center;
-
-    font-size: 19px;
-
-    font-weight: 800;
-}
-
-.winner-score {
-    color: #68c1ff;
-
-    text-shadow:
-        0 0 12px
-        rgba(70, 180, 255, 0.45);
-}
-
-.score-input {
-    width: 45px;
-
-    padding: 9px;
-
-    border:
-        1px solid
-        rgba(90, 170, 240, 0.30);
-
-    border-radius: 9px;
-
-    background:
-        rgba(5, 20, 40, 0.70);
-
-    color: white;
-
-    text-align: center;
-
-    font-size: 16px;
-
-    font-weight: 700;
-
-    outline: none;
-}
-
-.score-input:focus {
-    border-color:
-        #4daeff;
-
-    box-shadow:
-        0 0 12px
-        rgba(50, 150, 255, 0.20);
-}
-
-.invalid-score {
-    border-color:
-        #ff526d !important;
-
-    box-shadow:
-        0 0 12px
-        rgba(255, 50, 80, 0.25);
-}
-
-
-/* =========================================================
-   CONTROLS
-========================================================= */
-
-.week-controls {
-    margin-top: 15px;
-
-    color: #637f9f;
-
-    font-size: 12px;
-}
-
-
-/* =========================================================
-   TEAM TABS
-========================================================= */
-
-.team-tabs {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin: 25px 0;
-}
-
-.team-tab {
-    flex: 1 1 180px;
-
-    min-height: 45px;
-
-    padding: 11px 14px;
-
-    border:
-        1px solid
-        rgba(100, 180, 255, 0.15);
-
-    border-radius: 11px;
-
-    background:
-        rgba(20, 65, 115, 0.18);
-
-    color: #88a6c5;
-
-    cursor: pointer;
-
-    font-weight: 700;
-
-    font-size: 12px;
-
-    transition: 0.2s;
-}
-
-.team-tab:hover {
-    background:
-        rgba(50, 125, 210, 0.25);
-
-    color: white;
-}
-
-.team-tab.active {
-    color: #ffffff;
-
-    border-color:
-        rgba(75, 175, 255, 0.55);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(45, 130, 220, 0.35),
-            rgba(30, 80, 160, 0.25)
-        );
-
-    box-shadow:
-        0 0 20px
-        rgba(40, 140, 255, 0.12);
-}
-
-
-/* =========================================================
-   SELECTED ROSTER
-========================================================= */
-
-.selected-roster {
-    padding: 25px;
-
-    border:
-        1px solid
-        rgba(110, 190, 255, 0.13);
-
-    border-radius: 18px;
-
-    background:
-        rgba(5, 22, 43, 0.28);
-}
-
-.selected-roster-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 20px;
-}
-
-.selected-roster-header h3 {
-    margin: 0;
-
-    font-size: 25px;
-}
-
-.selected-roster-header span {
-    color: #6094c4;
-
-    font-size: 11px;
-
-    letter-spacing: 1px;
-
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   POKÉMON GRID
-========================================================= */
-
-.roster-pokemon-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(5, 1fr);
-
-    gap: 12px;
-}
-
-.pokemon-button {
-    min-height: 145px;
-
-    padding: 12px;
-
-    border:
-        1px solid
-        rgba(100, 180, 255, 0.13);
-
-    border-radius: 15px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(35, 90, 150, 0.22),
-            rgba(10, 35, 65, 0.32)
-        );
-
-    color: #dceeff;
-
-    cursor: pointer;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 5px;
-
-    transition:
-        transform 0.2s,
-        border 0.2s,
-        background 0.2s;
-}
-
-.pokemon-button:hover {
-    transform: translateY(-4px);
-
-    border-color:
-        rgba(90, 190, 255, 0.55);
-
-    background:
-        rgba(40, 115, 200, 0.28);
-
-    box-shadow:
-        0 12px 25px
-        rgba(0, 0, 0, 0.20);
-}
-
-.pokemon-mini-icon {
-    width: 100px;
-
-    height: 100px;
-
-    object-fit: contain;
-
-    image-rendering: auto;
-
-    transition: transform 0.2s;
-}
-
-.pokemon-button:hover
-.pokemon-mini-icon {
-    transform: scale(1.08);
-}
-
-.pokemon-button-name {
-    font-size: 12px;
-
-    font-weight: 700;
-
-    text-align: center;
-
-    color: #d7eaff;
-}
-
-
-/* =========================================================
-   POKÉMON MODAL
-========================================================= */
-
-.pokemon-modal {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 1000;
-
-    display: none;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-}
-
-.pokemon-modal.open {
-    display: flex;
-}
-
-.pokemon-modal-backdrop {
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        rgba(1, 8, 20, 0.78);
-
-    backdrop-filter:
-        blur(10px);
-}
-
-.pokemon-modal-card {
-    position: relative;
-
-    z-index: 2;
-
-    width: min(
-        720px,
-        100%
-    );
-
-    max-height:
-        calc(100vh - 40px);
-
-    overflow-y: auto;
-
-    padding: 30px;
-
-    border:
-        1px solid
-        rgba(110, 190, 255, 0.28);
-
-    border-radius: 25px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(20, 65, 115, 0.70),
-            rgba(5, 22, 45, 0.90)
-        );
-
-    backdrop-filter:
-        blur(30px);
-
-    -webkit-backdrop-filter:
-        blur(30px);
-
-    box-shadow:
-        0 30px 100px
-        rgba(0, 0, 0, 0.60),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.08);
-}
-
-.close-modal {
-    position: absolute;
-
-    top: 12px;
-    right: 15px;
-
-    width: 38px;
-    height: 38px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255, 255, 255, 0.08);
-
-    color: #d7ebff;
-
-    font-size: 27px;
-
-    cursor: pointer;
-
-    z-index: 5;
-}
-
-.close-modal:hover {
-    background:
-        rgba(255, 255, 255, 0.16);
-}
-
-.pokemon-modal-top {
-    display: grid;
-
-    grid-template-columns:
-        280px 1fr;
-
-    gap: 25px;
-
-    align-items: center;
-}
-
-.pokemon-image-container {
-    height: 280px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 20px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(65, 170, 255, 0.20),
-            rgba(10, 30, 60, 0.20)
-        );
-}
-
-.pokemon-image-container img {
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: contain;
-
-    filter:
-        drop-shadow(
-            0 15px 25px
-            rgba(0, 0, 0, 0.35)
-        );
-}
-
-.pokemon-modal-info h2 {
-    margin: 8px 0;
-
-    font-size: 35px;
-}
-
-.pokemon-team-label {
-    color: #62b9ff;
-
-    font-size: 12px;
-
-    font-weight: 800;
-
-    letter-spacing: 1px;
-}
-
-.pokemon-types {
-    display: flex;
-
-    gap: 7px;
-
-    flex-wrap: wrap;
-
-    margin: 12px 0;
-}
-
-.type-badge {
-    padding: 6px 10px;
-
-    border-radius: 999px;
-
-    background:
-        rgba(80, 160, 230, 0.16);
-
-    border:
-        1px solid
-        rgba(100, 180, 255, 0.20);
-
-    color: #bfe2ff;
-
-    font-size: 11px;
-
-    font-weight: 800;
-
-    text-transform: uppercase;
-}
-
-.pokemon-id {
-    color: #7694b4;
-
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   STATS
-========================================================= */
-
-.pokemon-stats {
-    margin-top: 25px;
-
-    display: grid;
-
-    gap: 10px;
-}
-
-.stat-row {
-    display: grid;
-
-    grid-template-columns:
-        100px 45px 1fr;
-
-    align-items: center;
-
-    gap: 10px;
-}
-
-.stat-name {
-    color: #a9c0d9;
-
-    font-size: 12px;
-
-    font-weight: 700;
-}
-
-.stat-value {
-    color: #ffffff;
-
-    font-size: 13px;
-
-    font-weight: 800;
-}
-
-.stat-bar {
-    height: 8px;
-
-    border-radius: 999px;
-
-    background:
-        rgba(100, 150, 200, 0.12);
-
-    overflow: hidden;
-}
-
-.stat-bar-fill {
-    height: 100%;
-
-    border-radius: 999px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #267bd8,
-            #56c1ff
-        );
-
-    box-shadow:
-        0 0 10px
-        rgba(60, 180, 255, 0.35);
-}
-
-.stat-total {
-    margin-top: 8px;
-
-    padding-top: 15px;
-
-    border-top:
-        1px solid
-        rgba(100, 180, 255, 0.13);
-}
-
-
-/* =========================================================
-   LOADING
-========================================================= */
-
-.pokemon-loading {
-    color: #6d91b5;
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   SCENARIOS
-========================================================= */
-
-.scenario-summary {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 12px;
-
-    margin: 25px 0;
-}
-
-.scenario-stat {
-    padding: 20px;
-
-    border:
-        1px solid
-        rgba(100, 180, 255, 0.12);
-
-    border-radius: 15px;
-
-    background:
-        rgba(15, 50, 90, 0.18);
-}
-
-.scenario-stat-number {
-    display: block;
-
-    font-size: 27px;
-
-    font-weight: 900;
-
-    color: #67c1ff;
-}
-
-.scenario-stat-label {
-    display: block;
-
-    margin-top: 5px;
-
-    color: #728fab;
-
-    font-size: 11px;
-}
-
-.scenario-results {
-    display: grid;
-
-    gap: 15px;
-}
-
-.team-scenario {
-    padding: 18px;
-
-    border-radius: 15px;
-
-    background:
-        rgba(15, 45, 80, 0.18);
-
-    border:
-        1px solid
-        rgba(100, 170, 240, 0.12);
-}
-
-.team-scenario-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    gap: 15px;
-}
-
-.team-scenario-name {
-    font-weight: 800;
-
-    color: #d8eaff;
-}
-
-.scenario-type {
-    padding: 5px 9px;
-
-    border-radius: 999px;
-
-    font-size: 10px;
-
-    font-weight: 900;
-}
-
-.scenario-type.clinch {
-    color: #7dffc3;
-
-    background:
-        rgba(30, 210, 130, 0.12);
-}
-
-.scenario-type.elimination {
-    color: #ff91a0;
-
-    background:
-        rgba(240, 50, 80, 0.12);
-}
-
-.scenario-description {
-    margin: 9px 0 15px;
-
-    color: #7894b1;
-
-    font-size: 12px;
-}
-
-.scenario-result-groups {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 8px;
-}
-
-.scenario-result-button {
-    padding: 10px;
-
-    border-radius: 9px;
-
-    border:
-        1px solid
-        rgba(100, 180, 255, 0.12);
-
-    background:
-        rgba(30, 80, 130, 0.18);
-
-    color: #b9d6f0;
-}
-
-.scenario-result-score {
-    display: block;
-
-    font-weight: 900;
-}
-
-.scenario-result-count {
-    display: block;
-
-    margin-top: 3px;
-
-    font-size: 10px;
-
-    color: #708ba7;
-}
-
-.zero-scenario {
-    opacity: 0.4;
-}
-
-.no-scenarios {
-    padding: 20px;
-
-    text-align: center;
-
-    color: #718ca8;
-
-    border-radius: 12px;
-
-    background:
-        rgba(20, 60, 100, 0.12);
-}
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-footer {
-    padding: 30px;
-
-    text-align: center;
-
-    color: #587492;
-
-    font-size: 12px;
-
-    border-top:
-        1px solid
-        rgba(100, 170, 230, 0.10);
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 750px) {
-
-    .site-header {
-        padding: 25px 18px 0;
     }
+  
+  html {
+  scroll-behavior: smooth;
+  }
+  
+  body {
+  margin: 0;
+  min-height: 100vh;
+  
 
-    .header-content {
-        flex-direction: column;
+  font-family:
+      Arial,
+      Helvetica,
+      sans-serif;
+  
+  color: #eef6ff;
+  
+  background:
+      radial-gradient(
+          circle at 20% 10%,
+          rgba(49, 106, 230, 0.30),
+          transparent 35%
+      ),
+      radial-gradient(
+          circle at 80% 20%,
+          rgba(0, 183, 255, 0.18),
+          transparent 35%
+      ),
+      radial-gradient(
+          circle at 50% 100%,
+          rgba(73, 82, 255, 0.20),
+          transparent 40%
+      ),
+      linear-gradient(
+          135deg,
+          #071326,
+          #0b1b36 45%,
+          #06101f
+      );
+  
+  background-attachment: fixed;
 
-        align-items: flex-start;
-    }
+  
+  }
+  
+  /* =========================================================
+  HEADER
+  ========================================================= */
+  
+  .site-header {
+  position: relative;
+  
 
-    .header-content h1 {
-        font-size: 32px;
-    }
+  padding: 35px 30px 0;
+  
+  border-bottom:
+      1px solid rgba(120, 190, 255, 0.15);
+  
+  background:
+      rgba(7, 19, 38, 0.72);
+  
+  backdrop-filter:
+      blur(20px);
+  
+  -webkit-backdrop-filter:
+      blur(20px);
+  
+  box-shadow:
+      0 10px 40px rgba(0, 0, 0, 0.30);
+  
+  overflow: hidden;
 
-    .container {
-        width:
-            calc(100% - 20px);
-    }
+  
+  }
+  
+  .header-glow {
+  position: absolute;
+  
 
-    .glass-card {
-        padding: 20px;
-    }
+  width: 500px;
+  height: 300px;
+  
+  top: -180px;
+  left: 50%;
+  
+  transform: translateX(-50%);
+  
+  background:
+      rgba(45, 125, 255, 0.28);
+  
+  filter: blur(80px);
+  
+  pointer-events: none;
 
-    .section-header {
-        flex-direction: column;
-    }
+  
+  }
+  
+  .header-content {
+  position: relative;
+  
 
-    .match {
-        grid-template-columns:
-            1fr 100px 1fr;
+  max-width: 1250px;
+  
+  margin: auto;
+  
+  display: flex;
+  
+  justify-content: space-between;
+  
+  align-items: center;
+  
+  gap: 30px;
 
-        padding: 12px;
-    }
+  
+  }
+  
+  .eyebrow,
+  .section-label {
+  font-size: 12px;
+  
 
-    .pokemon-modal-top {
-        grid-template-columns: 1fr;
-    }
+  font-weight: 800;
+  
+  letter-spacing: 2px;
+  
+  color: #65b8ff;
 
-    .pokemon-image-container {
-        height: 230px;
-    }
+  
+  }
+  
+  .header-content h1 {
+  margin: 7px 0 8px;
+  
 
-    .scenario-summary {
-        grid-template-columns: 1fr;
-    }
+  font-size: 42px;
+  
+  line-height: 1.05;
 
-    .scenario-result-groups {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
+  
+  }
+  
+  .header-content p {
+  margin: 0;
+  
 
-    .roster-pokemon-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
+  color: #9db4cf;
+  
+  font-size: 15px;
 
-}
+  
+  }
+  
+  /* =========================================================
+  RESET
+  ========================================================= */
+  
+  .reset-button {
+  padding: 12px 18px;
+  
+
+  border: 1px solid
+      rgba(100, 170, 255, 0.30);
+  
+  border-radius: 12px;
+  
+  color: #ddecff;
+  
+  background:
+      rgba(35, 87, 160, 0.22);
+  
+  cursor: pointer;
+  
+  transition: 0.2s;
+
+  
+  }
+  
+  .reset-button:hover {
+  background:
+  rgba(50, 115, 220, 0.35);
+  
+
+  border-color:
+      rgba(100, 190, 255, 0.55);
+  
+  transform: translateY(-1px);
+
+  
+  }
+  
+  /* =========================================================
+  MAIN NAV
+  ========================================================= */
+  
+  .main-nav {
+  max-width: 1250px;
+  
+
+  margin: 30px auto 0;
+  
+  display: flex;
+  
+  gap: 8px;
+
+  
+  }
+  
+  .nav-button {
+  border: 0;
+  
+
+  padding: 14px 25px;
+  
+  background: transparent;
+  
+  color: #7890ad;
+  
+  font-weight: 800;
+  
+  letter-spacing: 1px;
+  
+  cursor: pointer;
+  
+  border-bottom:
+      2px solid transparent;
+  
+  transition: 0.2s;
+
+  
+  }
+  
+  .nav-button:hover {
+  color: #cce8ff;
+  }
+  
+  .nav-button.active {
+  color: #6dc2ff;
+  
+
+  border-bottom-color:
+      #3b9eff;
+
+  
+  }
+  
+  /* =========================================================
+  CONTAINER
+  ========================================================= */
+  
+  .container {
+  width: min(
+  1250px,
+  calc(100% - 30px)
+  );
+  
+
+  margin: 35px auto 70px;
+
+  
+  }
+  
+  /* =========================================================
+  TABS
+  ========================================================= */
+  
+  .tab-content {
+  display: none;
+  }
+  
+  .tab-content.active-tab {
+  display: block;
+  }
+  
+  /* =========================================================
+  GLASS CARDS
+  ========================================================= */
+  
+  .glass-card {
+  margin-bottom: 25px;
+  
+
+  padding: 28px;
+  
+  border:
+      1px solid
+      rgba(120, 190, 255, 0.18);
+  
+  border-radius: 22px;
+  
+  background:
+      linear-gradient(
+          135deg,
+          rgba(30, 76, 130, 0.26),
+          rgba(9, 28, 55, 0.40)
+      );
+  
+  backdrop-filter:
+      blur(22px);
+  
+  -webkit-backdrop-filter:
+      blur(22px);
+  
+  box-shadow:
+      0 20px 60px
+      rgba(0, 0, 0, 0.30),
+  
+      inset 0 1px 0
+      rgba(255, 255, 255, 0.07);
+
+  
+  }
+  
+  .section-header {
+  display: flex;
+  
+
+  justify-content: space-between;
+  
+  align-items: flex-start;
+  
+  gap: 20px;
+  
+  margin-bottom: 25px;
+
+  
+  }
+  
+  .section-header h2,
+  .glass-card > h2 {
+  margin: 7px 0;
+  
+
+  font-size: 28px;
+
+  
+  }
+  
+  .section-header p,
+  .section-description {
+  color: #8fa8c5;
+  
+
+  margin: 7px 0 0;
+  
+  font-size: 14px;
+
+  
+  }
+  
+  /* =========================================================
+  PLAYOFF BADGE
+  ========================================================= */
+  
+  .playoff-badge,
+  .roster-count-badge {
+  padding: 10px 14px;
+  
+
+  border:
+      1px solid
+      rgba(90, 170, 255, 0.25);
+  
+  border-radius: 999px;
+  
+  background:
+      rgba(25, 85, 150, 0.22);
+  
+  color: #a9d8ff;
+  
+  font-size: 12px;
+  
+  font-weight: 700;
+  
+  white-space: nowrap;
+
+  
+  }
+  
+  .badge-dot {
+  display: inline-block;
+  
+
+  width: 7px;
+  height: 7px;
+  
+  margin-right: 7px;
+  
+  border-radius: 50%;
+  
+  background: #49b4ff;
+  
+  box-shadow:
+      0 0 10px #49b4ff;
+
+  
+  }
+  
+  /* =========================================================
+  STANDINGS
+  ========================================================= */
+  
+  .standings-wrapper {
+  overflow-x: auto;
+  }
+  
+  .standings-table {
+  width: 100%;
+  
+
+  border-collapse: collapse;
+  
+  min-width: 700px;
+
+  
+  }
+  
+  .standings-table th {
+  padding: 13px 15px;
+  
+
+  text-align: left;
+  
+  color: #6e94ba;
+  
+  font-size: 11px;
+  
+  letter-spacing: 1.5px;
+  
+  border-bottom:
+      1px solid
+      rgba(130, 190, 240, 0.15);
+
+  
+  }
+  
+  .standings-table td {
+  padding: 16px 15px;
+  
+
+  border-bottom:
+      1px solid
+      rgba(130, 190, 240, 0.08);
+  
+  color: #c8d9eb;
+
+  
+  }
+  
+  .standings-table tr {
+  transition: 0.2s;
+  }
+  
+  .standings-table tr:hover {
+  background:
+  rgba(70, 140, 220, 0.08);
+  }
+  
+  .standings-table .team-name {
+  color: #eaf4ff;
+  
+
+  font-weight: 700;
+
+  
+  }
+  
+  .playoff-team td {
+  background:
+  rgba(30, 120, 220, 0.035);
+  }
+  
+  .playoff-cutoff td {
+  padding: 9px 15px;
+  
+
+  text-align: center;
+  
+  color: #4aaeff;
+  
+  font-size: 11px;
+  
+  font-weight: 800;
+  
+  letter-spacing: 1.5px;
+  
+  border-top:
+      1px dashed
+      rgba(70, 170, 255, 0.35);
+  
+  border-bottom:
+      1px dashed
+      rgba(70, 170, 255, 0.35);
+
+  
+  }
+  
+  /* =========================================================
+  STATUS
+  ========================================================= */
+  
+  .status-badge {
+  display: inline-block;
+  
+
+  padding: 5px 9px;
+  
+  border-radius: 999px;
+  
+  font-size: 10px;
+  
+  font-weight: 800;
+  
+  letter-spacing: 0.7px;
+
+  
+  }
+  
+  .status-clinched {
+  color: #7dffc3;
+  
+
+  background:
+      rgba(40, 210, 130, 0.12);
+  
+  border:
+      1px solid
+      rgba(60, 230, 150, 0.25);
+
+  
+  }
+  
+  .status-eliminated {
+  color: #ff8f9f;
+  
+
+  background:
+      rgba(230, 50, 80, 0.12);
+  
+  border:
+      1px solid
+      rgba(230, 60, 90, 0.25);
+
+  
+  }
+  
+  .status-contention {
+  color: #8fcaff;
+  
+
+  background:
+      rgba(50, 140, 240, 0.12);
+  
+  border:
+      1px solid
+      rgba(70, 150, 255, 0.22);
+
+  
+  }
+  
+  /* =========================================================
+  CALCULATE STANDINGS
+  ========================================================= */
+  
+  .calculate-standings-row {
+  display: flex;
+  
+
+  align-items: center;
+  
+  gap: 16px;
+  
+  margin: 0 0 25px;
+
+  
+  }
+  
+  .calculate-button {
+  position: relative;
+  
+
+  padding: 12px 20px;
+  
+  border:
+      1px solid
+      rgba(100, 190, 255, 0.40);
+  
+  border-radius: 12px;
+  
+  background:
+      linear-gradient(
+          135deg,
+          rgba(55, 145, 240, 0.38),
+          rgba(25, 85, 170, 0.30)
+      );
+  
+  color: #ffffff;
+  
+  font-family:
+      Arial,
+      Helvetica,
+      sans-serif;
+  
+  font-size: 13px;
+  
+  font-weight: 800;
+  
+  letter-spacing: 0.3px;
+  
+  cursor: pointer;
+  
+  backdrop-filter:
+      blur(18px);
+  
+  -webkit-backdrop-filter:
+      blur(18px);
+  
+  box-shadow:
+      0 8px 25px
+      rgba(20, 100, 200, 0.20),
+  
+      inset 0 1px 0
+      rgba(255, 255, 255, 0.16);
+  
+  transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+  
+  }
+  
+  .calculate-button:hover {
+  transform: translateY(-2px);
+  
+
+  background:
+      linear-gradient(
+          135deg,
+          rgba(65, 165, 255, 0.50),
+          rgba(35, 100, 195, 0.40)
+      );
+  
+  border-color:
+      rgba(110, 205, 255, 0.65);
+  
+  box-shadow:
+      0 10px 30px
+      rgba(30, 130, 240, 0.30),
+  
+      0 0 20px
+      rgba(50, 160, 255, 0.15),
+  
+      inset 0 1px 0
+      rgba(255, 255, 255, 0.20);
+
+  
+  }
+  
+  .calculate-button:active {
+  transform: translateY(0);
+  
+
+  background:
+      rgba(40, 120, 215, 0.45);
+  
+  box-shadow:
+      0 5px 15px
+      rgba(20, 100, 200, 0.20),
+  
+      inset 0 1px 0
+      rgba(255, 255, 255, 0.12);
+
+  
+  }
+  
+  .calculate-button:focus-visible {
+  outline: none;
+  
+
+  border-color:
+      #65b8ff;
+  
+  box-shadow:
+      0 0 0 3px
+      rgba(70, 170, 255, 0.15),
+  
+      0 8px 25px
+      rgba(20, 100, 200, 0.25);
+
+  
+  }
+  
+  .calculate-standings-hint {
+  margin: 0;
+  
+
+  color: #718eae;
+  
+  font-size: 12px;
+  
+  line-height: 1.5;
+
+  
+  }
+  
+  /* =========================================================
+  WEEK BUTTONS
+  ========================================================= */
+  
+  .week-buttons {
+  display: flex;
+  
+
+  flex-wrap: wrap;
+  
+  gap: 8px;
+  
+  margin: 22px 0;
+
+  
+  }
+  
+  .week-button {
+  padding: 10px 15px;
+  
+
+  border-radius: 10px;
+  
+  border:
+      1px solid
+      rgba(100, 170, 240, 0.18);
+  
+  background:
+      rgba(30, 75, 130, 0.18);
+  
+  color: #91abc7;
+  
+  cursor: pointer;
+  
+  transition: 0.2s;
+
+  
+  }
+  
+  .week-button:hover {
+  background:
+  rgba(50, 120, 210, 0.25);
+  
+
+  color: white;
+
+  
+  }
+  
+  .week-button.active {
+  color: white;
+  
+
+  border-color:
+      rgba(80, 175, 255, 0.60);
+  
+  background:
+      rgba(40, 125, 220, 0.30);
+  
+  box-shadow:
+      0 0 18px
+      rgba(50, 150, 255, 0.15);
+
+  
+  }
+  
+  .week-button.locked {
+  opacity: 0.85;
+  }
+  
+  /* =========================================================
+  WEEK
+  ========================================================= */
+  
+  .selected-week {
+  padding: 22px;
+  
+
+  border:
+      1px solid
+      rgba(100, 170, 240, 0.12);
+  
+  border-radius: 17px;
+  
+  background:
+      rgba(4, 17, 34, 0.28);
+
+  
+  }
+  
+  .week-heading {
+  display: flex;
+  
+
+  justify-content: space-between;
+  
+  align-items: center;
+  
+  margin-bottom: 18px;
+
+  
+  }
+  
+  .week-title {
+  font-size: 22px;
+  
+
+  font-weight: 800;
+
+  
+  }
+  
+  #weekDates {
+  color: #7590ad;
+  
+
+  margin: 5px 0 0;
+
+  
+  }
+  
+  .week-status {
+  padding: 7px 11px;
+  
+
+  border-radius: 999px;
+  
+  font-size: 11px;
+  
+  font-weight: 800;
+
+  
+  }
+  
+  .week-status.locked {
+  color: #a8bad0;
+  
+
+  background:
+      rgba(130, 150, 180, 0.12);
+
+  
+  }
+  
+  .week-status.open {
+  color: #72ffc0;
+  
+
+  background:
+      rgba(40, 210, 130, 0.12);
+
+  
+  }
+  
+  /* =========================================================
+  MATCHES
+  ========================================================= */
+  
+  .matches {
+  display: grid;
+  
+
+  gap: 10px;
+
+  
+  }
+  
+  .match {
+  display: grid;
+  
+
+  grid-template-columns:
+      1fr 120px 1fr;
+  
+  align-items: center;
+  
+  gap: 15px;
+  
+  padding: 15px 18px;
+  
+  border:
+      1px solid
+      rgba(110, 180, 240, 0.10);
+  
+  border-radius: 13px;
+  
+  background:
+      rgba(20, 55, 95, 0.18);
+
+  
+  }
+  
+  .match-team {
+  font-weight: 700;
+  
+
+  color: #afc4dc;
+
+  
+  }
+  
+  .match-team:last-child {
+  text-align: right;
+  }
+  
+  .match-team.winner {
+  color: #ffffff;
+  }
+  
+  .match-team.loser {
+  color: #607995;
+  }
+  
+  .score-area {
+  display: flex;
+  
+
+  justify-content: center;
+  
+  align-items: center;
+  
+  gap: 9px;
+
+  
+  }
+  
+  .score {
+  min-width: 25px;
+  
+
+  text-align: center;
+  
+  font-size: 19px;
+  
+  font-weight: 800;
+
+  
+  }
+  
+  .winner-score {
+  color: #68c1ff;
+  
+
+  text-shadow:
+      0 0 12px
+      rgba(70, 180, 255, 0.45);
+
+  
+  }
+  
+  .score-input {
+  width: 45px;
+  
+
+  padding: 9px;
+  
+  border:
+      1px solid
+      rgba(90, 170, 240, 0.30);
+  
+  border-radius: 9px;
+  
+  background:
+      rgba(5, 20, 40, 0.70);
+  
+  color: white;
+  
+  text-align: center;
+  
+  font-size: 16px;
+  
+  font-weight: 700;
+  
+  outline: none;
+
+  
+  }
+  
+  .score-input:focus {
+  border-color:
+  #4daeff;
+  
+
+  box-shadow:
+      0 0 12px
+      rgba(50, 150, 255, 0.20);
+
+  
+  }
+  
+  .invalid-score {
+  border-color:
+  #ff526d !important;
+  
+
+  box-shadow:
+      0 0 12px
+      rgba(255, 50, 80, 0.25);
+
+  
+  }
+  
+  /* =========================================================
+  CONTROLS
+  ========================================================= */
+  
+  .week-controls {
+  margin-top: 15px;
+  
+
+  color: #637f9f;
+  
+  font-size: 12px;
+
+  
+  }
+  
+  /* =========================================================
+  TEAM TABS
+  ========================================================= */
+  
+  .team-tabs {
+  display: flex;
+  
+
+  flex-wrap: wrap;
+  
+  gap: 8px;
+  
+  margin: 25px 0;
+
+  
+  }
+  
+  .team-tab {
+  flex: 1 1 180px;
+  
+
+  min-height: 45px;
+  
+  padding: 11px 14px;
+  
+  border:
+      1px solid
+      rgba(100, 180, 255, 0.15);
+  
+  border-radius: 11px;
+  
+  background:
+      rgba(20, 65, 115, 0.18);
+  
+  color: #88a6c5;
+  
+  cursor: pointer;
+  
+  font-weight: 700;
+  
+  font-size: 12px;
+  
+  transition: 0.2s;
+
+  
+  }
+  
+  .team-tab:hover {
+  background:
+  rgba(50, 125, 210, 0.25);
+  
+
+  color: white;
+
+  
+  }
+  
+  .team-tab.active {
+  color: #ffffff;
+  
+
+  border-color:
+      rgba(75, 175, 255, 0.55);
+  
+  background:
+      linear-gradient(
+          135deg,
+          rgba(45, 130, 220, 0.35),
+          rgba(30, 80, 160, 0.25)
+      );
+  
+  box-shadow:
+      0 0 20px
+      rgba(40, 140, 255, 0.12);
+
+  
+  }
+  
+  /* =========================================================
+  SELECTED ROSTER
+  ========================================================= */
+  
+  .selected-roster {
+  padding: 25px;
+  
+
+  border:
+      1px solid
+      rgba(110, 190, 255, 0.13);
+  
+  border-radius: 18px;
+  
+  background:
+      rgba(5, 22, 43, 0.28);
+
+  
+  }
+  
+  .selected-roster-header {
+  display: flex;
+  
+
+  justify-content: space-between;
+  
+  align-items: center;
+  
+  margin-bottom: 20px;
+
+  
+  }
+  
+  .selected-roster-header h3 {
+  margin: 0;
+  
+
+  font-size: 25px;
+
+  
+  }
+  
+  .selected-roster-header span {
+  color: #6094c4;
+  
+
+  font-size: 11px;
+  
+  letter-spacing: 1px;
+  
+  font-weight: 800;
+
+  
+  }
+  
+  /* =========================================================
+  POKÉMON GRID
+  ========================================================= */
+  
+  .roster-pokemon-grid {
+  display: grid;
+  
+
+  grid-template-columns:
+      repeat(5, 1fr);
+  
+  gap: 12px;
+
+  
+  }
+  
+  .pokemon-button {
+  min-height: 145px;
+  
+
+  padding: 12px;
+  
+  border:
+      1px solid
+      rgba(100, 180, 255, 0.13);
+  
+  border-radius: 15px;
+  
+  background:
+      linear-gradient(
+          145deg,
+          rgba(35, 90, 150, 0.22),
+          rgba(10, 35, 65, 0.32)
+      );
+  
+  color: #dceeff;
+  
+  cursor: pointer;
+  
+  display: flex;
+  
+  flex-direction: column;
+  
+  justify-content: center;
+  
+  align-items: center;
+  
+  gap: 5px;
+  
+  transition:
+      transform 0.2s,
+      border 0.2s,
+      background 0.2s;
+
+  
+  }
+  
+  .pokemon-button:hover {
+  transform: translateY(-4px);
+  
+
+  border-color:
+      rgba(90, 190, 255, 0.55);
+  
+  background:
+      rgba(40, 115, 200, 0.28);
+  
+  box-shadow:
+      0 12px 25px
+      rgba(0, 0, 0, 0.20);
+
+  
+  }
+  
+  .pokemon-mini-icon {
+  width: 100px;
+  
+
+  height: 100px;
+  
+  object-fit: contain;
+  
+  image-rendering: auto;
+  
+  transition: transform 0.2s;
+
+  
+  }
+  
+  .pokemon-button:hover
+  .pokemon-mini-icon {
+  transform: scale(1.08);
+  }
+  
+  .pokemon-button-name {
+  font-size: 12px;
+  
+
+  font-weight: 700;
+  
+  text-align: center;
+  
+  color: #d7eaff;
+
+  
+  }
+  
+  /* =========================================================
+  POKÉMON MODAL
+  ========================================================= */
+  
+  .pokemon-modal {
+  position: fixed;
+  
+
+  inset: 0;
+  
+  z-index: 1000;
+  
+  display: none;
+  
+  align-items: center;
+  
+  justify-content: center;
+  
+  padding: 20px;
+
+  
+  }
+  
+  .pokemon-modal.open {
+  display: flex;
+  }
+  
+  .pokemon-modal-backdrop {
+  position: absolute;
+  
+
+  inset: 0;
+  
+  background:
+      rgba(1, 8, 20, 0.78);
+  
+  backdrop-filter:
+      blur(10px);
+
+  
+  }
+  
+  .pokemon-modal-card {
+  position: relative;
+  
+
+  z-index: 2;
+  
+  width: min(
+      720px,
+      100%
+  );
+  
+  max-height:
+      calc(100vh - 40px);
+  
+  overflow-y: auto;
+  
+  padding: 30px;
+  
+  border:
+      1px solid
+      rgba(110, 190, 255, 0.28);
+  
+  border-radius: 25px;
+  
+  background:
+      linear-gradient(
+          135deg,
+          rgba(20, 65, 115, 0.70),
+          rgba(5, 22, 45, 0.90)
+      );
+  
+  backdrop-filter:
+      blur(30px);
+  
+  -webkit-backdrop-filter:
+      blur(30px);
+  
+  box-shadow:
+      0 30px 100px
+      rgba(0, 0, 0, 0.60),
+  
+      inset 0 1px 0
+      rgba(255, 255, 255, 0.08);
+
+  
+  }
+  
+  .close-modal {
+  position: absolute;
+  
+
+  top: 12px;
+  right: 15px;
+  
+  width: 38px;
+  height: 38px;
+  
+  border: 0;
+  
+  border-radius: 50%;
+  
+  background:
+      rgba(255, 255, 255, 0.08);
+  
+  color: #d7ebff;
+  
+  font-size: 27px;
+  
+  cursor: pointer;
+  
+  z-index: 5;
+
+  
+  }
+  
+  .close-modal:hover {
+  background:
+  rgba(255, 255, 255, 0.16);
+  }
+  
+  .pokemon-modal-top {
+  display: grid;
+  
+
+  grid-template-columns:
+      280px 1fr;
+  
+  gap: 25px;
+  
+  align-items: center;
+
+  
+  }
+  
+  .pokemon-image-container {
+  height: 280px;
+  
+
+  display: flex;
+  
+  align-items: center;
+  
+  justify-content: center;
+  
+  border-radius: 20px;
+  
+  background:
+      radial-gradient(
+          circle,
+          rgba(65, 170, 255, 0.20),
+          rgba(10, 30, 60, 0.20)
+      );
+
+  
+  }
+  
+  .pokemon-image-container img {
+  width: 100%;
+  
+
+  height: 100%;
+  
+  object-fit: contain;
+  
+  filter:
+      drop-shadow(
+          0 15px 25px
+          rgba(0, 0, 0, 0.35)
+      );
+
+  
+  }
+  
+  .pokemon-modal-info h2 {
+  margin: 8px 0;
+  
+
+  font-size: 35px;
+
+  
+  }
+  
+  .pokemon-team-label {
+  color: #62b9ff;
+  
+
+  font-size: 12px;
+  
+  font-weight: 800;
+  
+  letter-spacing: 1px;
+
+  
+  }
+  
+  .pokemon-types {
+  display: flex;
+  
+
+  gap: 7px;
+  
+  flex-wrap: wrap;
+  
+  margin: 12px 0;
+
+  
+  }
+  
+  .type-badge {
+  padding: 6px 10px;
+  
+
+  border-radius: 999px;
+  
+  background:
+      rgba(80, 160, 230, 0.16);
+  
+  border:
+      1px solid
+      rgba(100, 180, 255, 0.20);
+  
+  color: #bfe2ff;
+  
+  font-size: 11px;
+  
+  font-weight: 800;
+  
+  text-transform: uppercase;
+
+  
+  }
+  
+  .pokemon-id {
+  color: #7694b4;
+  
+
+  font-weight: 800;
+
+  
+  }
+  
+  /* =========================================================
+  STATS
+  ========================================================= */
+  
+  .pokemon-stats {
+  margin-top: 25px;
+  
+
+  display: grid;
+  
+  gap: 10px;
+
+  
+  }
+  
+  .stat-row {
+  display: grid;
+  
+
+  grid-template-columns:
+      100px 45px 1fr;
+  
+  align-items: center;
+  
+  gap: 10px;
+
+  
+  }
+  
+  .stat-name {
+  color: #a9c0d9;
+  
+
+  font-size: 12px;
+  
+  font-weight: 700;
+
+  
+  }
+  
+  .stat-value {
+  color: #ffffff;
+  
+
+  font-size: 13px;
+  
+  font-weight: 800;
+
+  
+  }
+  
+  .stat-bar {
+  height: 8px;
+  
+
+  border-radius: 999px;
+  
+  background:
+      rgba(100, 150, 200, 0.12);
+  
+  overflow: hidden;
+
+  
+  }
+  
+  .stat-bar-fill {
+  height: 100%;
+  
+
+  border-radius: 999px;
+  
+  background:
+      linear-gradient(
+          90deg,
+          #267bd8,
+          #56c1ff
+      );
+  
+  box-shadow:
+      0 0 10px
+      rgba(60, 180, 255, 0.35);
+
+  
+  }
+  
+  .stat-total {
+  margin-top: 8px;
+  
+
+  padding-top: 15px;
+  
+  border-top:
+      1px solid
+      rgba(100, 180, 255, 0.13);
+
+  
+  }
+  
+  /* =========================================================
+  LOADING
+  ========================================================= */
+  
+  .pokemon-loading {
+  color: #6d91b5;
+  
+
+  font-size: 13px;
+
+  
+  }
+  
+  /* =========================================================
+  FOOTER
+  ========================================================= */
+  
+  footer {
+  padding: 30px;
+  
+
+  text-align: center;
+  
+  color: #587492;
+  
+  font-size: 12px;
+  
+  border-top:
+      1px solid
+      rgba(100, 170, 230, 0.10);
+
+  
+  }
+  
+  /* =========================================================
+  MOBILE
+  ========================================================= */
+  
+  @media (max-width: 750px) {
+  
+
+  .site-header {
+      padding: 25px 18px 0;
+  }
+  
+  .header-content {
+      flex-direction: column;
+  
+      align-items: flex-start;
+  }
+  
+  .header-content h1 {
+      font-size: 32px;
+  }
+  
+  .container {
+      width:
+          calc(100% - 20px);
+  }
+  
+  .glass-card {
+      padding: 20px;
+  }
+  
+  .section-header {
+      flex-direction: column;
+  }
+  
+  .calculate-standings-row {
+      flex-direction: column;
+  
+      align-items: flex-start;
+  
+      gap: 10px;
+  }
+  
+  .match {
+      grid-template-columns:
+          1fr 100px 1fr;
+  
+      padding: 12px;
+  }
+  
+  .pokemon-modal-top {
+      grid-template-columns: 1fr;
+  }
+  
+  .pokemon-image-container {
+      height: 230px;
+  }
+  
+  .roster-pokemon-grid {
+      grid-template-columns:
+          repeat(2, 1fr);
+  }
+
+  
+  }
+  
