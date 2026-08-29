@@ -401,7 +401,8 @@ const weeks = [
 
 let currentWeek = 1;
 
-let selectedTeam = "Durham Drills";
+let selectedTeam =
+    "Durham Drills";
 
 const STORAGE_KEY =
     "pokemonDraftLeagueScores";
@@ -413,9 +414,11 @@ const POSSIBLE_SCORES = [
     [0, 3]
 ];
 
-const futureScheduleCache = new Map();
+const futureScheduleCache =
+    new Map();
 
-const pokemonCache = new Map();
+const pokemonCache =
+    new Map();
 
 
 /* =========================================================
@@ -425,42 +428,64 @@ const pokemonCache = new Map();
 function initializeTabs() {
 
     const buttons =
-        document.querySelectorAll(".nav-button");
+        document.querySelectorAll(
+            ".nav-button"
+        );
 
     const tabs =
-        document.querySelectorAll(".tab-content");
+        document.querySelectorAll(
+            ".tab-content"
+        );
+
 
     buttons.forEach(button => {
 
-        button.addEventListener("click", () => {
+        button.addEventListener(
+            "click",
+            () => {
 
-            const target =
-                button.dataset.tab;
+                const target =
+                    button.dataset.tab;
 
-            buttons.forEach(b =>
-                b.classList.remove("active")
-            );
 
-            tabs.forEach(tab =>
-                tab.classList.remove("active-tab")
-            );
-
-            button.classList.add("active");
-
-            const targetElement =
-                document.getElementById(target);
-
-            if (targetElement) {
-
-                targetElement.classList.add(
-                    "active-tab"
+                buttons.forEach(b =>
+                    b.classList.remove(
+                        "active"
+                    )
                 );
 
-            }
 
-        });
+                tabs.forEach(tab =>
+                    tab.classList.remove(
+                        "active-tab"
+                    )
+                );
+
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                const targetElement =
+                    document.getElementById(
+                        target
+                    );
+
+
+                if (targetElement) {
+
+                    targetElement.classList.add(
+                        "active-tab"
+                    );
+
+                }
+
+            }
+        );
 
     });
+
 }
 
 
@@ -468,19 +493,35 @@ function initializeTabs() {
    POKÉMON API NAME
 ========================================================= */
 
-function getPokemonApiName(pokemonName) {
+function getPokemonApiName(
+    pokemonName
+) {
 
-    if (pokemonApiNames[pokemonName]) {
+    if (
+        pokemonApiNames[
+            pokemonName
+        ]
+    ) {
 
-        return pokemonApiNames[pokemonName];
+        return pokemonApiNames[
+            pokemonName
+        ];
 
     }
 
+
     return pokemonName
         .toLowerCase()
-        .replace(/[.'’()]/g, "")
+        .replace(
+            /[.'’()]/g,
+            ""
+        )
         .trim()
-        .replace(/\s+/g, "-");
+        .replace(
+            /\s+/g,
+            "-"
+        );
+
 }
 
 
@@ -488,21 +529,34 @@ function getPokemonApiName(pokemonName) {
    FETCH POKÉMON
 ========================================================= */
 
-async function fetchPokemonData(pokemonName) {
+async function fetchPokemonData(
+    pokemonName
+) {
 
-    if (pokemonCache.has(pokemonName)) {
+    if (
+        pokemonCache.has(
+            pokemonName
+        )
+    ) {
 
-        return pokemonCache.get(pokemonName);
+        return pokemonCache.get(
+            pokemonName
+        );
 
     }
 
+
     const apiName =
-        getPokemonApiName(pokemonName);
+        getPokemonApiName(
+            pokemonName
+        );
+
 
     const response =
         await fetch(
             `https://pokeapi.co/api/v2/pokemon/${apiName}`
         );
+
 
     if (!response.ok) {
 
@@ -512,15 +566,19 @@ async function fetchPokemonData(pokemonName) {
 
     }
 
+
     const data =
         await response.json();
+
 
     pokemonCache.set(
         pokemonName,
         data
     );
 
+
     return data;
+
 }
 
 
@@ -528,12 +586,17 @@ async function fetchPokemonData(pokemonName) {
    GET POKÉMON IMAGE
 ========================================================= */
 
-async function getPokemonImage(pokemonName) {
+async function getPokemonImage(
+    pokemonName
+) {
 
     try {
 
         const data =
-            await fetchPokemonData(pokemonName);
+            await fetchPokemonData(
+                pokemonName
+            );
+
 
         return (
             data.sprites &&
@@ -553,6 +616,7 @@ async function getPokemonImage(pokemonName) {
         return null;
 
     }
+
 }
 
 
@@ -563,36 +627,55 @@ async function getPokemonImage(pokemonName) {
 function renderTeamTabs() {
 
     const container =
-        document.getElementById("teamTabs");
+        document.getElementById(
+            "teamTabs"
+        );
+
 
     if (!container) {
         return;
     }
 
+
     container.innerHTML = "";
+
 
     teams.forEach(team => {
 
         const button =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
+
 
         button.type = "button";
 
-        button.className = "team-tab";
+        button.className =
+            "team-tab";
 
-        if (team === selectedTeam) {
 
-            button.classList.add("active");
+        if (
+            team ===
+            selectedTeam
+        ) {
+
+            button.classList.add(
+                "active"
+            );
 
         }
 
-        button.textContent = team;
+
+        button.textContent =
+            team;
+
 
         button.addEventListener(
             "click",
             () => {
 
-                selectedTeam = team;
+                selectedTeam =
+                    team;
 
                 renderTeamTabs();
 
@@ -601,9 +684,13 @@ function renderTeamTabs() {
             }
         );
 
-        container.appendChild(button);
+
+        container.appendChild(
+            button
+        );
 
     });
+
 }
 
 
@@ -618,32 +705,50 @@ function renderSelectedRoster() {
             "selectedRoster"
         );
 
+
     if (!container) {
         return;
     }
 
+
     const roster =
-        rosters[selectedTeam] || [];
+        rosters[
+            selectedTeam
+        ] || [];
+
 
     container.innerHTML = "";
 
+
     const header =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     header.className =
         "selected-roster-header";
 
+
     const title =
-        document.createElement("h3");
+        document.createElement(
+            "h3"
+        );
+
 
     title.textContent =
         selectedTeam;
 
+
     const count =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
+
 
     count.textContent =
         `${roster.length} POKÉMON`;
+
 
     header.appendChild(title);
 
@@ -651,54 +756,77 @@ function renderSelectedRoster() {
 
     container.appendChild(header);
 
+
     const grid =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     grid.className =
         "roster-pokemon-grid";
 
+
     roster.forEach(pokemon => {
 
         const button =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
+
 
         button.type = "button";
 
         button.className =
             "pokemon-button";
 
+
         const image =
-            document.createElement("img");
+            document.createElement(
+                "img"
+            );
+
 
         image.className =
             "pokemon-mini-icon";
 
+
         image.alt =
             pokemon;
+
 
         image.loading =
             "lazy";
 
+
         image.src =
             createPlaceholderImage();
+
 
         loadRosterImage(
             image,
             pokemon
         );
 
+
         const name =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
+
 
         name.className =
             "pokemon-button-name";
 
+
         name.textContent =
             pokemon;
+
 
         button.appendChild(image);
 
         button.appendChild(name);
+
 
         button.addEventListener(
             "click",
@@ -712,11 +840,14 @@ function renderSelectedRoster() {
             }
         );
 
+
         grid.appendChild(button);
 
     });
 
+
     container.appendChild(grid);
+
 }
 
 
@@ -765,9 +896,11 @@ async function loadRosterImage(
             pokemonName
         );
 
+
     if (url) {
 
-        image.src = url;
+        image.src =
+            url;
 
     } else {
 
@@ -823,29 +956,40 @@ function openPokemonModal(
             "pokemonStats"
         );
 
+
     if (!modal) {
         return;
     }
 
+
     modal.classList.add("open");
+
 
     modal.setAttribute(
         "aria-hidden",
         "false"
     );
 
+
     document.body.style.overflow =
         "hidden";
+
 
     team.textContent =
         teamName;
 
+
     name.textContent =
         pokemonName;
 
-    types.innerHTML = "";
 
-    id.textContent = "";
+    types.innerHTML =
+        "";
+
+
+    id.textContent =
+        "";
+
 
     imageContainer.innerHTML = `
         <div class="pokemon-loading">
@@ -853,13 +997,18 @@ function openPokemonModal(
         </div>
     `;
 
+
     stats.innerHTML = `
         <div class="pokemon-loading">
             Loading stats...
         </div>
     `;
 
-    loadPokemonData(pokemonName);
+
+    loadPokemonData(
+        pokemonName
+    );
+
 }
 
 
@@ -891,12 +1040,14 @@ async function loadPokemonData(
             "pokemonStats"
         );
 
+
     try {
 
         const data =
             await fetchPokemonData(
                 pokemonName
             );
+
 
         const artwork =
             data.sprites &&
@@ -907,6 +1058,7 @@ async function loadPokemonData(
             data.sprites.other[
                 "official-artwork"
             ].front_default;
+
 
         if (artwork) {
 
@@ -927,43 +1079,56 @@ async function loadPokemonData(
 
         }
 
-        typesContainer.innerHTML = "";
+
+        typesContainer.innerHTML =
+            "";
+
 
         data.types
             .sort(
                 (a, b) =>
                     a.slot - b.slot
             )
-            .forEach(typeData => {
+            .forEach(
+                typeData => {
 
-                const badge =
-                    document.createElement(
-                        "span"
+                    const badge =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    badge.className =
+                        "type-badge";
+
+
+                    badge.textContent =
+                        typeData.type.name;
+
+
+                    typesContainer.appendChild(
+                        badge
                     );
 
-                badge.className =
-                    "type-badge";
+                }
+            );
 
-                badge.textContent =
-                    typeData.type.name;
-
-                typesContainer.appendChild(
-                    badge
-                );
-
-            });
 
         idContainer.textContent =
             "#" +
-            String(data.id).padStart(3, "0");
+            String(data.id)
+                .padStart(3, "0");
+
 
         renderPokemonStats(
             data.stats
         );
 
+
     } catch (error) {
 
         console.error(error);
+
 
         imageContainer.innerHTML = `
             <div class="pokemon-loading">
@@ -971,9 +1136,14 @@ async function loadPokemonData(
             </div>
         `;
 
-        typesContainer.innerHTML = "";
 
-        idContainer.textContent = "";
+        typesContainer.innerHTML =
+            "";
+
+
+        idContainer.textContent =
+            "";
+
 
         statsContainer.innerHTML = `
             <div class="no-scenarios">
@@ -984,6 +1154,7 @@ async function loadPokemonData(
         `;
 
     }
+
 }
 
 
@@ -991,18 +1162,24 @@ async function loadPokemonData(
    STATS
 ========================================================= */
 
-function renderPokemonStats(stats) {
+function renderPokemonStats(
+    stats
+) {
 
     const container =
         document.getElementById(
             "pokemonStats"
         );
 
+
     if (!container) {
         return;
     }
 
-    container.innerHTML = "";
+
+    container.innerHTML =
+        "";
+
 
     const statNames = {
 
@@ -1015,57 +1192,90 @@ function renderPokemonStats(stats) {
 
     };
 
+
     let total = 0;
+
 
     stats.forEach(stat => {
 
         const statName =
             stat.stat.name;
 
+
         const value =
             stat.base_stat;
 
-        if (!statNames[statName]) {
+
+        if (
+            !statNames[statName]
+        ) {
+
             return;
+
         }
 
-        total += value;
+
+        total +=
+            value;
+
 
         const row =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         row.className =
             "stat-row";
 
+
         const label =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
+
 
         label.className =
             "stat-name";
 
+
         label.textContent =
             statNames[statName];
 
+
         const number =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
+
 
         number.className =
             "stat-value";
 
+
         number.textContent =
             value;
 
+
         const bar =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         bar.className =
             "stat-bar";
 
+
         const fill =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         fill.className =
             "stat-bar-fill";
+
 
         const percentage =
             Math.min(
@@ -1073,10 +1283,13 @@ function renderPokemonStats(stats) {
                 (value / 255) * 100
             );
 
+
         fill.style.width =
             percentage + "%";
 
+
         bar.appendChild(fill);
+
 
         row.appendChild(label);
 
@@ -1084,43 +1297,71 @@ function renderPokemonStats(stats) {
 
         row.appendChild(bar);
 
+
         container.appendChild(row);
 
     });
 
+
     const totalRow =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     totalRow.className =
         "stat-row stat-total";
 
+
     const totalLabel =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
+
 
     totalLabel.className =
         "stat-name";
 
+
     totalLabel.textContent =
         "Base Total";
 
+
     const totalNumber =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
+
 
     totalNumber.className =
         "stat-value";
 
+
     totalNumber.textContent =
         total;
 
-    totalRow.appendChild(totalLabel);
-
-    totalRow.appendChild(totalNumber);
 
     totalRow.appendChild(
-        document.createElement("div")
+        totalLabel
     );
 
-    container.appendChild(totalRow);
+
+    totalRow.appendChild(
+        totalNumber
+    );
+
+
+    totalRow.appendChild(
+        document.createElement(
+            "div"
+        )
+    );
+
+
+    container.appendChild(
+        totalRow
+    );
+
 }
 
 
@@ -1135,18 +1376,26 @@ function closePokemonModal() {
             "pokemonModal"
         );
 
+
     if (!modal) {
         return;
     }
 
-    modal.classList.remove("open");
+
+    modal.classList.remove(
+        "open"
+    );
+
 
     modal.setAttribute(
         "aria-hidden",
         "true"
     );
 
-    document.body.style.overflow = "";
+
+    document.body.style.overflow =
+        "";
+
 }
 
 
@@ -1161,10 +1410,12 @@ function initializePokemonModal() {
             "closePokemonModal"
         );
 
+
     const backdrop =
         document.getElementById(
             "pokemonModalBackdrop"
         );
+
 
     if (closeButton) {
 
@@ -1175,6 +1426,7 @@ function initializePokemonModal() {
 
     }
 
+
     if (backdrop) {
 
         backdrop.addEventListener(
@@ -1184,11 +1436,15 @@ function initializePokemonModal() {
 
     }
 
+
     document.addEventListener(
         "keydown",
         event => {
 
-            if (event.key === "Escape") {
+            if (
+                event.key ===
+                "Escape"
+            ) {
 
                 closePokemonModal();
 
@@ -1196,26 +1452,32 @@ function initializePokemonModal() {
 
         }
     );
+
 }
 
 
 /* =========================================================
-   FUTURE SCHEDULE
+   FUTURE SCHEDULE CACHE
 ========================================================= */
 
 function buildFutureScheduleCache() {
 
     futureScheduleCache.clear();
 
+
     for (const team of teams) {
 
         const gamesByWeek = {};
+
 
         for (const week of weeks) {
 
             let count = 0;
 
-            for (const match of week.matches) {
+
+            for (
+                const match of week.matches
+            ) {
 
                 if (
                     match[0] === team ||
@@ -1228,10 +1490,13 @@ function buildFutureScheduleCache() {
 
             }
 
-            gamesByWeek[week.number] =
-                count;
+
+            gamesByWeek[
+                week.number
+            ] = count;
 
         }
+
 
         futureScheduleCache.set(
             team,
@@ -1239,8 +1504,13 @@ function buildFutureScheduleCache() {
         );
 
     }
+
 }
 
+
+/* =========================================================
+   REMAINING GAME COUNT
+========================================================= */
 
 function getRemainingGameCount(
     teamName,
@@ -1252,24 +1522,33 @@ function getRemainingGameCount(
             teamName
         );
 
+
     if (!schedule) {
         return 0;
     }
 
+
     let count = 0;
 
+
     for (
-        let weekNumber = afterWeek + 1;
-        weekNumber <= weeks.length;
+        let weekNumber =
+            afterWeek + 1;
+        weekNumber <=
+            weeks.length;
         weekNumber++
     ) {
 
         count +=
-            schedule[weekNumber] || 0;
+            schedule[
+                weekNumber
+            ] || 0;
 
     }
 
+
     return count;
+
 }
 
 
@@ -1284,14 +1563,17 @@ function loadSavedScores() {
             STORAGE_KEY
         );
 
+
     if (!saved) {
         return;
     }
+
 
     try {
 
         const savedWeeks =
             JSON.parse(saved);
+
 
         for (
             let w = 0;
@@ -1299,22 +1581,34 @@ function loadSavedScores() {
             w++
         ) {
 
-            if (weeks[w].locked) {
+            if (
+                weeks[w].locked
+            ) {
+
                 continue;
+
             }
 
-            if (!savedWeeks[w]) {
+
+            if (
+                !savedWeeks[w]
+            ) {
+
                 continue;
+
             }
+
 
             for (
                 let m = 0;
-                m < weeks[w].matches.length;
+                m <
+                    weeks[w].matches.length;
                 m++
             ) {
 
                 const savedMatch =
                     savedWeeks[w][m];
+
 
                 if (
                     savedMatch &&
@@ -1327,6 +1621,7 @@ function loadSavedScores() {
 
                     weeks[w].matches[m][2] =
                         savedMatch[2];
+
 
                     weeks[w].matches[m][3] =
                         savedMatch[3];
@@ -1345,12 +1640,18 @@ function loadSavedScores() {
         );
 
     }
+
 }
 
+
+/* =========================================================
+   SAVE SCORES
+========================================================= */
 
 function saveScoresToStorage() {
 
     const data = [];
+
 
     for (
         let w = 0;
@@ -1360,14 +1661,17 @@ function saveScoresToStorage() {
 
         data[w] = [];
 
+
         for (
             let m = 0;
-            m < weeks[w].matches.length;
+            m <
+                weeks[w].matches.length;
             m++
         ) {
 
             const match =
                 weeks[w].matches[m];
+
 
             data[w][m] = [
 
@@ -1389,10 +1693,12 @@ function saveScoresToStorage() {
 
     }
 
+
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(data)
     );
+
 }
 
 
@@ -1418,9 +1724,14 @@ function validScore(
 
     }
 
-    const a = Number(scoreA);
 
-    const b = Number(scoreB);
+    const a =
+        Number(scoreA);
+
+
+    const b =
+        Number(scoreB);
+
 
     if (
         !Number.isInteger(a) ||
@@ -1430,6 +1741,7 @@ function validScore(
         return false;
 
     }
+
 
     if (
         a < 0 ||
@@ -1442,7 +1754,11 @@ function validScore(
 
     }
 
-    return a + b === 3;
+
+    return (
+        a + b === 3
+    );
+
 }
 
 
@@ -1450,17 +1766,22 @@ function validScore(
    WEEK COMPLETION
 ========================================================= */
 
-function isWeekComplete(weekNumber) {
+function isWeekComplete(
+    weekNumber
+) {
 
     const week =
         weeks.find(
             w =>
-                w.number === weekNumber
+                w.number ===
+                weekNumber
         );
+
 
     if (!week) {
         return false;
     }
+
 
     return week.matches.every(
         match =>
@@ -1470,12 +1791,18 @@ function isWeekComplete(weekNumber) {
                 match[3]
             )
     );
+
 }
 
+
+/* =========================================================
+   COMPLETED THROUGH WEEK
+========================================================= */
 
 function getCompletedThroughWeek() {
 
     let completedThrough = 0;
+
 
     for (const week of weeks) {
 
@@ -1496,19 +1823,33 @@ function getCompletedThroughWeek() {
 
     }
 
+
     return completedThrough;
+
 }
 
 
-function canAnalyzeWeek(weekNumber) {
+/* =========================================================
+   CAN ANALYZE WEEK
+========================================================= */
 
-    if (weekNumber <= 1) {
+function canAnalyzeWeek(
+    weekNumber
+) {
+
+    if (
+        weekNumber <= 1
+    ) {
+
         return true;
+
     }
+
 
     return isWeekComplete(
         weekNumber - 1
     );
+
 }
 
 
@@ -1518,19 +1859,26 @@ function canAnalyzeWeek(weekNumber) {
 
 function createEmptyStandings() {
 
-    return teams.map(team => ({
+    return teams.map(
+        team => ({
 
-        team,
+            team,
 
-        wins: 0,
+            wins: 0,
 
-        losses: 0,
+            losses: 0,
 
-        differential: 0
+            differential: 0
 
-    }));
+        })
+    );
+
 }
 
+
+/* =========================================================
+   APPLY MATCH
+========================================================= */
 
 function applyMatch(
     standings,
@@ -1549,35 +1897,53 @@ function applyMatch(
 
     }
 
+
     const scoreA =
         Number(match[2]);
+
 
     const scoreB =
         Number(match[3]);
 
+
     const teamA =
         standings.find(
             t =>
-                t.team === match[0]
+                t.team ===
+                match[0]
         );
+
 
     const teamB =
         standings.find(
             t =>
-                t.team === match[1]
+                t.team ===
+                match[1]
         );
 
-    if (!teamA || !teamB) {
+
+    if (
+        !teamA ||
+        !teamB
+    ) {
+
         return;
+
     }
+
 
     teamA.differential +=
         scoreA - scoreB;
 
+
     teamB.differential +=
         scoreB - scoreA;
 
-    if (scoreA > scoreB) {
+
+    if (
+        scoreA >
+        scoreB
+    ) {
 
         teamA.wins++;
 
@@ -1590,21 +1956,33 @@ function applyMatch(
         teamA.losses++;
 
     }
+
 }
 
 
-function sortStandings(standings) {
+/* =========================================================
+   SORT STANDINGS
+========================================================= */
+
+function sortStandings(
+    standings
+) {
 
     return standings.sort(
         (a, b) => {
 
             if (
-                a.wins !== b.wins
+                a.wins !==
+                b.wins
             ) {
 
-                return b.wins - a.wins;
+                return (
+                    b.wins -
+                    a.wins
+                );
 
             }
+
 
             if (
                 a.differential !==
@@ -1618,22 +1996,30 @@ function sortStandings(standings) {
 
             }
 
+
             return a.team.localeCompare(
                 b.team
             );
 
         }
     );
+
 }
 
+
+/* =========================================================
+   CALCULATE CURRENT STANDINGS
+========================================================= */
 
 function calculateStandings() {
 
     const standings =
         createEmptyStandings();
 
+
     const completedThrough =
         getCompletedThroughWeek();
+
 
     for (
         const week of weeks
@@ -1648,6 +2034,7 @@ function calculateStandings() {
 
         }
 
+
         for (
             const match of week.matches
         ) {
@@ -1661,9 +2048,11 @@ function calculateStandings() {
 
     }
 
+
     return sortStandings(
         standings
     );
+
 }
 
 
@@ -1676,18 +2065,27 @@ function getFutureMatches() {
     const completedThrough =
         getCompletedThroughWeek();
 
+
     const futureMatches = [];
 
-    for (const week of weeks) {
+
+    for (
+        const week of weeks
+    ) {
 
         if (
             week.number <=
             completedThrough
         ) {
+
             continue;
+
         }
 
-        for (const match of week.matches) {
+
+        for (
+            const match of week.matches
+        ) {
 
             if (
                 match.length < 4 ||
@@ -1697,10 +2095,15 @@ function getFutureMatches() {
                 )
             ) {
 
-                futureMatches.push([
-                    match[0],
-                    match[1]
-                ]);
+                futureMatches.push({
+
+                    teamA:
+                        match[0],
+
+                    teamB:
+                        match[1]
+
+                });
 
             }
 
@@ -1708,27 +2111,14 @@ function getFutureMatches() {
 
     }
 
+
     return futureMatches;
+
 }
 
 
 /* =========================================================
-   POSSIBLE SEED CALCULATION
-=========================================================
-
-   This uses the actual remaining schedule.
-
-   Instead of saying:
-
-       "Team X can win 3 more games"
-
-   independently for every team, this considers the fact
-   that teams must play each other.
-
-   We use a branch-and-bound search over the remaining
-   matches. The search keeps track of wins and differential
-   and records the best/worst seed found for every team.
-
+   CREATE FUTURE STATE
 ========================================================= */
 
 function createFutureState() {
@@ -1736,38 +2126,66 @@ function createFutureState() {
     const standings =
         calculateStandings();
 
+
     const state = {};
 
-    for (const team of standings) {
 
-        state[team.team] = {
+    for (const team of teams) {
 
-            wins: team.wins,
+        const current =
+            standings.find(
+                t =>
+                    t.team === team
+            );
 
-            losses: team.losses,
+
+        state[team] = {
+
+            wins:
+                current
+                    ? current.wins
+                    : 0,
+
+            losses:
+                current
+                    ? current.losses
+                    : 0,
 
             differential:
-                team.differential
+                current
+                    ? current.differential
+                    : 0
 
         };
 
     }
 
+
     return state;
+
 }
 
 
-function cloneState(state) {
+/* =========================================================
+   CLONE STATE
+========================================================= */
+
+function cloneState(
+    state
+) {
 
     const copy = {};
+
 
     for (const team of teams) {
 
         copy[team] = {
 
-            wins: state[team].wins,
+            wins:
+                state[team].wins,
 
-            losses: state[team].losses,
+            losses:
+                state[team].losses,
 
             differential:
                 state[team].differential
@@ -1776,9 +2194,15 @@ function cloneState(state) {
 
     }
 
+
     return copy;
+
 }
 
+
+/* =========================================================
+   APPLY FUTURE OUTCOME
+========================================================= */
 
 function applyFutureOutcome(
     state,
@@ -1788,18 +2212,29 @@ function applyFutureOutcome(
 ) {
 
     const teamA =
-        state[match[0]];
+        state[
+            match.teamA
+        ];
+
 
     const teamB =
-        state[match[1]];
+        state[
+            match.teamB
+        ];
+
 
     teamA.differential +=
         scoreA - scoreB;
 
+
     teamB.differential +=
         scoreB - scoreA;
 
-    if (scoreA > scoreB) {
+
+    if (
+        scoreA >
+        scoreB
+    ) {
 
         teamA.wins++;
 
@@ -1812,135 +2247,430 @@ function applyFutureOutcome(
         teamA.losses++;
 
     }
-}
 
-
-function rankState(state) {
-
-    const ranking =
-        teams.map(team => ({
-
-            team,
-
-            wins:
-                state[team].wins,
-
-            losses:
-                state[team].losses,
-
-            differential:
-                state[team].differential
-
-        }));
-
-    return sortStandings(ranking);
 }
 
 
 /* =========================================================
-   EXACT FUTURE SEED SEARCH
+   RANK STATE
 ========================================================= */
 
-function calculatePossibleSeeds() {
+function rankState(
+    state
+) {
 
-    const futureMatches =
-        getFutureMatches();
+    const ranking =
+        teams.map(
+            team => ({
 
-    const startingState =
-        createFutureState();
+                team,
 
-    const possibleSeeds = {};
+                wins:
+                    state[team].wins,
 
-    const minSeed = {};
+                losses:
+                    state[team].losses,
 
-    const maxSeed = {};
+                differential:
+                    state[
+                        team
+                    ].differential
 
-    const clinchPossible = {};
-
-    const eliminatePossible = {};
-
-    for (const team of teams) {
-
-        possibleSeeds[team] =
-            new Set();
-
-        minSeed[team] =
-            Infinity;
-
-        maxSeed[team] =
-            -Infinity;
-
-        clinchPossible[team] =
-            false;
-
-        eliminatePossible[team] =
-            false;
-
-    }
-
-
-    /*
-     * If there are no future games, simply use
-     * the current standings.
-     */
-
-    if (futureMatches.length === 0) {
-
-        const finalRanking =
-            rankState(startingState);
-
-        finalRanking.forEach(
-            (team, index) => {
-
-                const seed =
-                    index + 1;
-
-                possibleSeeds[
-                    team.team
-                ].add(seed);
-
-                minSeed[
-                    team.team
-                ] = seed;
-
-                maxSeed[
-                    team.team
-                ] = seed;
-
-            }
+            })
         );
 
-        return {
-            possibleSeeds,
-            minSeed,
-            maxSeed
-        };
+
+    return sortStandings(
+        ranking
+    );
+
+}
+
+
+/* =========================================================
+   COMPARE TEAMS
+========================================================= */
+
+function compareTeams(
+    a,
+    b
+) {
+
+    if (
+        a.wins !==
+        b.wins
+    ) {
+
+        return (
+            b.wins -
+            a.wins
+        );
 
     }
 
 
-    /*
-     * Recursive schedule exploration.
-     *
-     * Each match has exactly four possible scores:
-     *
-     * 3-0
-     * 2-1
-     * 1-2
-     * 0-3
-     *
-     * We process matches in an order that tends to
-     * settle the important teams early.
-     */
+    if (
+        a.differential !==
+        b.differential
+    ) {
+
+        return (
+            b.differential -
+            a.differential
+        );
+
+    }
+
+
+    return a.team.localeCompare(
+        b.team
+    );
+
+}
+
+
+/* =========================================================
+   TARGET TEAM RANGE
+========================================================= */
+
+function getTargetRange(
+    state,
+    targetTeam,
+    futureMatches,
+    startIndex
+) {
+
+    let remaining =
+        0;
+
+
+    for (
+        let i = startIndex;
+        i <
+            futureMatches.length;
+        i++
+    ) {
+
+        const match =
+            futureMatches[i];
+
+
+        if (
+            match.teamA ===
+                targetTeam ||
+            match.teamB ===
+                targetTeam
+        ) {
+
+            remaining++;
+
+        }
+
+    }
+
+
+    const current =
+        state[
+            targetTeam
+        ];
+
+
+    return {
+
+        team:
+            targetTeam,
+
+        minWins:
+            current.wins,
+
+        maxWins:
+            current.wins +
+            remaining,
+
+        minDifferential:
+            current.differential -
+            remaining * 3,
+
+        maxDifferential:
+            current.differential +
+            remaining * 3
+
+    };
+
+}
+
+
+/* =========================================================
+   OPPONENT RANGE
+========================================================= */
+
+function getOpponentRange(
+    state,
+    opponent,
+    futureMatches,
+    startIndex
+) {
+
+    let remaining =
+        0;
+
+
+    for (
+        let i = startIndex;
+        i <
+            futureMatches.length;
+        i++
+    ) {
+
+        const match =
+            futureMatches[i];
+
+
+        if (
+            match.teamA ===
+                opponent ||
+            match.teamB ===
+                opponent
+        ) {
+
+            remaining++;
+
+        }
+
+    }
+
+
+    const current =
+        state[
+            opponent
+        ];
+
+
+    return {
+
+        minWins:
+            current.wins,
+
+        maxWins:
+            current.wins +
+            remaining,
+
+        minDifferential:
+            current.differential -
+            remaining * 3,
+
+        maxDifferential:
+            current.differential +
+            remaining * 3
+
+    };
+
+}
+
+
+/* =========================================================
+   DEFINITELY ABOVE TARGET
+=========================================================
+
+   This is SAFE pruning.
+
+   If an opponent is above the target even when:
+
+       opponent gets its WORST case
+       target gets its BEST case
+
+   then that opponent is guaranteed to finish above
+   the target.
+
+========================================================= */
+
+function definitelyAboveTarget(
+    opponentRange,
+    targetRange,
+    opponent,
+    targetTeam
+) {
+
+    if (
+        opponentRange.minWins >
+        targetRange.maxWins
+    ) {
+
+        return true;
+
+    }
+
+
+    if (
+        opponentRange.minWins ===
+        targetRange.maxWins
+    ) {
+
+        if (
+            opponentRange.minDifferential >
+            targetRange.maxDifferential
+        ) {
+
+            return true;
+
+        }
+
+
+        if (
+            opponentRange.minDifferential ===
+            targetRange.maxDifferential
+        ) {
+
+            return (
+                opponent.localeCompare(
+                    targetTeam
+                ) < 0
+            );
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================================================
+   POSSIBLY ABOVE TARGET
+=========================================================
+
+   This is also SAFE.
+
+   If an opponent CANNOT possibly get above the target,
+   regardless of future results, then they don't count
+   toward the target's possible number of teams above.
+
+========================================================= */
+
+function possiblyAboveTarget(
+    opponentRange,
+    targetRange,
+    opponent,
+    targetTeam
+) {
+
+    if (
+        opponentRange.maxWins >
+        targetRange.minWins
+    ) {
+
+        return true;
+
+    }
+
+
+    if (
+        opponentRange.maxWins ===
+        targetRange.minWins
+    ) {
+
+        if (
+            opponentRange.maxDifferential >
+            targetRange.minDifferential
+        ) {
+
+            return true;
+
+        }
+
+
+        if (
+            opponentRange.maxDifferential ===
+            targetRange.minDifferential
+        ) {
+
+            return (
+                opponent.localeCompare(
+                    targetTeam
+                ) < 0
+            );
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================================================
+   EXACT SEED FEASIBILITY
+=========================================================
+
+   This asks:
+
+       "Can TEAM finish exactly at SEED?"
+
+   It does NOT independently assign outcomes to teams.
+
+   Every branch represents actual outcomes of actual
+   remaining games.
+
+   Example:
+
+       Team A vs Team B
+
+   If Team A wins, Team B necessarily loses.
+
+   This is exactly what the old system was missing.
+
+========================================================= */
+
+function canTeamFinishAtSeed(
+    targetTeam,
+    targetSeed,
+    startingState,
+    futureMatches
+) {
+
+    const memo =
+        new Map();
+
+
+    function makeStateKey(
+        index,
+        state
+    ) {
+
+        let key =
+            index + "|";
+
+
+        for (
+            const team of teams
+        ) {
+
+            key +=
+                state[team].wins +
+                "," +
+                state[team].differential +
+                ";";
+
+        }
+
+
+        return key;
+
+    }
+
 
     function search(
         matchIndex,
         state
     ) {
 
-        /*
-         * Final state.
-         */
+        /* ---------------------------------------------
+           FINAL STATE
+        --------------------------------------------- */
 
         if (
             matchIndex >=
@@ -1948,47 +2678,172 @@ function calculatePossibleSeeds() {
         ) {
 
             const ranking =
-                rankState(state);
+                rankState(
+                    state
+                );
 
-            ranking.forEach(
-                (team, index) => {
 
-                    const seed =
-                        index + 1;
+            const position =
+                ranking.findIndex(
+                    team =>
+                        team.team ===
+                        targetTeam
+                );
 
-                    possibleSeeds[
-                        team.team
-                    ].add(seed);
 
-                    if (
-                        seed <
-                        minSeed[team.team]
-                    ) {
-
-                        minSeed[
-                            team.team
-                        ] = seed;
-
-                    }
-
-                    if (
-                        seed >
-                        maxSeed[team.team]
-                    ) {
-
-                        maxSeed[
-                            team.team
-                        ] = seed;
-
-                    }
-
-                }
+            return (
+                position + 1 ===
+                targetSeed
             );
-
-            return;
 
         }
 
+
+        /* ---------------------------------------------
+           MEMOIZATION
+        --------------------------------------------- */
+
+        const key =
+            makeStateKey(
+                matchIndex,
+                state
+            );
+
+
+        if (
+            memo.has(key)
+        ) {
+
+            return memo.get(
+                key
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           SAFE PRUNING
+        --------------------------------------------- */
+
+        const targetRange =
+            getTargetRange(
+                state,
+                targetTeam,
+                futureMatches,
+                matchIndex
+            );
+
+
+        let definitelyAbove =
+            0;
+
+
+        let possiblyAbove =
+            0;
+
+
+        for (
+            const opponent of teams
+        ) {
+
+            if (
+                opponent ===
+                targetTeam
+            ) {
+
+                continue;
+
+            }
+
+
+            const opponentRange =
+                getOpponentRange(
+                    state,
+                    opponent,
+                    futureMatches,
+                    matchIndex
+                );
+
+
+            if (
+                definitelyAboveTarget(
+                    opponentRange,
+                    targetRange,
+                    opponent,
+                    targetTeam
+                )
+            ) {
+
+                definitelyAbove++;
+
+            }
+
+
+            if (
+                possiblyAboveTarget(
+                    opponentRange,
+                    targetRange,
+                    opponent,
+                    targetTeam
+                )
+            ) {
+
+                possiblyAbove++;
+
+            }
+
+        }
+
+
+        const neededAbove =
+            targetSeed - 1;
+
+
+        /*
+         * Too many teams are guaranteed to be above
+         * target. Therefore this seed is impossible.
+         */
+
+        if (
+            definitelyAbove >
+            neededAbove
+        ) {
+
+            memo.set(
+                key,
+                false
+            );
+
+
+            return false;
+
+        }
+
+
+        /*
+         * Not enough teams can possibly get above
+         * target. Therefore this seed is impossible.
+         */
+
+        if (
+            possiblyAbove <
+            neededAbove
+        ) {
+
+            memo.set(
+                key,
+                false
+            );
+
+
+            return false;
+
+        }
+
+
+        /* ---------------------------------------------
+           EXPLORE ACTUAL MATCH OUTCOMES
+        --------------------------------------------- */
 
         const match =
             futureMatches[
@@ -2001,7 +2856,10 @@ function calculatePossibleSeeds() {
         ) {
 
             const nextState =
-                cloneState(state);
+                cloneState(
+                    state
+                );
+
 
             applyFutureOutcome(
                 nextState,
@@ -2010,299 +2868,236 @@ function calculatePossibleSeeds() {
                 score[1]
             );
 
-            search(
-                matchIndex + 1,
-                nextState
-            );
+
+            if (
+                search(
+                    matchIndex + 1,
+                    nextState
+                )
+            ) {
+
+                memo.set(
+                    key,
+                    true
+                );
+
+
+                return true;
+
+            }
 
         }
+
+
+        memo.set(
+            key,
+            false
+        );
+
+
+        return false;
 
     }
 
 
-    /*
-     * IMPORTANT:
-     *
-     * 18 remaining matches would technically be
-     * 4^18 combinations.
-     *
-     * Instead of blindly calculating all combinations,
-     * use the optimized status search below for the
-     * actual clinch/elimination determination.
-     *
-     * The seed-range search uses the same schedule and
-     * is protected by a hard limit.
-     */
+    return search(
+        0,
+        cloneState(
+            startingState
+        )
+    );
 
-    const MAX_EXACT_SCENARIOS =
-        1000000;
+}
 
 
-    if (
-        Math.pow(
-            4,
-            futureMatches.length
-        ) <= MAX_EXACT_SCENARIOS
+/* =========================================================
+   CALCULATE ALL POSSIBLE SEEDS
+========================================================= */
+
+function calculatePossibleSeeds() {
+
+    const futureMatches =
+        getFutureMatches();
+
+
+    const startingState =
+        createFutureState();
+
+
+    const possibleSeeds = {};
+
+    const minSeed = {};
+
+    const maxSeed = {};
+
+
+    for (
+        const team of teams
     ) {
 
-        search(
-            0,
-            startingState
+        possibleSeeds[team] =
+            new Set();
+
+
+        minSeed[team] =
+            Infinity;
+
+
+        maxSeed[team] =
+            -Infinity;
+
+    }
+
+
+    /* ---------------------------------------------
+       NO FUTURE GAMES
+    --------------------------------------------- */
+
+    if (
+        futureMatches.length === 0
+    ) {
+
+        const ranking =
+            rankState(
+                startingState
+            );
+
+
+        ranking.forEach(
+            (team, index) => {
+
+                const seed =
+                    index + 1;
+
+
+                possibleSeeds[
+                    team.team
+                ].add(seed);
+
+
+                minSeed[
+                    team.team
+                ] = seed;
+
+
+                maxSeed[
+                    team.team
+                ] = seed;
+
+            }
         );
 
-    } else {
 
-        /*
-         * Use schedule-aware bounds when the number of
-         * complete score scenarios becomes too large.
-         */
+        return {
 
-        calculateSeedBoundsScheduleAware(
-            startingState,
-            futureMatches,
             possibleSeeds,
             minSeed,
             maxSeed
+
+        };
+
+    }
+
+
+    /* ---------------------------------------------
+       EXACT SEED SEARCH
+    ---------------------------------------------
+
+       For each team:
+
+           Test seed 1
+           Test seed 2
+           ...
+           Test seed 12
+
+       A seed is recorded ONLY if the exact schedule
+       search finds a real future outcome combination
+       that places that team at that seed.
+    --------------------------------------------- */
+
+    for (
+        const team of teams
+    ) {
+
+        console.log(
+            `Analyzing ${team}...`
+        );
+
+
+        for (
+            let seed = 1;
+            seed <= teams.length;
+            seed++
+        ) {
+
+            const possible =
+                canTeamFinishAtSeed(
+                    team,
+                    seed,
+                    startingState,
+                    futureMatches
+                );
+
+
+            if (
+                possible
+            ) {
+
+                possibleSeeds[
+                    team
+                ].add(seed);
+
+
+                minSeed[
+                    team
+                ] = Math.min(
+                    minSeed[
+                        team
+                    ],
+                    seed
+                );
+
+
+                maxSeed[
+                    team
+                ] = Math.max(
+                    maxSeed[
+                        team
+                    ],
+                    seed
+                );
+
+            }
+
+        }
+
+
+        console.log(
+            `${team} possible seeds:`,
+            Array.from(
+                possibleSeeds[team]
+            ).sort(
+                (a, b) =>
+                    a - b
+            )
         );
 
     }
 
 
     return {
+
         possibleSeeds,
         minSeed,
         maxSeed
+
     };
-}
-
-
-/* =========================================================
-   SCHEDULE-AWARE SEED BOUNDS
-========================================================= */
-
-function calculateSeedBoundsScheduleAware(
-    startingState,
-    futureMatches,
-    possibleSeeds,
-    minSeed,
-    maxSeed
-) {
-
-    /*
-     * For each team, calculate conservative best/worst
-     * positions while respecting the actual remaining
-     * opponents.
-     *
-     * These bounds are intentionally conservative:
-     * if a seed is shown, it is a seed the team cannot
-     * be ruled out of based on the remaining schedule.
-     */
-
-    for (const targetTeam of teams) {
-
-        const target =
-            startingState[targetTeam];
-
-        const targetRemaining =
-            futureMatches.filter(
-                match =>
-                    match[0] === targetTeam ||
-                    match[1] === targetTeam
-            ).length;
-
-
-        /*
-         * Maximum possible wins for target.
-         */
-
-        const bestWins =
-            target.wins +
-            targetRemaining;
-
-
-        /*
-         * Minimum possible wins for target.
-         */
-
-        const worstWins =
-            target.wins;
-
-
-        /*
-         * Current differential.
-         *
-         * Maximum differential assumes every future
-         * game is won 3-0.
-         */
-
-        const bestDifferential =
-            target.differential +
-            targetRemaining * 3;
-
-
-        /*
-         * Minimum differential assumes every future
-         * game is lost 0-3.
-         */
-
-        const worstDifferential =
-            target.differential -
-            targetRemaining * 3;
-
-
-        let bestRank = 12;
-
-        let worstRank = 1;
-
-
-        /*
-         * Best possible rank:
-         * Target gets maximum wins/differential.
-         * Opponents get conservative minimum.
-         */
-
-        let playersAboveBest = 0;
-
-        let playersAboveWorst = 0;
-
-
-        for (const opponent of teams) {
-
-            if (
-                opponent === targetTeam
-            ) {
-                continue;
-            }
-
-
-            const opponentRemaining =
-                futureMatches.filter(
-                    match =>
-                        (
-                            match[0] === opponent ||
-                            match[1] === opponent
-                        )
-                ).length;
-
-
-            const opponentState =
-                startingState[opponent];
-
-
-            const opponentMinWins =
-                opponentState.wins;
-
-
-            const opponentMaxWins =
-                opponentState.wins +
-                opponentRemaining;
-
-
-            const opponentMinDiff =
-                opponentState.differential -
-                opponentRemaining * 3;
-
-
-            const opponentMaxDiff =
-                opponentState.differential +
-                opponentRemaining * 3;
-
-
-            /*
-             * Opponent definitely above target's
-             * BEST possible finish.
-             */
-
-            if (
-                opponentMinWins >
-                bestWins
-            ) {
-
-                playersAboveBest++;
-
-            } else if (
-                opponentMinWins ===
-                bestWins &&
-                opponentMinDiff >
-                bestDifferential
-            ) {
-
-                playersAboveBest++;
-
-            }
-
-
-            /*
-             * Opponent can potentially be above target's
-             * WORST possible finish.
-             */
-
-            if (
-                opponentMaxWins >
-                worstWins
-            ) {
-
-                playersAboveWorst++;
-
-            } else if (
-                opponentMaxWins ===
-                worstWins &&
-                opponentMaxDiff >
-                worstDifferential
-            ) {
-
-                playersAboveWorst++;
-
-            }
-
-        }
-
-
-        bestRank =
-            Math.min(
-                12,
-                playersAboveBest + 1
-            );
-
-
-        worstRank =
-            Math.min(
-                12,
-                playersAboveWorst + 1
-            );
-
-
-        minSeed[targetTeam] =
-            bestRank;
-
-        maxSeed[targetTeam] =
-            worstRank;
-
-
-        /*
-         * Fill every seed between the conservative
-         * bounds.
-         */
-
-        for (
-            let seed = bestRank;
-            seed <= worstRank;
-            seed++
-        ) {
-
-            possibleSeeds[
-                targetTeam
-            ].add(seed);
-
-        }
-
-    }
 
 }
 
 
 /* =========================================================
-   PLAYOFF STATUS
+   SEED LIST TEXT
 ========================================================= */
 
 function getSeedListText(
@@ -2318,34 +3113,21 @@ function getSeedListText(
 
     }
 
+
     return Array.from(
         possibleSeeds
     )
-        .sort((a, b) => a - b)
+        .sort(
+            (a, b) =>
+                a - b
+        )
         .join(", ");
-}
 
-
-function getCurrentSeed(
-    teamName,
-    standings
-) {
-
-    const index =
-        standings.findIndex(
-            team =>
-                team.team ===
-                teamName
-        );
-
-    return index >= 0
-        ? index + 1
-        : null;
 }
 
 
 /* =========================================================
-   ROBUST CLINCH / ELIMINATION
+   EXACT PLAYOFF STATUS
 ========================================================= */
 
 function calculateRobustStatus(
@@ -2354,9 +3136,10 @@ function calculateRobustStatus(
 ) {
 
     const seeds =
-        possibleSeedData.possibleSeeds[
-            teamName
-        ];
+        possibleSeedData
+            .possibleSeeds[
+                teamName
+            ];
 
 
     if (
@@ -2369,33 +3152,42 @@ function calculateRobustStatus(
     }
 
 
-    const seedArray =
-        Array.from(seeds);
+    let canMakePlayoffs =
+        false;
 
 
-    const hasPlayoffSeed =
-        seedArray.some(
-            seed =>
-                seed <= 8
-        );
+    let canMissPlayoffs =
+        false;
 
 
-    const hasNonPlayoffSeed =
-        seedArray.some(
-            seed =>
-                seed > 8
-        );
+    for (
+        const seed of seeds
+    ) {
+
+        if (
+            seed <= 8
+        ) {
+
+            canMakePlayoffs =
+                true;
+
+        } else {
+
+            canMissPlayoffs =
+                true;
+
+        }
+
+    }
 
 
     /*
-     * CLINCHED:
-     *
      * Every possible final seed is 1-8.
      */
 
     if (
-        hasPlayoffSeed &&
-        !hasNonPlayoffSeed
+        canMakePlayoffs &&
+        !canMissPlayoffs
     ) {
 
         return "CLINCHED";
@@ -2404,14 +3196,12 @@ function calculateRobustStatus(
 
 
     /*
-     * ELIMINATED:
-     *
      * Every possible final seed is 9-12.
      */
 
     if (
-        !hasPlayoffSeed &&
-        hasNonPlayoffSeed
+        !canMakePlayoffs &&
+        canMissPlayoffs
     ) {
 
         return "ELIMINATED";
@@ -2420,8 +3210,13 @@ function calculateRobustStatus(
 
 
     return "CONTENTION";
+
 }
 
+
+/* =========================================================
+   TEAM STATUS
+========================================================= */
 
 function getTeamStatus(
     teamName,
@@ -2433,6 +3228,7 @@ function getTeamStatus(
         teamName,
         possibleSeedData
     );
+
 }
 
 
@@ -2447,6 +3243,7 @@ function updateStandings() {
             "standingsBody"
         );
 
+
     if (!body) {
         return;
     }
@@ -2457,7 +3254,9 @@ function updateStandings() {
 
 
     /*
-     * Calculate possible seeds from the actual
+     * THIS IS THE IMPORTANT PART.
+     *
+     * Possible seeds are calculated from the actual
      * remaining schedule.
      */
 
@@ -2465,7 +3264,8 @@ function updateStandings() {
         calculatePossibleSeeds();
 
 
-    body.innerHTML = "";
+    body.innerHTML =
+        "";
 
 
     standings.forEach(
@@ -2480,8 +3280,10 @@ function updateStandings() {
                         "tr"
                     );
 
+
                 cutoff.className =
                     "playoff-cutoff";
+
 
                 cutoff.innerHTML = `
                     <td colspan="7">
@@ -2490,7 +3292,10 @@ function updateStandings() {
                     </td>
                 `;
 
-                body.appendChild(cutoff);
+
+                body.appendChild(
+                    cutoff
+                );
 
             }
 
@@ -2519,7 +3324,9 @@ function updateStandings() {
             const differentialText =
                 differential > 0
                     ? "+" + differential
-                    : String(differential);
+                    : String(
+                        differential
+                    );
 
 
             const status =
@@ -2594,7 +3401,7 @@ function updateStandings() {
                 <td>
                     <span
                         class="possible-seeds"
-                        title="All possible final playoff seeds"
+                        title="All possible final seeds based on the actual remaining schedule"
                     >
                         ${seedText}
                     </span>
@@ -2613,7 +3420,9 @@ function updateStandings() {
             `;
 
 
-            body.appendChild(row);
+            body.appendChild(
+                row
+            );
 
         }
     );
@@ -2651,7 +3460,8 @@ function calculateStandingsThroughWeek(
         ) {
 
             for (
-                const match of scenarioMatches
+                const match of
+                    scenarioMatches
             ) {
 
                 applyMatch(
@@ -2664,7 +3474,8 @@ function calculateStandingsThroughWeek(
         } else {
 
             for (
-                const match of week.matches
+                const match of
+                    week.matches
             ) {
 
                 applyMatch(
@@ -2682,6 +3493,7 @@ function calculateStandingsThroughWeek(
     return sortStandings(
         standings
     );
+
 }
 
 
@@ -2696,12 +3508,14 @@ function renderWeekButtons() {
             "weekButtons"
         );
 
+
     if (!container) {
         return;
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     weeks.forEach(
@@ -2757,6 +3571,7 @@ function renderWeekButtons() {
                     currentWeek =
                         week.number;
 
+
                     renderWeekButtons();
 
                     renderWeek();
@@ -2784,7 +3599,9 @@ function renderWeekButtons() {
 function renderWeek() {
 
     const week =
-        weeks[currentWeek - 1];
+        weeks[
+            currentWeek - 1
+        ];
 
 
     if (!week) {
@@ -2835,7 +3652,8 @@ function renderWeek() {
 
     if (matches) {
 
-        matches.innerHTML = "";
+        matches.innerHTML =
+            "";
 
     }
 
@@ -2849,6 +3667,7 @@ function renderWeek() {
             status.textContent =
                 "🔒 LOCKED";
 
+
             status.className =
                 "week-status locked";
 
@@ -2856,6 +3675,7 @@ function renderWeek() {
 
             status.textContent =
                 "● OPEN";
+
 
             status.className =
                 "week-status open";
@@ -2901,20 +3721,30 @@ function renderMatch(
 ) {
 
     const matchDiv =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
-    matchDiv.className = "match";
+
+    matchDiv.className =
+        "match";
 
 
     const teamA =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     const teamB =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     teamA.className =
         "match-team";
+
 
     teamB.className =
         "match-team";
@@ -2923,35 +3753,48 @@ function renderMatch(
     teamA.textContent =
         match[0];
 
+
     teamB.textContent =
         match[1];
 
 
     const scoreArea =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     scoreArea.className =
         "score-area";
 
 
-    if (locked) {
+    if (
+        locked
+    ) {
 
         const scoreA =
             Number(match[2]);
+
 
         const scoreB =
             Number(match[3]);
 
 
         const scoreElementA =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
+
 
         const scoreElementB =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
 
         scoreElementA.className =
             "score";
+
 
         scoreElementB.className =
             "score";
@@ -2960,15 +3803,25 @@ function renderMatch(
         scoreElementA.textContent =
             scoreA;
 
+
         scoreElementB.textContent =
             scoreB;
 
 
-        if (scoreA > scoreB) {
+        if (
+            scoreA >
+            scoreB
+        ) {
 
-            teamA.classList.add("winner");
+            teamA.classList.add(
+                "winner"
+            );
 
-            teamB.classList.add("loser");
+
+            teamB.classList.add(
+                "loser"
+            );
+
 
             scoreElementA.classList.add(
                 "winner-score"
@@ -2976,9 +3829,15 @@ function renderMatch(
 
         } else {
 
-            teamB.classList.add("winner");
+            teamB.classList.add(
+                "winner"
+            );
 
-            teamA.classList.add("loser");
+
+            teamA.classList.add(
+                "loser"
+            );
+
 
             scoreElementB.classList.add(
                 "winner-score"
@@ -2993,52 +3852,77 @@ function renderMatch(
 
 
         const dash =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
-        dash.textContent = "-";
 
-        scoreArea.appendChild(dash);
+        dash.textContent =
+            "-";
+
+
+        scoreArea.appendChild(
+            dash
+        );
 
 
         scoreArea.appendChild(
             scoreElementB
         );
 
-
     } else {
 
         const inputA =
-            document.createElement("input");
+            document.createElement(
+                "input"
+            );
+
 
         const inputB =
-            document.createElement("input");
+            document.createElement(
+                "input"
+            );
 
 
-        inputA.type = "number";
+        inputA.type =
+            "number";
 
-        inputB.type = "number";
+
+        inputB.type =
+            "number";
 
 
-        inputA.min = "0";
+        inputA.min =
+            "0";
 
-        inputA.max = "3";
 
-        inputB.min = "0";
+        inputA.max =
+            "3";
 
-        inputB.max = "3";
+
+        inputB.min =
+            "0";
+
+
+        inputB.max =
+            "3";
 
 
         inputA.className =
             "score-input";
 
+
         inputB.className =
             "score-input";
 
 
-        if (match.length >= 4) {
+        if (
+            match.length >= 4
+        ) {
 
             inputA.value =
                 match[2];
+
 
             inputB.value =
                 match[3];
@@ -3053,14 +3937,17 @@ function renderMatch(
                 "loser"
             );
 
+
             teamB.classList.remove(
                 "winner",
                 "loser"
             );
 
+
             inputA.classList.remove(
                 "invalid-score"
             );
+
 
             inputB.classList.remove(
                 "invalid-score"
@@ -3078,10 +3965,15 @@ function renderMatch(
 
 
             const a =
-                Number(inputA.value);
+                Number(
+                    inputA.value
+                );
+
 
             const b =
-                Number(inputB.value);
+                Number(
+                    inputB.value
+                );
 
 
             if (
@@ -3092,20 +3984,25 @@ function renderMatch(
                     "invalid-score"
                 );
 
+
                 inputB.classList.add(
                     "invalid-score"
                 );
+
 
                 return;
 
             }
 
 
-            if (a > b) {
+            if (
+                a > b
+            ) {
 
                 teamA.classList.add(
                     "winner"
                 );
+
 
                 teamB.classList.add(
                     "loser"
@@ -3116,6 +4013,7 @@ function renderMatch(
                 teamB.classList.add(
                     "winner"
                 );
+
 
                 teamA.classList.add(
                     "loser"
@@ -3131,6 +4029,7 @@ function renderMatch(
             const scoreA =
                 inputA.value;
 
+
             const scoreB =
                 inputB.value;
 
@@ -3145,6 +4044,7 @@ function renderMatch(
                 inputA.classList.add(
                     "invalid-score"
                 );
+
 
                 inputB.classList.add(
                     "invalid-score"
@@ -3185,9 +4085,12 @@ function renderMatch(
 
             saveScoresToStorage();
 
+
             updateStandings();
 
+
             renderWeek();
+
 
             analyzeCurrentWeekScenarios();
 
@@ -3198,6 +4101,7 @@ function renderMatch(
             "input",
             updateWinnerDisplay
         );
+
 
         inputB.addEventListener(
             "input",
@@ -3245,11 +4149,18 @@ function renderMatch(
 
 
         const dash =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
-        dash.textContent = "-";
 
-        scoreArea.appendChild(dash);
+        dash.textContent =
+            "-";
+
+
+        scoreArea.appendChild(
+            dash
+        );
 
 
         scoreArea.appendChild(
@@ -3262,13 +4173,25 @@ function renderMatch(
     }
 
 
-    matchDiv.appendChild(teamA);
+    matchDiv.appendChild(
+        teamA
+    );
 
-    matchDiv.appendChild(scoreArea);
 
-    matchDiv.appendChild(teamB);
+    matchDiv.appendChild(
+        scoreArea
+    );
 
-    container.appendChild(matchDiv);
+
+    matchDiv.appendChild(
+        teamB
+    );
+
+
+    container.appendChild(
+        matchDiv
+    );
+
 }
 
 
@@ -3283,27 +4206,35 @@ function renderControls() {
             "weekControls"
         );
 
+
     if (!controls) {
         return;
     }
 
 
-    controls.innerHTML = "";
+    controls.innerHTML =
+        "";
 
 
     const week =
-        weeks[currentWeek - 1];
+        weeks[
+            currentWeek - 1
+        ];
 
 
     const message =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
 
     message.className =
         "locked-message";
 
 
-    if (week.locked) {
+    if (
+        week.locked
+    ) {
 
         message.textContent =
             "🔒 Results for this week are locked";
@@ -3316,12 +4247,15 @@ function renderControls() {
     }
 
 
-    controls.appendChild(message);
+    controls.appendChild(
+        message
+    );
+
 }
 
 
 /* =========================================================
-   SCENARIOS
+   SCENARIO NUMBER
 ========================================================= */
 
 function buildScenarioFromNumber(
@@ -3331,6 +4265,7 @@ function buildScenarioFromNumber(
 
     let number =
         scenarioNumber;
+
 
     const scenario = [];
 
@@ -3345,22 +4280,31 @@ function buildScenarioFromNumber(
             number %
             POSSIBLE_SCORES.length;
 
+
         number =
             Math.floor(
                 number /
                 POSSIBLE_SCORES.length
             );
 
+
         scenario.push(
-            POSSIBLE_SCORES[option]
+            POSSIBLE_SCORES[
+                option
+            ]
         );
 
     }
 
 
     return scenario;
+
 }
 
+
+/* =========================================================
+   BUILD SCENARIO MATCHES
+========================================================= */
 
 function buildScenarioMatches(
     week,
@@ -3380,39 +4324,13 @@ function buildScenarioMatches(
 
         ]
     );
+
 }
 
 
-function analyzeTeamAfterScenario(
-    teamName,
-    standingsAfterWeek,
-    weekNumber
-) {
-
-    /*
-     * Scenario analysis here only determines the current
-     * status after the selected week's results.
-     *
-     * The full standings table uses the robust
-     * schedule-aware calculation.
-     */
-
-    const currentIndex =
-        standingsAfterWeek.findIndex(
-            team =>
-                team.team ===
-                teamName
-        );
-
-    if (currentIndex === -1) {
-        return "CONTENTION";
-    }
-
-    return currentIndex < 8
-        ? "PLAYOFF POSITION"
-        : "OUTSIDE PLAYOFFS";
-}
-
+/* =========================================================
+   TEAM WEEK RESULT
+========================================================= */
 
 function getTeamWeekResult(
     teamName,
@@ -3422,7 +4340,8 @@ function getTeamWeekResult(
 
     for (
         let m = 0;
-        m < week.matches.length;
+        m <
+            week.matches.length;
         m++
     ) {
 
@@ -3431,8 +4350,10 @@ function getTeamWeekResult(
 
 
         if (
-            match[0] !== teamName &&
-            match[1] !== teamName
+            match[0] !==
+                teamName &&
+            match[1] !==
+                teamName
         ) {
 
             continue;
@@ -3441,7 +4362,8 @@ function getTeamWeekResult(
 
 
         if (
-            match[0] === teamName
+            match[0] ===
+            teamName
         ) {
 
             return (
@@ -3463,17 +4385,33 @@ function getTeamWeekResult(
 
 
     return null;
+
 }
 
 
 /* =========================================================
-   SCENARIO ANALYSIS
+   CURRENT WEEK SCENARIO ANALYSIS
+=========================================================
+
+   This section is ONLY for the selected week's 6 games.
+
+   6 games:
+
+       4^6 = 4096
+
+   That is small enough to enumerate directly.
+
+   The actual playoff clinch/elimination calculation
+   above considers the complete remaining schedule.
+
 ========================================================= */
 
 function analyzeCurrentWeekScenarios() {
 
     const week =
-        weeks[currentWeek - 1];
+        weeks[
+            currentWeek - 1
+        ];
 
 
     const countElement =
@@ -3519,7 +4457,9 @@ function analyzeCurrentWeekScenarios() {
     }
 
 
-    if (weekNumberElement) {
+    if (
+        weekNumberElement
+    ) {
 
         weekNumberElement.textContent =
             week.number;
@@ -3527,13 +4467,17 @@ function analyzeCurrentWeekScenarios() {
     }
 
 
-    if (week.locked) {
+    if (
+        week.locked
+    ) {
 
         countElement.textContent =
             "—";
 
+
         clinchCountElement.textContent =
             "—";
+
 
         elimCountElement.textContent =
             "—";
@@ -3562,8 +4506,10 @@ function analyzeCurrentWeekScenarios() {
         countElement.textContent =
             "—";
 
+
         clinchCountElement.textContent =
             "—";
+
 
         elimCountElement.textContent =
             "—";
@@ -3595,45 +4541,17 @@ function analyzeCurrentWeekScenarios() {
         total.toLocaleString();
 
 
-    const teamEvents =
-        new Map();
-
-
-    for (const team of teams) {
-
-        teamEvents.set(
-            team,
-            {
-
-                clinch: {
-                    "3-0": 0,
-                    "2-1": 0,
-                    "1-2": 0,
-                    "0-3": 0
-                },
-
-                elimination: {
-                    "3-0": 0,
-                    "2-1": 0,
-                    "1-2": 0,
-                    "0-3": 0
-                }
-
-            }
-        );
-
-    }
-
-
-    let totalClinchEvents = 0;
-
-    let totalEliminationEvents = 0;
-
-
     /*
-     * Scenario analysis is only for the currently
-     * selected open week.
+     * We still enumerate the current week's 4096
+     * possible results because this is small.
+     *
+     * The complete playoff status is NOT determined
+     * by these 4096 results alone.
      */
+
+    let scenariosChecked =
+        0;
+
 
     for (
         let scenarioNumber = 0;
@@ -3655,87 +4573,100 @@ function analyzeCurrentWeekScenarios() {
             );
 
 
-        const standings =
-            calculateStandingsThroughWeek(
-                week.number,
-                scenarioMatches
-            );
+        calculateStandingsThroughWeek(
+            week.number,
+            scenarioMatches
+        );
 
 
-        /*
-         * We do NOT call the old broken independent
-         * maximum-win clinch logic here.
-         *
-         * A team is only considered clinched/eliminated
-         * after considering the actual complete schedule.
-         */
+        scenariosChecked++;
 
-        const currentResults =
-            new Map();
+    }
 
 
-        for (const team of teams) {
+    /*
+     * Permanent clinch/elimination is determined
+     * by the exact complete-schedule calculation.
+     */
 
-            const position =
-                standings.findIndex(
-                    t =>
-                        t.team === team
-                );
+    const possibleSeedData =
+        calculatePossibleSeeds();
 
-            currentResults.set(
+
+    let clinched =
+        0;
+
+
+    let eliminated =
+        0;
+
+
+    for (
+        const team of teams
+    ) {
+
+        const status =
+            calculateRobustStatus(
                 team,
-                position < 8
+                possibleSeedData
             );
+
+
+        if (
+            status ===
+            "CLINCHED"
+        ) {
+
+            clinched++;
 
         }
 
 
-        /*
-         * For this week's scenario, simply record
-         * who moves into/out of the playoff line.
-         *
-         * Final clinch/elimination is handled by the
-         * standings table.
-         */
+        if (
+            status ===
+            "ELIMINATED"
+        ) {
 
-        for (const team of teams) {
-
-            const result =
-                getTeamWeekResult(
-                    team,
-                    week,
-                    scenario
-                );
-
-            if (!result) {
-                continue;
-            }
+            eliminated++;
 
         }
 
     }
 
 
-    /*
-     * The selected week's scenario panel should not
-     * claim permanent clinches/eliminations unless
-     * the complete remaining schedule has been resolved.
-     */
-
     clinchCountElement.textContent =
-        "0";
+        clinched;
+
 
     elimCountElement.textContent =
-        "0";
+        eliminated;
 
 
     resultsElement.innerHTML = `
         <div class="no-scenarios">
-            Week ${week.number} scenarios show possible
-            weekly results. Permanent CLINCHED and
-            ELIMINATED status is calculated in the
-            standings using the complete remaining
-            schedule.
+
+            Checked ${scenariosChecked.toLocaleString()}
+            possible Week ${week.number} results.
+
+            <br><br>
+
+            Permanent playoff status is based on
+            all remaining games and the actual schedule.
+
+            <br><br>
+
+            <strong>
+                ${clinched}
+            </strong>
+            clinched
+
+            &nbsp; • &nbsp;
+
+            <strong>
+                ${eliminated}
+            </strong>
+            eliminated
+
         </div>
     `;
 
@@ -3766,16 +4697,26 @@ function resetAllScores() {
     );
 
 
-    for (const week of weeks) {
+    for (
+        const week of weeks
+    ) {
 
-        if (week.locked) {
+        if (
+            week.locked
+        ) {
+
             continue;
+
         }
 
 
-        for (const match of week.matches) {
+        for (
+            const match of
+                week.matches
+        ) {
 
-            match.length = 2;
+            match.length =
+                2;
 
         }
 
@@ -3794,6 +4735,7 @@ function resetAllScores() {
     alert(
         "All editable scores have been reset."
     );
+
 }
 
 
