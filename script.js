@@ -1231,7 +1231,84 @@ function applyMatch(
         teamA.losses++;
     }
 }
+/* =========================================================
+   HEAD-TO-HEAD TIEBREAKER
+========================================================= */
 
+function getHeadToHeadRecord(
+    teamA,
+    teamB
+) {
+
+    let teamAWins = 0;
+    let teamBWins = 0;
+
+    for (const week of weeks) {
+
+        for (const match of week.matches) {
+
+            const team1 = match[0];
+            const team2 = match[1];
+            const score1 = match[2];
+            const score2 = match[3];
+
+            // Ignore unplayed matches
+            if (
+                !validScore(
+                    score1,
+                    score2
+                )
+            ) {
+                continue;
+            }
+
+            // Only look at matches between these two teams
+            if (
+                !(
+                    (
+                        team1 === teamA &&
+                        team2 === teamB
+                    ) ||
+                    (
+                        team1 === teamB &&
+                        team2 === teamA
+                    )
+                )
+            ) {
+                continue;
+            }
+
+            if (team1 === teamA) {
+
+                if (score1 > score2) {
+                    teamAWins++;
+                } else if (score2 > score1) {
+                    teamBWins++;
+                }
+
+            } else {
+
+                if (score2 > score1) {
+                    teamAWins++;
+                } else if (score1 > score2) {
+                    teamBWins++;
+                }
+            }
+        }
+    }
+
+    // Positive = teamA ranks higher
+    // Negative = teamB ranks higher
+    if (teamAWins > teamBWins) {
+        return 1;
+    }
+
+    if (teamBWins > teamAWins) {
+        return -1;
+    }
+
+    return 0;
+}
 
 /* =========================================================
    SORT STANDINGS
@@ -1244,11 +1321,13 @@ function sortStandings(
     return standings.sort(
         (a, b) => {
 
+            // 1. Wins
             if (a.wins !== b.wins) {
 
                 return b.wins - a.wins;
             }
 
+            // 2. Point differential
             if (
                 a.differential !==
                 b.differential
@@ -1260,6 +1339,19 @@ function sortStandings(
                 );
             }
 
+            // 3. Head-to-head
+            const h2h =
+                getHeadToHeadRecord(
+                    a.team,
+                    b.team
+                );
+
+            if (h2h !== 0) {
+
+                return -h2h;
+            }
+
+            // 4. Alphabetical fallback
             return a.team.localeCompare(
                 b.team
             );
