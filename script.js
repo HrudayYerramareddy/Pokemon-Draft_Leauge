@@ -1348,7 +1348,7 @@ function sortStandings(
 
             if (h2h !== 0) {
 
-                return -h2h;
+                return h2h;
             }
 
             // 4. Alphabetical fallback
