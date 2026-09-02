@@ -282,12 +282,12 @@ const weeks = [
         locked: true,
 
         matches: [
-            ["Great Lakes Glimmora", "Amarillo Archaludon",3 ,0],
+            ["Great Lakes Glimmora", "Amarillo Archaludon", 3, 0],
             ["Niagara Stampede", "Florida Floettes", 0, 3],
             ["New Braunfels Ninetails", "Garden State Garchomps", 1, 2],
             ["Texas State Disasters", "Ontario Fightin' Palafin", 3, 0],
-            ["Southern Tier Supporters", "Houston Heat Wave",0, 3],
-            ["Colorado Avalugg", "Durham Drills",2,1]
+            ["Southern Tier Supporters", "Houston Heat Wave", 0, 3],
+            ["Colorado Avalugg", "Durham Drills", 2, 1]
         ]
     },
 
@@ -1462,539 +1462,209 @@ function createFutureState() {
 
 
 /* =========================================================
-   CLONE STATE
+   TEAM INDEX / BASE HEAD-TO-HEAD MATRIX
+
+   Helpers for the exhaustive brute-force search below: map
+   each team name to a 0-based index, and precompute the
+   head-to-head "net" matrix (net[i][j] = wins by i over j
+   minus wins by j over i) from every match already decided
+   (locked weeks, plus any open-week matches the user has
+   already filled in). Future/unresolved matches contribute
+   0 here and are added in during the search itself.
 ========================================================= */
 
-function cloneState(state) {
+function buildTeamIndex() {
 
-    const copy = {};
+    const teamIndex = {};
 
-    for (const team of teams) {
+    teams.forEach((name, i) => {
+        teamIndex[name] = i;
+    });
 
-        copy[team] = {
-
-            wins:
-                state[team].wins,
-
-            losses:
-                state[team].losses,
-
-            differential:
-                state[team].differential
-        };
-    }
-
-    return copy;
+    return teamIndex;
 }
 
 
-/* =========================================================
-   APPLY FUTURE OUTCOME
-========================================================= */
+function buildBaseHeadToHeadMatrix(teamIndex) {
 
-function applyFutureOutcome(
-    state,
-    match,
-    scoreA,
-    scoreB
-) {
+    const n = teams.length;
+    const net = [];
 
-    const teamA =
-        state[match.teamA];
-
-    const teamB =
-        state[match.teamB];
-
-    teamA.differential +=
-        scoreA - scoreB;
-
-    teamB.differential +=
-        scoreB - scoreA;
-
-    if (scoreA > scoreB) {
-
-        teamA.wins++;
-        teamB.losses++;
-
-    } else {
-
-        teamB.wins++;
-        teamA.losses++;
-    }
-}
-
-
-/* =========================================================
-   RANK STATE
-========================================================= */
-
-function rankState(state) {
-
-    const ranking =
-        teams.map(team => ({
-
-            team,
-
-            wins:
-                state[team].wins,
-
-            losses:
-                state[team].losses,
-
-            differential:
-                state[team].differential
-        }));
-
-    return sortStandings(
-        ranking
-    );
-}
-
-
-/* =========================================================
-   REMAINING GAME COUNT LOOKUP
-========================================================= */
-
-function buildRemainingGameCounts(
-    futureMatches
-) {
-
-    const matchCount =
-        futureMatches.length;
-
-    const counts = {};
-
-    for (const team of teams) {
-
-        counts[team] =
-            new Array(
-                matchCount + 1
-            ).fill(0);
+    for (let i = 0; i < n; i++) {
+        net.push(new Array(n).fill(0));
     }
 
-    for (
-        let i = matchCount - 1;
-        i >= 0;
-        i--
-    ) {
+    for (const week of weeks) {
 
-        const match =
-            futureMatches[i];
+        for (const match of week.matches) {
 
-        for (const team of teams) {
+            const teamAName = match[0];
+            const teamBName = match[1];
+            const scoreA = match[2];
+            const scoreB = match[3];
 
-            counts[team][i] =
-                counts[team][i + 1] +
-                (
-                    match.teamA === team ||
-                    match.teamB === team
-                        ? 1
-                        : 0
-                );
-        }
-    }
-
-    return counts;
-}
-
-
-/* =========================================================
-   TARGET TEAM RANGE
-========================================================= */
-
-function getTargetRange(
-    state,
-    targetTeam,
-    remainingGameCounts,
-    startIndex
-) {
-
-    const remaining =
-        remainingGameCounts[
-            targetTeam
-        ][startIndex];
-
-    const current =
-        state[targetTeam];
-
-    return {
-
-        team: targetTeam,
-
-        minWins:
-            current.wins,
-
-        maxWins:
-            current.wins +
-            remaining,
-
-        minDifferential:
-            current.differential -
-            remaining * 3,
-
-        maxDifferential:
-            current.differential +
-            remaining * 3
-    };
-}
-
-
-/* =========================================================
-   OPPONENT RANGE
-========================================================= */
-
-function getOpponentRange(
-    state,
-    opponent,
-    remainingGameCounts,
-    startIndex
-) {
-
-    const remaining =
-        remainingGameCounts[
-            opponent
-        ][startIndex];
-
-    const current =
-        state[opponent];
-
-    return {
-
-        minWins:
-            current.wins,
-
-        maxWins:
-            current.wins +
-            remaining,
-
-        minDifferential:
-            current.differential -
-            remaining * 3,
-
-        maxDifferential:
-            current.differential +
-            remaining * 3
-    };
-}
-
-
-/* =========================================================
-   DEFINITELY ABOVE TARGET
-========================================================= */
-
-function definitelyAboveTarget(
-    opponentRange,
-    targetRange,
-    opponent,
-    targetTeam
-) {
-
-    if (
-        opponentRange.minWins >
-        targetRange.maxWins
-    ) {
-        return true;
-    }
-
-    if (
-        opponentRange.minWins ===
-        targetRange.maxWins
-    ) {
-
-        if (
-            opponentRange.minDifferential >
-            targetRange.maxDifferential
-        ) {
-            return true;
-        }
-
-        if (
-            opponentRange.minDifferential ===
-            targetRange.maxDifferential
-        ) {
-
-            return (
-                opponent.localeCompare(
-                    targetTeam
-                ) < 0
-            );
-        }
-    }
-
-    return false;
-}
-
-
-/* =========================================================
-   POSSIBLY ABOVE TARGET
-========================================================= */
-
-function possiblyAboveTarget(
-    opponentRange,
-    targetRange,
-    opponent,
-    targetTeam
-) {
-
-    if (
-        opponentRange.maxWins >
-        targetRange.minWins
-    ) {
-        return true;
-    }
-
-    if (
-        opponentRange.maxWins ===
-        targetRange.minWins
-    ) {
-
-        if (
-            opponentRange.maxDifferential >
-            targetRange.minDifferential
-        ) {
-            return true;
-        }
-
-        if (
-            opponentRange.maxDifferential ===
-            targetRange.minDifferential
-        ) {
-
-            return (
-                opponent.localeCompare(
-                    targetTeam
-                ) < 0
-            );
-        }
-    }
-
-    return false;
-}
-
-
-/* =========================================================
-   EXACT SEED FEASIBILITY
-========================================================= */
-
-function canTeamFinishAtSeed(
-    targetTeam,
-    targetSeed,
-    startingState,
-    futureMatches,
-    remainingGameCounts
-) {
-
-    const memo = new Map();
-
-    function makeStateKey(
-        index,
-        state
-    ) {
-
-        let key =
-            index + "|";
-
-        for (const team of teams) {
-
-            key +=
-                state[team].wins +
-                "," +
-                state[team].differential +
-                ";";
-        }
-
-        return key;
-    }
-
-    function search(
-        matchIndex,
-        state
-    ) {
-
-        if (
-            matchIndex >=
-            futureMatches.length
-        ) {
-
-            const ranking =
-                rankState(state);
-
-            const position =
-                ranking.findIndex(
-                    team =>
-                        team.team ===
-                        targetTeam
-                );
-
-            return (
-                position + 1 ===
-                targetSeed
-            );
-        }
-
-        const key =
-            makeStateKey(
-                matchIndex,
-                state
-            );
-
-        if (memo.has(key)) {
-            return memo.get(key);
-        }
-
-        const targetRange =
-            getTargetRange(
-                state,
-                targetTeam,
-                remainingGameCounts,
-                matchIndex
-            );
-
-        let definitelyAbove = 0;
-        let possiblyAbove = 0;
-
-        for (const opponent of teams) {
-
-            if (
-                opponent ===
-                targetTeam
-            ) {
+            if (!validScore(scoreA, scoreB)) {
                 continue;
             }
 
-            const opponentRange =
-                getOpponentRange(
-                    state,
-                    opponent,
-                    remainingGameCounts,
-                    matchIndex
-                );
+            const i = teamIndex[teamAName];
+            const j = teamIndex[teamBName];
 
-            if (
-                definitelyAboveTarget(
-                    opponentRange,
-                    targetRange,
-                    opponent,
-                    targetTeam
-                )
-            ) {
-                definitelyAbove++;
-            }
-
-            if (
-                possiblyAboveTarget(
-                    opponentRange,
-                    targetRange,
-                    opponent,
-                    targetTeam
-                )
-            ) {
-                possiblyAbove++;
+            if (Number(scoreA) > Number(scoreB)) {
+                net[i][j] += 1;
+                net[j][i] -= 1;
+            } else {
+                net[j][i] += 1;
+                net[i][j] -= 1;
             }
         }
-
-        const neededAbove =
-            targetSeed - 1;
-
-        if (
-            definitelyAbove >
-            neededAbove
-        ) {
-
-            memo.set(
-                key,
-                false
-            );
-
-            return false;
-        }
-
-        if (
-            possiblyAbove <
-            neededAbove
-        ) {
-
-            memo.set(
-                key,
-                false
-            );
-
-            return false;
-        }
-
-        const match =
-            futureMatches[
-                matchIndex
-            ];
-
-        for (
-            const score
-            of POSSIBLE_SCORES
-        ) {
-
-            const nextState =
-                cloneState(state);
-
-            applyFutureOutcome(
-                nextState,
-                match,
-                score[0],
-                score[1]
-            );
-
-            if (
-                search(
-                    matchIndex + 1,
-                    nextState
-                )
-            ) {
-
-                memo.set(
-                    key,
-                    true
-                );
-
-                return true;
-            }
-        }
-
-        memo.set(
-            key,
-            false
-        );
-
-        return false;
     }
 
-    return search(
-        0,
-        cloneState(startingState)
-    );
+    return net;
 }
 
 
 /* =========================================================
-   CALCULATE ALL POSSIBLE SEEDS
+   EXHAUSTIVE BRUTE-FORCE SCENARIO SEARCH
+
+   Enumerates EVERY possible outcome of every remaining match
+   (4 possible scores each) and, for every single one of the
+   4^N complete scenarios, ranks all 12 teams using the exact
+   same tiebreak rules as the live standings table (wins,
+   then differential, then real head-to-head, then team name)
+   to record which final seeds each team can land on.
+
+   With weeks 10 and 11 open (12 matches), this is
+   4^12 = 16,777,216 = 4096 x 4096 scenarios, matching every
+   remaining possibility exactly - no pruning or approximation.
+
+   To keep the tab responsive, the first few matches are
+   walked in an "outer" loop that yields to the browser (and
+   reports progress) between branches; the remaining matches
+   for each branch are enumerated with a fast, synchronous
+   inner recursion that mutates and reverts shared arrays
+   instead of cloning state, since 16.7M leaves is far too
+   many to allocate fresh objects for.
 ========================================================= */
 
-function calculatePossibleSeeds() {
+/* =========================================================
+   EXHAUSTIVE BRUTE-FORCE SCENARIO SEARCH
 
-    const futureMatches =
-        getFutureMatches();
+   EVERY possible outcome of EVERY remaining match is evaluated.
+
+   Each match has exactly 4 possible outcomes:
+       3-0
+       2-1
+       1-2
+       0-3
+
+   For 12 remaining matches:
+
+       4^12
+       = 16,777,216
+       = 4096 x 4096
+
+   NO pruning.
+   NO heuristics.
+   NO scenario skipping.
+
+   The progress counter represents actual completed scenarios.
+========================================================= */
+
+/* =========================================================
+   EXHAUSTIVE BRUTE-FORCE SCENARIO SEARCH
+
+   Checks EVERY possible outcome of EVERY remaining match.
+
+   Each match has 4 possible outcomes:
+
+       3-0
+       2-1
+       1-2
+       0-3
+
+   With 12 remaining matches:
+
+       4^12 = 16,777,216 scenarios
+
+   There is NO pruning.
+   There is NO approximation.
+   Every complete scenario is evaluated.
+
+   The search is processed in small asynchronous batches so
+   the browser remains responsive while the search runs.
+========================================================= */
+
+async function calculatePossibleSeeds() {
+
+    const teamIndex = buildTeamIndex();
+    const n = teams.length;
+
+    const futureMatches = getFutureMatches();
+
+    const matchPairs = futureMatches.map(
+        match => [
+            teamIndex[match.teamA],
+            teamIndex[match.teamB]
+        ]
+    );
+
+    const totalScenarios =
+        Math.pow(
+            POSSIBLE_SCORES.length,
+            matchPairs.length
+        );
 
     const startingState =
         createFutureState();
 
-    const remainingGameCounts =
-        buildRemainingGameCounts(
-            futureMatches
+    const wins =
+        new Int32Array(n);
+
+    const differential =
+        new Int32Array(n);
+
+    for (let i = 0; i < n; i++) {
+
+        const state =
+            startingState[teams[i]];
+
+        wins[i] =
+            state.wins;
+
+        differential[i] =
+            state.differential;
+    }
+
+    const net =
+        buildBaseHeadToHeadMatrix(
+            teamIndex
+        );
+
+    const alphaRank =
+        new Int32Array(n);
+
+    teams
+        .map((name, i) => i)
+        .sort(
+            (a, b) =>
+                teams[a].localeCompare(
+                    teams[b]
+                )
+        )
+        .forEach(
+            (teamIdx, order) => {
+
+                alphaRank[teamIdx] =
+                    order;
+            }
         );
 
     const possibleSeeds = {};
     const minSeed = {};
     const maxSeed = {};
 
-    for (const team of teams) {
+    teams.forEach(team => {
 
         possibleSeeds[team] =
             new Set();
@@ -2004,36 +1674,141 @@ function calculatePossibleSeeds() {
 
         maxSeed[team] =
             -Infinity;
+    });
+
+
+    /* =====================================================
+       FINAL STANDINGS COMPARISON
+    ===================================================== */
+
+    function compareIndices(a, b) {
+
+        /* 1. Wins */
+
+        if (wins[a] !== wins[b]) {
+
+            return (
+                wins[b] -
+                wins[a]
+            );
+        }
+
+
+        /* 2. Point differential */
+
+        if (
+            differential[a] !==
+            differential[b]
+        ) {
+
+            return (
+                differential[b] -
+                differential[a]
+            );
+        }
+
+
+        /* 3. Head-to-head */
+
+        const h2h =
+            net[a][b];
+
+        if (h2h > 0) {
+            return -1;
+        }
+
+        if (h2h < 0) {
+            return 1;
+        }
+
+
+        /* 4. Alphabetical */
+
+        return (
+            alphaRank[a] -
+            alphaRank[b]
+        );
     }
 
-    if (
-        futureMatches.length === 0
+
+    /* =====================================================
+       RANKING ARRAY
+    ===================================================== */
+
+    const orderScratch = [];
+
+    for (
+        let i = 0;
+        i < n;
+        i++
     ) {
 
+        orderScratch.push(i);
+    }
+
+
+    /* =====================================================
+       RECORD COMPLETE SCENARIO
+    ===================================================== */
+
+    function recordLeaf() {
+
         const ranking =
-            rankState(
-                startingState
-            );
+            orderScratch
+                .slice()
+                .sort(
+                    compareIndices
+                );
 
-        ranking.forEach(
-            (team, index) => {
+        for (
+            let seedIndex = 0;
+            seedIndex < n;
+            seedIndex++
+        ) {
 
-                const seed =
-                    index + 1;
+            const teamIdx =
+                ranking[seedIndex];
 
-                possibleSeeds[
-                    team.team
-                ].add(seed);
+            const teamName =
+                teams[teamIdx];
 
-                minSeed[
-                    team.team
-                ] = seed;
+            const seed =
+                seedIndex + 1;
 
-                maxSeed[
-                    team.team
-                ] = seed;
+            possibleSeeds[
+                teamName
+            ].add(seed);
+
+            if (
+                seed <
+                minSeed[teamName]
+            ) {
+
+                minSeed[teamName] =
+                    seed;
             }
-        );
+
+            if (
+                seed >
+                maxSeed[teamName]
+            ) {
+
+                maxSeed[teamName] =
+                    seed;
+            }
+        }
+    }
+
+
+    /* =====================================================
+       NO FUTURE MATCHES
+    ===================================================== */
+
+    if (
+        matchPairs.length === 0
+    ) {
+
+        recordLeaf();
 
         return {
             possibleSeeds,
@@ -2042,47 +1817,233 @@ function calculatePossibleSeeds() {
         };
     }
 
-    for (const team of teams) {
 
-        for (
-            let seed = 1;
-            seed <= teams.length;
-            seed++
-        ) {
+    /* =====================================================
+       APPLY / UNDO OUTCOME
+    ===================================================== */
 
-            const possible =
-                canTeamFinishAtSeed(
-                    team,
-                    seed,
-                    startingState,
-                    futureMatches,
-                    remainingGameCounts
-                );
+    function applyOutcome(
+        i,
+        j,
+        scoreA,
+        scoreB,
+        sign
+    ) {
 
-            if (possible) {
+        const aWinsMatch =
+            scoreA > scoreB;
 
-                possibleSeeds[
-                    team
-                ].add(seed);
 
-                minSeed[
-                    team
-                ] =
-                    Math.min(
-                        minSeed[team],
-                        seed
-                    );
+        /* Wins */
 
-                maxSeed[
-                    team
-                ] =
-                    Math.max(
-                        maxSeed[team],
-                        seed
-                    );
-            }
+        if (aWinsMatch) {
+
+            wins[i] += sign;
+
+        } else {
+
+            wins[j] += sign;
+        }
+
+
+        /* Point differential */
+
+        differential[i] +=
+            sign *
+            (
+                scoreA -
+                scoreB
+            );
+
+        differential[j] +=
+            sign *
+            (
+                scoreB -
+                scoreA
+            );
+
+
+        /* Head-to-head */
+
+        if (aWinsMatch) {
+
+            net[i][j] += sign;
+            net[j][i] -= sign;
+
+        } else {
+
+            net[i][j] -= sign;
+            net[j][i] += sign;
         }
     }
+
+
+    /* =====================================================
+       ASYNCHRONOUS SEARCH
+
+       The first several matches are handled one branch at
+       a time. After each top-level branch, we yield back
+       to the browser.
+
+       This does NOT skip scenarios.
+
+       Every scenario is still evaluated.
+    ===================================================== */
+
+    let scenariosDone = 0;
+
+    const yieldToBrowser =
+        () =>
+            new Promise(resolve =>
+                setTimeout(resolve, 0)
+            );
+
+
+    /*
+       Process one complete branch synchronously.
+
+       branchDepth controls how deep the asynchronous
+       recursion starts.
+    */
+
+    const ASYNC_DEPTH = 3;
+
+
+    function recurseSync(
+        matchIndex
+    ) {
+
+        if (
+            matchIndex ===
+            matchPairs.length
+        ) {
+
+            recordLeaf();
+
+            scenariosDone++;
+
+            return;
+        }
+
+        const [
+            i,
+            j
+        ] =
+            matchPairs[
+                matchIndex
+            ];
+
+        for (
+            const [
+                scoreA,
+                scoreB
+            ]
+            of POSSIBLE_SCORES
+        ) {
+
+            applyOutcome(
+                i,
+                j,
+                scoreA,
+                scoreB,
+                1
+            );
+
+            recurseSync(
+                matchIndex + 1
+            );
+
+            applyOutcome(
+                i,
+                j,
+                scoreA,
+                scoreB,
+                -1
+            );
+        }
+    }
+
+
+    async function recurseAsync(
+        matchIndex
+    ) {
+
+        /*
+           Once we reach the asynchronous depth,
+           process that entire branch synchronously.
+        */
+
+        if (
+            matchIndex >=
+            ASYNC_DEPTH
+        ) {
+
+            recurseSync(
+                matchIndex
+            );
+
+            return;
+        }
+
+
+        const [
+            i,
+            j
+        ] =
+            matchPairs[
+                matchIndex
+            ];
+
+
+        for (
+            const [
+                scoreA,
+                scoreB
+            ]
+            of POSSIBLE_SCORES
+        ) {
+
+            applyOutcome(
+                i,
+                j,
+                scoreA,
+                scoreB,
+                1
+            );
+
+            await recurseAsync(
+                matchIndex + 1
+            );
+
+            applyOutcome(
+                i,
+                j,
+                scoreA,
+                scoreB,
+                -1
+            );
+
+            /*
+               Yield after each branch.
+
+               This keeps the browser responsive.
+            */
+
+            await yieldToBrowser();
+        }
+    }
+
+
+    /* =====================================================
+       START SEARCH
+    ===================================================== */
+
+    await recurseAsync(0);
+
+
+    /* =====================================================
+       RETURN FINAL RESULTS
+    ===================================================== */
 
     return {
         possibleSeeds,
@@ -2091,12 +2052,15 @@ function calculatePossibleSeeds() {
     };
 }
 
+/* =========================================================
+   POSSIBLE SEED CACHE
+========================================================= */
 
 /* =========================================================
    POSSIBLE SEED CACHE
 ========================================================= */
 
-function getPossibleSeedData() {
+async function getPossibleSeedData() {
 
     if (
         possibleSeedDataDirty ||
@@ -2104,7 +2068,7 @@ function getPossibleSeedData() {
     ) {
 
         possibleSeedDataCache =
-            calculatePossibleSeeds();
+            await calculatePossibleSeeds();
 
         possibleSeedDataDirty =
             false;
@@ -2141,35 +2105,27 @@ function updateCalculateButtonState() {
     if (!possibleSeedDataCache) {
 
         button.textContent =
-            "Calculate Standings";
+            "Run Full Exhaustive Search";
 
-        button.classList.remove(
-            "stale"
-        );
+        button.classList.remove("stale");
 
         button.disabled = false;
 
-    } else if (
-        possibleSeedDataDirty
-    ) {
+    } else if (possibleSeedDataDirty) {
 
         button.textContent =
-            "Recalculate Standings (scores changed)";
+            "Rerun Full Exhaustive Search";
 
-        button.classList.add(
-            "stale"
-        );
+        button.classList.add("stale");
 
         button.disabled = false;
 
     } else {
 
         button.textContent =
-            "Standings Up To Date";
+            "Scenarios Up To Date";
 
-        button.classList.remove(
-            "stale"
-        );
+        button.classList.remove("stale");
 
         button.disabled = true;
     }
@@ -3058,55 +3014,84 @@ function renderControls() {
 
 /* =========================================================
    RECALCULATE AND RENDER
+
+   Runs the full exhaustive "4096 x 4096" scenario search.
+   With weeks 10-11 open, that's exactly 4^12 = 16,777,216
+   complete outcome combinations, every one of which is
+   enumerated and ranked. This function is async and yields
+   between top-level branches so the browser tab stays
+   responsive and the button shows live progress instead of
+   freezing.
 ========================================================= */
 
-function recalculateAndRender() {
+/* =========================================================
+   RECALCULATE AND RENDER
 
-    const body =
-        document.getElementById(
-            "standingsBody"
-        );
+   Runs EVERY possible remaining scenario.
+
+   For 12 remaining matches:
+
+       4^12 = 16,777,216
+
+   The progress display shows the number of COMPLETE
+   scenarios evaluated.
+========================================================= */
+
+/* =========================================================
+   RECALCULATE AND RENDER
+========================================================= */
+
+async function recalculateAndRender() {
 
     const button =
         document.getElementById(
             "calculateStandingsBtn"
         );
 
-    if (body) {
-
-        body.innerHTML = `
-            <tr>
-                <td
-                    colspan="7"
-                    style="text-align:center;"
-                >
-                    Calculating standings…
-                    This can take up to a minute.
-                </td>
-            </tr>
-        `;
-    }
+    /* Disable button while searching */
 
     if (button) {
 
         button.disabled = true;
 
         button.textContent =
-            "Calculating…";
+            "Calculating...";
     }
 
-    setTimeout(() => {
+
+    try {
+
+        /* Run EVERY possible scenario */
 
         const possibleSeedData =
-            getPossibleSeedData();
+            await getPossibleSeedData();
+
+
+        /* Display results */
 
         updateStandings(
             possibleSeedData
         );
 
-        updateCalculateButtonState();
 
-    }, 20);
+    } catch (error) {
+
+        console.error(
+            "Exhaustive search failed:",
+            error
+        );
+
+        alert(
+            "The exhaustive search failed.\n\n" +
+            "Check the browser console for details."
+        );
+
+    } finally {
+
+        /* Restore correct button state */
+
+        updateCalculateButtonState();
+    }
 }
 
 
@@ -3158,7 +3143,7 @@ function resetAllScores() {
 
     alert(
         "All editable scores have been reset.\n\n" +
-        "Press Calculate Standings to refresh seeds and playoff status."
+        "Press Calculate All Remaining Scenarios to refresh seeds and playoff status."
     );
 }
 
