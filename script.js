@@ -297,7 +297,7 @@ const weeks = [
         locked: true,
 
         matches: [
-            ["Great Lakes Glimmora", "Florida Floettes",3 ,0],
+            ["Great Lakes Glimmora", "Florida Floettes",0 ,3],
             ["Amarillo Archaludon", "Garden State Garchomps", 0, 3],
             ["Niagara Stampede", "Ontario Fightin' Palafin", 3, 0],
             ["New Braunfels Ninetails", "Houston Heat Wave",3, 0],
