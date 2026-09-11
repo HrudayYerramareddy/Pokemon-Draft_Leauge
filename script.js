@@ -1663,11 +1663,15 @@ async function calculatePossibleSeeds() {
     const possibleSeeds = {};
     const minSeed = {};
     const maxSeed = {};
+    const seedScenarioCounts = {};
 
     teams.forEach(team => {
 
         possibleSeeds[team] =
             new Set();
+
+        seedScenarioCounts[team] =
+            new Array(n + 1).fill(0);
 
         minSeed[team] =
             Infinity;
@@ -1779,6 +1783,8 @@ async function calculatePossibleSeeds() {
                 teamName
             ].add(seed);
 
+            seedScenarioCounts[teamName][seed]++;
+
             if (
                 seed <
                 minSeed[teamName]
@@ -1813,7 +1819,9 @@ async function calculatePossibleSeeds() {
         return {
             possibleSeeds,
             minSeed,
-            maxSeed
+            maxSeed,
+            seedScenarioCounts,
+            totalScenarios
         };
     }
 
@@ -2048,7 +2056,9 @@ async function calculatePossibleSeeds() {
     return {
         possibleSeeds,
         minSeed,
-        maxSeed
+        maxSeed,
+        seedScenarioCounts,
+        totalScenarios
     };
 }
 
@@ -3073,6 +3083,10 @@ async function recalculateAndRender() {
             possibleSeedData
         );
 
+        renderSeedScenarioBreakdown(
+            possibleSeedData
+        );
+
 
     } catch (error) {
 
@@ -3092,6 +3106,127 @@ async function recalculateAndRender() {
 
         updateCalculateButtonState();
     }
+}
+
+
+/* =========================================================
+   SEED SCENARIO BREAKDOWN
+========================================================= */
+
+function initializeSeedScenarioBreakdown() {
+
+    const select =
+        document.getElementById("scenarioTeamSelect");
+
+    if (!select) {
+        return;
+    }
+
+    select.innerHTML = "";
+
+    teams.forEach(team => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = team;
+        option.textContent = team;
+
+        if (team === selectedTeam) {
+            option.selected = true;
+        }
+
+        select.appendChild(option);
+    });
+
+    select.addEventListener("change", () => {
+        selectedTeam = select.value;
+        renderSeedScenarioBreakdown(possibleSeedDataCache);
+    });
+
+    renderSeedScenarioBreakdown(possibleSeedDataCache);
+}
+
+
+function renderSeedScenarioBreakdown(possibleSeedData) {
+
+    const container =
+        document.getElementById("seedScenarioResults");
+
+    const select =
+        document.getElementById("scenarioTeamSelect");
+
+    if (!container) {
+        return;
+    }
+
+    const teamName =
+        select ? select.value : selectedTeam;
+
+    if (
+        !possibleSeedData ||
+        !possibleSeedData.seedScenarioCounts ||
+        !possibleSeedData.seedScenarioCounts[teamName]
+    ) {
+        container.innerHTML = `
+            <div class="scenario-empty">
+                Press Calculate Standings to see the exact number of
+                remaining scenarios that place ${teamName} at each seed.
+            </div>
+        `;
+        return;
+    }
+
+    const counts =
+        possibleSeedData.seedScenarioCounts[teamName];
+
+    const total =
+        possibleSeedData.totalScenarios || 0;
+
+    let html = "";
+
+    for (let seed = 1; seed <= teams.length; seed++) {
+
+        const count = counts[seed] || 0;
+
+        if (count === 0) {
+            continue;
+        }
+
+        const percent =
+            total > 0
+                ? (count / total) * 100
+                : 0;
+
+        html += `
+            <div class="scenario-row">
+                <div class="scenario-seed">#${seed}</div>
+
+                <div class="scenario-bar-track">
+                    <div
+                        class="scenario-bar-fill"
+                        style="width: ${percent}%"
+                    ></div>
+                </div>
+
+                <div class="scenario-count">
+                    ${count.toLocaleString()} / ${total.toLocaleString()}
+                </div>
+
+                <div class="scenario-percent">
+                    ${percent.toFixed(1)}%
+                </div>
+            </div>
+        `;
+    }
+
+    html += `
+        <div class="scenario-total">
+            ${total.toLocaleString()} total remaining scenarios
+        </div>
+    `;
+
+    container.innerHTML = html;
 }
 
 
@@ -3177,6 +3312,7 @@ document.addEventListener(
         );
 
         initializeCalculateButton();
+        initializeSeedScenarioBreakdown();
 
         const resetButton =
             document.getElementById(
