@@ -1975,25 +1975,21 @@ async function calculatePossibleSeeds() {
     async function recurseAsync(
         matchIndex
     ) {
-
-        /*
-           Once we reach the asynchronous depth,
-           process that entire branch synchronously.
-        */
-
+    
+        // If we reached the async depth OR there are no more matches,
+        // finish this branch using the synchronous recursion.
         if (
-            matchIndex >=
-            ASYNC_DEPTH
+            matchIndex >= ASYNC_DEPTH ||
+            matchIndex >= matchPairs.length
         ) {
-
+    
             recurseSync(
                 matchIndex
             );
-
+    
             return;
         }
-
-
+    
         const [
             i,
             j
@@ -2001,8 +1997,7 @@ async function calculatePossibleSeeds() {
             matchPairs[
                 matchIndex
             ];
-
-
+    
         for (
             const [
                 scoreA,
@@ -2010,7 +2005,7 @@ async function calculatePossibleSeeds() {
             ]
             of POSSIBLE_SCORES
         ) {
-
+    
             applyOutcome(
                 i,
                 j,
@@ -2018,11 +2013,11 @@ async function calculatePossibleSeeds() {
                 scoreB,
                 1
             );
-
+    
             await recurseAsync(
                 matchIndex + 1
             );
-
+    
             applyOutcome(
                 i,
                 j,
@@ -2030,18 +2025,11 @@ async function calculatePossibleSeeds() {
                 scoreB,
                 -1
             );
-
-            /*
-               Yield after each branch.
-
-               This keeps the browser responsive.
-            */
-
+    
             await yieldToBrowser();
         }
     }
-
-
+    
     /* =====================================================
        START SEARCH
     ===================================================== */
