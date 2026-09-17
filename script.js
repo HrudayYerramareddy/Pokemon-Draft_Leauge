@@ -312,12 +312,12 @@ const weeks = [
         locked: false,
 
         matches: [
-            ["Great Lakes Glimmora", "Garden State Garchomps"],
-            ["Florida Floettes", "Ontario Fightin' Palafin"],
-            ["Amarillo Archaludon", "Houston Heat Wave"],
-            ["Niagara Stampede", "Durham Drills"],
-            ["New Braunfels Ninetails", "Colorado Avalugg"],
-            ["Texas State Disasters", "Southern Tier Supporters"]
+            ["Great Lakes Glimmora", "Garden State Garchomps", 0 , 3],
+            ["Florida Floettes", "Ontario Fightin' Palafin",3, 0],
+            ["Amarillo Archaludon", "Houston Heat Wave", 3, 0],
+            ["Niagara Stampede", "Durham Drills",1,2],
+            ["New Braunfels Ninetails", "Colorado Avalugg",2,1],
+            ["Texas State Disasters", "Southern Tier Supporters",3,0]
         ]
     }
 ];
