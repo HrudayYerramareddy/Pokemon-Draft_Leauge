@@ -309,7 +309,7 @@ const weeks = [
     {
         number: 11,
         dates: "September 11-13",
-        locked: false,
+        locked: true,
 
         matches: [
             ["Great Lakes Glimmora", "Garden State Garchomps", 0 , 3],
